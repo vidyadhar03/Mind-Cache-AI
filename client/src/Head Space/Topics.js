@@ -22,9 +22,9 @@ function Topics() {
       <div className="grid grid-cols-4 gap-2">
         {topics.map((topic, index) => (
           <div
-            className="bg-blue-200 mt-8 mx-4 px-12 py-24 text-center rounded-md text-black font-medium"
+            className="bg-blue-200 mt-8 mx-4 px-12 py-24 text-center rounded-md text-black font-medium cursor-pointer"
             onClick={() => {
-              navigate(`/headspace/topics/${topic.title.replace(/ /g, '')}`);
+              navigate(`/topics/${topic.title.replace(/ /g, '')}`);
             }}
           >
             {topic.title}

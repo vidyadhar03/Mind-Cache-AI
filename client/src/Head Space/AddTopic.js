@@ -8,7 +8,7 @@ function AddTopic({ onClosedialog }) {
   let newTopic = "";
 
   function handleSubmit() {
-    navigate("/headspace/topics");
+    navigate("/topics");
 
     if (newTopic === "") {
       console.log("it is emoty");
