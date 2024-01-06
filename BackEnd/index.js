@@ -1,63 +1,60 @@
-// const express = require("express");
-// // const mongoose = require('mongoose');
-// const bodyParser = require("body-parser");
-// const cors = require("cors");
-// // const { chatWithOpenAI } = require('./openAIHelper'); // We will create this next
-// // const ChatSession = require('./models/chatSession'); // MongoDB model
+const express = require("express");
+const app = express();
+app.use(express.json());
+const port = 3001;
 
-// const app = express();
-// app.use(bodyParser.json());
-// app.use(cors());
+//importing DB models
+const { User, Topic } = require("./models/schemas");
 
-// // Connect to MongoDB
-// // mongoose.connect('mongodb://localhost:27017/chatDB', { useNewUrlParser: true, useUnifiedTopology: true });
+//hashing logic using bcrypt
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
-// app.post("/api/chat", async (req, res) => {
-//   const { sessionId, userInput } = req.body;
-//   // let chatSession;
+//importing jwt secret
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const secret = process.env.JWT_SECRET;
 
-//   // if (sessionId) {
-//   //     // Retrieve existing session
-//   //     chatSession = await ChatSession.findById(sessionId);
-//   // } else {
-//   //     // Create new session
-//   //     chatSession = new ChatSession({ messages: [] });
-//   //     await chatSession.save();
-//   // }
+//USERS CRUD
+app.post("/signup", async (req, res) => {
+  const { name, password, email } = req.body;
+  try {
+    let found = await User.findOne({ email: email });
+    if (found) {
+      return res.status(400).json({ message: "user already exists" });
+    }
+    const hashedpassword = await bcrypt.hash(password, saltRounds);
+    const newUser = new User({ name, password: hashedpassword, email });
+    await newUser.save();
+    res.status(200).json({ message: "user signed up succesfully!" });
+  } catch (e) {
+    res.status(500).json({ message: "internal server" });
+  }
+});
 
-//   // // Update conversation history and call OpenAI
-//   // const updatedMessages = [...chatSession.messages, { role: 'user', content: userInput }];
-//   // const aiResponse = await chatWithOpenAI(updatedMessages);
-//   // updatedMessages.push({ role: 'assistant', content: aiResponse });
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const found = await User.findOne({ email: email });
+    if (found) {
+      if (await bcrypt.compare(password, found.password)) {
+        const token = jwt.sign({ userId: found._id }, secret, {
+          expiresIn: "1h",
+        });
+        res.status(200).json({ message: "Logged in!", token: token });
+      } else {
+        res.status(200).json({ message: "wrong credentials!" });
+      }
+    } else {
+      res.status(400).json({ message: "User doesnt exist!" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Internal server error!" });
+  }
+});
 
-//   // // Save updated conversation history
-//   // chatSession.messages = updatedMessages;
-//   // await chatSession.save();
+//TOPICS CRUD
 
-//   // res.send({ sessionId: chatSession._id, messages: updatedMessages });
-
-//   // const updatedMessages = [...chatSession.messages, { role: 'user', content: userInput }];
-
-//   const updatedMessages = [
-//     { role: "AI", content: "here is your answer for the question" },
-//     { role: "user", content: userInput },
-//   ];
-
-//   res.send({ sessionId: sessionId, messages: updatedMessages });
-// });
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
-
-const mongoose = require("mongoose");
-
-mongoose.connect("mongodb+srv://vidyadhariitkgp:m5GqJPngbahXTZpB@cluster0.24ovbgg.mongodb.net/tracker");
-
-const User = mongoose.model('users',{name:String,email:String,password:String});
-
-const firstUser = new User({name:'first user',email:'firstuser@gmail.com',password:'password123'});
-
-firstUser.save().then(()=>console.log('updated'));
+app.listen(port, () => {
+  console.log("port is running!");
+});
