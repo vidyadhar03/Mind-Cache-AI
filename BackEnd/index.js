@@ -4,7 +4,7 @@ app.use(express.json());
 const port = 3001;
 
 //importing DB models
-const { User, Topic } = require("./models/schemas");
+const { User, Topic, Thought } = require("./models/schemas");
 
 //hashing logic using bcrypt
 const bcrypt = require("bcrypt");
@@ -88,8 +88,7 @@ app.post("/addtopic", async (req, res) => {
         res.status(200).json({ message: "Topic added" });
       }
     } else {
-      const topics = [{ title, time }];
-      const newTopic = new Topic({ userID: userid, topics });
+      const newTopic = new Topic({ userID: userid, topics: [{ title, time }] });
       await newTopic.save();
       res.status(200).json({ message: "Topic added" });
     }
@@ -99,17 +98,79 @@ app.post("/addtopic", async (req, res) => {
 });
 
 app.post("/updatetopic", async (req, res) => {
-  const { userid, title, edit } = req.body;
+  const { userid, title, edit, del } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
     let local_topics = found.topics;
     const index = local_topics.findIndex((topic) => topic.title === title);
-    local_topics[index].title = edit;
+    if (del === "yes") {
+      local_topics.splice(index, 1);
+    } else {
+      local_topics[index].title = edit;
+    }
     found.topics = local_topics;
     await found.save();
     res.status(200).json({ message: "Topic Updated" });
   } catch (e) {
     res.status(500).json({ message: "Internal Server error" });
+  }
+});
+
+app.post("/thoughts", async (req, res) => {
+  const { topicid } = req.body;
+  try {
+    const found = await Thought.findOne({ topicID: topicid });
+    if (found) {
+      res.status(200).json({ message: "success", data: found.thoughts });
+    } else {
+      res.status(400).json({ message: "No thoughts found" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/addthought", async (req, res) => {
+  const { topicid, thought, time } = req.body;
+  try {
+    const found = await Thought.findOne({ topicID: topicid });
+    if (found) {
+      const local_thoughts = found.thoughts;
+      local_thoughts.push({ thought, time });
+      found.thoughts = local_thoughts;
+      await found.save();
+      res.status(200).json({ message: "Thought added" });
+    } else {
+      const newThought = new Thought({
+        topicID: topicid,
+        thoughts: [{ thought, time }],
+      });
+      await newThought.save();
+      res.status(200).json({ message: "Thought added" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/updatethought", async (req, res) => {
+  const { topicid, thought, edit, del } = req.body;
+  try {
+    const found = await Thought.findOne({ topicID: topicid });
+    local_thoughts = found.thoughts;
+    const index = local_thoughts.findIndex(
+      (thoughtl) => thoughtl.thought === thought
+    );
+    if (del === "yes") {
+      local_thoughts.splice(index, 1);
+    } else {
+      local_thoughts[index].thought = edit;
+    }
+    found.thoughts = local_thoughts;
+    await found.save();
+    res.status(200).json({ message: "Thought Updated" });
+  } catch (e) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

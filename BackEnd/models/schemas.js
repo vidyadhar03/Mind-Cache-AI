@@ -31,4 +31,4 @@ const thoughtSchema = new mongoose.Schema({
 });
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-module.exports = { User, Topic };
+module.exports = { User, Topic, Thought };
