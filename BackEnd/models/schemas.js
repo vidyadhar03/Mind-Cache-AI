@@ -6,17 +6,29 @@ mongoose.connect(mongouri);
 // User Schema
 const userSchema = new mongoose.Schema({
   name: String,
-  password: String, // Remember to hash passwords before saving
-  email: String // You can add validation rules as needed
+  password: String,
+  email: String
 });
 const User = mongoose.model('User', userSchema);
 
 // Topic Schema
 const topicSchema = new mongoose.Schema({
-  title: String,
-  thoughts: [{ thought: String, time: String }],
-  time: String
+  userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  topics:[{ 
+    title:String,
+    time:String
+  }]
 });
 const Topic = mongoose.model('Topic', topicSchema);
+
+// Thought Schema
+const thoughtSchema = new mongoose.Schema({
+  topicID: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic' },
+  thoughts:[{
+    thought:String,
+    time:String
+  }]
+});
+const Thought = mongoose.model('Thought', thoughtSchema);
 
 module.exports = { User, Topic };
