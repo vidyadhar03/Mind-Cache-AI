@@ -1,10 +1,26 @@
 const express = require("express");
+const z = require("zod");
 const app = express();
 app.use(express.json());
 const port = 3001;
 
 //importing DB models
 const { User, Topic, Thought } = require("./models/schemas");
+
+//input validators
+const {
+  vsignup,
+  vlogin,
+  vtopics,
+  vaddtopic,
+  vupdatetopic,
+  vthoughts,
+  vaddthought,
+  vupdatethought,
+} = require("./validators");
+
+//auth middleware
+const { auth } = require("./middleware");
 
 //hashing logic using bcrypt
 const bcrypt = require("bcrypt");
@@ -17,6 +33,12 @@ const secret = process.env.JWT_SECRET;
 
 //USERS CRUD
 app.post("/signup", async (req, res) => {
+  const response = vsignup(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { name, password, email } = req.body;
   try {
     let found = await User.findOne({ email: email });
@@ -33,6 +55,12 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+  const response = vlogin(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { email, password } = req.body;
   try {
     const found = await User.findOne({ email: email });
@@ -58,8 +86,14 @@ app.post("/login", async (req, res) => {
 });
 
 //TOPICS CRUD
-app.post("/topics", async (req, res) => {
-  const { userid } = req.body;
+app.get("/topics/:userid",auth,async (req, res) => {
+  const response = vtopics(req.params.userid);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+  const userid = req.params.userid;
   try {
     const found = await Topic.findOne({ userID: userid });
     if (found) {
@@ -72,7 +106,13 @@ app.post("/topics", async (req, res) => {
   }
 });
 
-app.post("/addtopic", async (req, res) => {
+app.post("/addtopic",auth,async (req, res) => {
+  const response = vaddtopic(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { userid, title, time } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
@@ -97,7 +137,13 @@ app.post("/addtopic", async (req, res) => {
   }
 });
 
-app.post("/updatetopic", async (req, res) => {
+app.post("/updatetopic",auth, async (req, res) => {
+  const response = vupdatetopic(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { userid, title, edit, del } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
@@ -116,8 +162,14 @@ app.post("/updatetopic", async (req, res) => {
   }
 });
 
-app.post("/thoughts", async (req, res) => {
-  const { topicid } = req.body;
+app.get("/thoughts/:topicid",auth, async (req, res) => {
+  const response = vthoughts(req.params.topicid);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+  const topicid = req.params.topicid;
   try {
     const found = await Thought.findOne({ topicID: topicid });
     if (found) {
@@ -130,7 +182,13 @@ app.post("/thoughts", async (req, res) => {
   }
 });
 
-app.post("/addthought", async (req, res) => {
+app.post("/addthought",auth, async (req, res) => {
+  const response = vaddthought(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { topicid, thought, time } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
@@ -153,7 +211,13 @@ app.post("/addthought", async (req, res) => {
   }
 });
 
-app.post("/updatethought", async (req, res) => {
+app.post("/updatethought",auth, async (req, res) => {
+  const response = vupdatethought(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
   const { topicid, thought, edit, del } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
