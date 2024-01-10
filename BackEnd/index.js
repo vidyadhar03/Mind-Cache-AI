@@ -1,6 +1,6 @@
 const express = require("express");
 const z = require("zod");
-const cors = require("cors")
+const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -52,7 +52,7 @@ app.post("/signup", async (req, res) => {
     await newUser.save();
     res.status(200).json({ message: "user signed up succesfully!" });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "internal server" });
   }
 });
@@ -84,13 +84,13 @@ app.post("/login", async (req, res) => {
       res.status(400).json({ message: "User doesnt exist!" });
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal server error!" });
   }
 });
 
 //TOPICS CRUD
-app.get("/topics/:userid",auth,async (req, res) => {
+app.get("/topics/:userid", auth, async (req, res) => {
   const response = vtopics(req.params.userid);
   if (!response.success) {
     return res
@@ -103,15 +103,15 @@ app.get("/topics/:userid",auth,async (req, res) => {
     if (found) {
       res.status(200).json({ message: "Success", data: found.topics });
     } else {
-      res.status(200).json({ message: "No topics found",data:[]});
+      res.status(200).json({ message: "No topics found", data: [] });
     }
-  } catch (e){
-    console.log(e)
+  } catch (e) {
+    console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.post("/addtopic",auth,async (req, res) => {
+app.post("/addtopic", auth, async (req, res) => {
   const response = vaddtopic(req.body);
   if (!response.success) {
     return res
@@ -130,20 +130,20 @@ app.post("/addtopic",auth,async (req, res) => {
         local_topics.push({ title, time });
         found.topics = local_topics;
         await found.save();
-        res.status(200).json({ message: "Topic added",data:found.topics});
+        res.status(200).json({ message: "Topic added", data: found.topics });
       }
     } else {
       const newTopic = new Topic({ userID: userid, topics: [{ title, time }] });
       await newTopic.save();
-      res.status(200).json({ message: "Topic added",data:newTopic.topics });
+      res.status(200).json({ message: "Topic added", data: newTopic.topics });
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.post("/updatetopic",auth, async (req, res) => {
+app.post("/updatetopic", auth, async (req, res) => {
   const response = vupdatetopic(req.body);
   if (!response.success) {
     return res
@@ -155,21 +155,24 @@ app.post("/updatetopic",auth, async (req, res) => {
     const found = await Topic.findOne({ userID: userid });
     let local_topics = found.topics;
     const index = local_topics.findIndex((topic) => topic.title === title);
+    console.log("before del: ",local_topics)
+
     if (del === "yes") {
-      local_topics.splice(index, 1);
+        local_topics.splice(index, 1);
     } else {
       local_topics[index].title = edit;
     }
+
     found.topics = local_topics;
     await found.save();
-    res.status(200).json({ message: "Topic Updated" });
+    res.status(200).json({ message: "Topic Updated", data: found.topics });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal Server error" });
   }
 });
 
-app.get("/thoughts/:topicid",auth, async (req, res) => {
+app.get("/thoughts/:topicid", auth, async (req, res) => {
   const response = vthoughts(req.params.topicid);
   if (!response.success) {
     return res
@@ -185,12 +188,12 @@ app.get("/thoughts/:topicid",auth, async (req, res) => {
       res.status(200).json({ message: "No thoughts found", data: [] });
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.post("/addthought",auth, async (req, res) => {
+app.post("/addthought", auth, async (req, res) => {
   const response = vaddthought(req.body);
   if (!response.success) {
     return res
@@ -205,22 +208,24 @@ app.post("/addthought",auth, async (req, res) => {
       local_thoughts.push({ thought, time });
       found.thoughts = local_thoughts;
       await found.save();
-      res.status(200).json({ message: "Thought added",data:found.thoughts });
+      res.status(200).json({ message: "Thought added", data: found.thoughts });
     } else {
       const newThought = new Thought({
         topicID: topicid,
         thoughts: [{ thought, time }],
       });
       await newThought.save();
-      res.status(200).json({ message: "Thought added",data:newThought.thoughts  });
+      res
+        .status(200)
+        .json({ message: "Thought added", data: newThought.thoughts });
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.post("/updatethought",auth, async (req, res) => {
+app.post("/updatethought", auth, async (req, res) => {
   const response = vupdatethought(req.body);
   if (!response.success) {
     return res
@@ -230,6 +235,7 @@ app.post("/updatethought",auth, async (req, res) => {
   const { topicid, thought, edit, del } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
+    console.log(found)
     local_thoughts = found.thoughts;
     const index = local_thoughts.findIndex(
       (thoughtl) => thoughtl.thought === thought
@@ -241,9 +247,9 @@ app.post("/updatethought",auth, async (req, res) => {
     }
     found.thoughts = local_thoughts;
     await found.save();
-    res.status(200).json({ message: "Thought Updated" });
+    res.status(200).json({ message: "Thought Updated", data: found.thoughts });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });

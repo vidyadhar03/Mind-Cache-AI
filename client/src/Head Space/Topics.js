@@ -2,11 +2,18 @@ import { DataContext } from "../utils/DataContext";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AddTopic from "./AddTopic";
+import EditData from "./EditData";
 
 function Topics() {
   const { topics, setTopics } = useContext(DataContext);
   const [showaddtopic, setshowaddtopic] = useState(false);
+  const [showedittopic, setshowedittopic] = useState(false);
+  const [selectedtopic,setSelectedtopic] = useState(null);
   const navigate = useNavigate();
+
+  const handleeditclose = () => {
+    setshowedittopic(false);
+  };
 
   const handleopen = () => {
     setshowaddtopic(true);
@@ -60,24 +67,39 @@ function Topics() {
     );
   }
 
-
-
   return (
     <div className="">
       {showaddtopic && <AddTopic onClosedialog={handleclose} />}
+      {showedittopic && <EditData onClosedialog={handleeditclose} datamode={"topic"} datapassed={selectedtopic} topicid={selectedtopic._id}/>}
 
       <div className="grid grid-cols-4 gap-2">
         {topics.map((topic, index) => (
           <div
-            className="bg-blue-200 mt-8 mx-4 px-12 py-24 text-center rounded-md text-black font-medium cursor-pointer"
-            onClick={() => {
-              navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
-                state: { data: topic },
-              });
-            }}
+            className="bg-blue-200 mt-8 mx-4  text-center rounded-md cursor-pointer shadow-lg hover:shadow-2xl"
             key={index}
           >
-            {topic.title}
+          
+
+            <div className="flex justify-end">
+              <img
+                className="h-4 w-4 m-2"
+                src="./editlogo.png"
+                onClick={()=>{
+                  setSelectedtopic(topic);
+                  setshowedittopic(true);
+                }}
+              />
+            </div>
+            <div
+              className="px-12 py-24 text-black text-2xl font-bold"
+              onClick={() => {
+                navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
+                  state: { data: topic },
+                });
+              }}
+            >
+              {topic.title}
+            </div>
           </div>
         ))}
       </div>
