@@ -1,7 +1,9 @@
 const express = require("express");
 const z = require("zod");
+const cors = require("cors")
 const app = express();
 app.use(express.json());
+app.use(cors());
 const port = 3001;
 
 //importing DB models
@@ -50,6 +52,7 @@ app.post("/signup", async (req, res) => {
     await newUser.save();
     res.status(200).json({ message: "user signed up succesfully!" });
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "internal server" });
   }
 });
@@ -81,6 +84,7 @@ app.post("/login", async (req, res) => {
       res.status(400).json({ message: "User doesnt exist!" });
     }
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal server error!" });
   }
 });
@@ -99,9 +103,10 @@ app.get("/topics/:userid",auth,async (req, res) => {
     if (found) {
       res.status(200).json({ message: "Success", data: found.topics });
     } else {
-      res.status(400).json({ message: "No topics found" });
+      res.status(200).json({ message: "No topics found",data:[]});
     }
-  } catch (e) {
+  } catch (e){
+    console.log(e)
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -125,14 +130,15 @@ app.post("/addtopic",auth,async (req, res) => {
         local_topics.push({ title, time });
         found.topics = local_topics;
         await found.save();
-        res.status(200).json({ message: "Topic added" });
+        res.status(200).json({ message: "Topic added",data:found.topics});
       }
     } else {
       const newTopic = new Topic({ userID: userid, topics: [{ title, time }] });
       await newTopic.save();
-      res.status(200).json({ message: "Topic added" });
+      res.status(200).json({ message: "Topic added",data:newTopic.topics });
     }
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -158,6 +164,7 @@ app.post("/updatetopic",auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Topic Updated" });
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal Server error" });
   }
 });
@@ -175,9 +182,10 @@ app.get("/thoughts/:topicid",auth, async (req, res) => {
     if (found) {
       res.status(200).json({ message: "success", data: found.thoughts });
     } else {
-      res.status(400).json({ message: "No thoughts found" });
+      res.status(200).json({ message: "No thoughts found", data: [] });
     }
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -197,16 +205,17 @@ app.post("/addthought",auth, async (req, res) => {
       local_thoughts.push({ thought, time });
       found.thoughts = local_thoughts;
       await found.save();
-      res.status(200).json({ message: "Thought added" });
+      res.status(200).json({ message: "Thought added",data:found.thoughts });
     } else {
       const newThought = new Thought({
         topicID: topicid,
         thoughts: [{ thought, time }],
       });
       await newThought.save();
-      res.status(200).json({ message: "Thought added" });
+      res.status(200).json({ message: "Thought added",data:newThought.thoughts  });
     }
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -234,6 +243,7 @@ app.post("/updatethought",auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Thought Updated" });
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Internal server error" });
   }
 });

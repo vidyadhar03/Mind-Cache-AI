@@ -6,65 +6,14 @@ export const useData = () => useContext(DataContext);
 
 export const DataProvider = ({ children }) => {
   const [topics, setTopics] = useState([]);
+  const [thoughts, setThoughts] = useState([]);
 
-  useEffect(() => {
-    let thoughtsarray = [
-    //   {
-    //     thought: "first thought of first topic",
-    //     time: "15-12-2023 15:33",
-    //   },
-    //   {
-    //     thought: "second thought of first topic",
-    //     time: "15-12-2023 15:33",
-    //   },
-    //   {
-    //     thought: "first thought of first topic",
-    //     time: "15-12-2023 15:33",
-    //   },
-    //   {
-    //     thought: "second thought of first topic",
-    //     time: "15-12-2023 15:33",
-    //   },
-    ];
+  // useEffect(() => {
 
-    let topics = [
-    //   {
-    //     title: "first topic",
-    //     time: "15-12-2023 15:00",
-    //     thoughts: thoughtsarray,
-    //     index: "0",
-    //   },
-    //   {
-    //     title: "second topic",
-    //     time: "15-12-2023 15:00",
-    //     thoughts: thoughtsarray,
-    //     index: "0",
-    //   },
-    //   {
-    //     title: "third topic",
-    //     time: "15-12-2023 15:00",
-    //     thoughts: thoughtsarray,
-    //     index: "0",
-    //   },
-    //   {
-    //     title: "first topic",
-    //     time: "15-12-2023 15:00",
-    //     thoughts: thoughtsarray,
-    //     index: "0",
-    //   },
-    //   {
-    //     title: "second topic",
-    //     time: "15-12-2023 15:00",
-    //     thoughts: thoughtsarray,
-    //     index: "0",
-    //   }
-    ];
-
-    setTopics(topics);
-  }, []);
+  // }, []);
 
   return (
-    <DataContext.Provider value={{ topics, setTopics }}>
+    <DataContext.Provider value={{ topics, setTopics ,thoughts, setThoughts}}>
       {children}
     </DataContext.Provider>
   );

@@ -8,7 +8,9 @@ function NavBar(){
         <div className="my-auto text-lg cursor-pointer" onClick={()=>{
             navigate(`/`)
         }}>Tracker</div>
-        <button className="border-2 p-1 rounded-xl bg-blue-100 hover:bg-blue-300 ">Sign In</button>
+        <button className="border-2 p-1 rounded-xl bg-blue-100 hover:bg-blue-300 " onClick={()=>{
+            navigate(`/signin`)
+        }}>Sign In</button>
     </div>
 }
 

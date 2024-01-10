@@ -3,28 +3,41 @@ import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
 
 function AddThought({ onClosedialog,topic }) {
-  const { topics, setTopics } = useContext(DataContext);
+  const {  setThoughts } = useContext(DataContext);
   const navigate = useNavigate();
   let newThought = "";
 
-  function handleSubmit() {
+  console.log(topic)
+
+  async function handleSubmit() {
     if (newThought === "") {
-      console.log("it is emoty");
+      console.log("it is empty");
       
     } else {
-      console.log("adding to topics data");
-      //adding new topic to the topics array
-      const newThoughtObject = {
-        thought: newThought,
-        time: "15-12-2023 15:00"
-      };
 
-      const index = topics.findIndex(topicx=>topicx.title===topic)
+      try {
+        const response = await fetch("http://localhost:3001/addthought", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: localStorage.getItem("usertoken"),
+          },
+          body: JSON.stringify({
+            topicid: topic._id,
+            thought: newThought,
+            time: "present date and time",
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        setThoughts(json.data);
+        onClosedialog();
+      } catch (e) {
+        console.log(e);
+      }
 
-      topics[index].thoughts.push(newThoughtObject)
-      console.log(topics);
-      setTopics(topics)
-      onClosedialog()
     }
   }
 
@@ -37,7 +50,7 @@ function AddThought({ onClosedialog,topic }) {
       <div className="py-8 px-24 bg-white border shadow-xl rounded-lg">
         <div className="flex-col  items-center">
           <div className="text-black font-medium text-xl">
-            Add a thought to the {topic} topic to easy track
+            Add a thought to the {topic.title} topic to easy track
           </div>
 
           <div className=" mt-4 mb-2 flex justify-center">

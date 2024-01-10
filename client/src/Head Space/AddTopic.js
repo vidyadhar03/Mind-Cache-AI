@@ -1,37 +1,39 @@
-import { useNavigate } from "react-router-dom";
 import { DataContext } from "../utils/DataContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 function AddTopic({ onClosedialog }) {
-  const { topics, setTopics } = useContext(DataContext);
-  const navigate = useNavigate();
+  const { setTopics } = useContext(DataContext);
   let newTopic = "";
 
-  function handleSubmit() {
-    navigate("/topics");
-
+  async function handleSubmit() {
     if (newTopic === "") {
-      console.log("it is emoty");
-      
+      console.log("it is empty");
+      //todo - update UI when topic input is empty
     } else {
-      console.log("adding to topics data");
-      //adding new topic to the topics array
-      const newTopicObject = {
-        title: newTopic,
-        time: "15-12-2023 15:00",
-        thoughts: [],
-        index: "0",
-      };
-      topics.push(newTopicObject)
-      console.log(topics);
-      setTopics(topics)
-      onClosedialog()
+      try {
+        const response = await fetch("http://localhost:3001/addtopic", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: localStorage.getItem("usertoken"),
+          },
+          body: JSON.stringify({
+            userid: localStorage.getItem("userid"),
+            title: newTopic,
+            time: "present date and time",
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        setTopics(json.data);
+        onClosedialog();
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
-
-  const addNewTopic = (event) => {
-    newTopic = event.target.value;
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
@@ -45,7 +47,9 @@ function AddTopic({ onClosedialog }) {
             <input
               placeholder="Topic"
               className="border-2 p-2 w-parent rounded-md w-full"
-              onChange={addNewTopic}
+              onChange={(e) => {
+                newTopic = e.target.value;
+              }}
             ></input>
           </div>
 
