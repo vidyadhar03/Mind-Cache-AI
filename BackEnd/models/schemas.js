@@ -35,4 +35,32 @@ const thoughtSchema = new mongoose.Schema({
 });
 const Thought = mongoose.model("Thought", thoughtSchema);
 
-module.exports = { User, Topic, Thought };
+//chat session schema
+const ChatSessionSchema = new mongoose.Schema({
+  userID: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true },
+  sessions: [
+    {
+      sessionTitle: String,
+      time: String,
+    },
+  ],
+});
+const ChatSession = mongoose.model("Chat Session", ChatSessionSchema);
+
+//chat message schema
+const chatMessageSchema = new mongoose.Schema({
+  sessionID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ChatSession",
+    index: true,
+  },
+  messages: [
+    {
+      role: String,
+      content: String,
+    },
+  ],
+});
+const ChatMessage = mongoose.model("Chat Message", chatMessageSchema);
+
+module.exports = { User, Topic, Thought, ChatSession, ChatMessage };
