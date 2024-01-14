@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { DataContext } from "../utils/DataContext";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -73,7 +73,10 @@ function Thoughts() {
         <button
           className="border-2 p-2 rounded-lg hover:bg-blue-100"
           onClick={() => {
-            navigate("/analyse");
+            navigate("/analyse", {
+              state: { data: topicobj.title, thoughts:thoughts },
+            });
+            localStorage.setItem("sessionLoaded","")
           }}
         >
           Analyse Thoughts

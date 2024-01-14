@@ -7,7 +7,7 @@ function SignIn() {
   const name = "tracker user";
   const [email, setEmail] = useState("newgmail@gmail.com");
   const [password, setPassword] = useState("passwordhehe");
-  const [showsignup, setShowsignup] = useState(true);
+  const [showsignup, setShowsignup] = useState(false);
 
   const SignUp = async (e) => {
     e.preventDefault();

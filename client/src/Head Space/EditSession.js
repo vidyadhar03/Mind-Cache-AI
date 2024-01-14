@@ -1,74 +1,47 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../utils/DataContext";
+import { useState } from "react";
 
-function EditData({ onClosedialog, datamode, datapassed, topicid }) {
-  const { setTopics, setThoughts } = useContext(DataContext);
-
+function EditSession({ onClosedialog, session,updateSesh }) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
-  let datagot = "";
 
-  if (datamode === "topic") {
-    datagot = datapassed.title;
-  } else {
-    datagot = datapassed.thought;
-  }
 
-  async function EditData() {
+  async function UpdateData() {
     try {
-      let api_url = "";
-      let req_body = "";
-      if (datamode === "topic") {
-        api_url = "http://localhost:3001/updatetopic";
-        req_body = JSON.stringify({
-          userid: localStorage.getItem("userid"),
-          title: datapassed.title,
-          edit: edit,
-          del: del,
-        });
-      } else {
-        api_url = "http://localhost:3001/updatethought";
-        req_body = JSON.stringify({
-          topicid: topicid,
-          thought: datapassed.thought,
-          edit: edit,
-          del: del,
-        });
-      }
-      console.log(req_body);
-      const response = await fetch(api_url, {
+      const response = await fetch("http://localhost:5000/editchatsession", {
         method: "POST",
-        body: req_body,
         headers: {
           authorization: localStorage.getItem("usertoken"),
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          userid: localStorage.getItem("userid"),
+          sessionid: session._id,
+          edit: edit,
+          del: del,
+        }),
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
-      if (datamode === "topic") {
-        setTopics(json.data);
-      } else {
-        setThoughts(json.data);
-      }
-      del = "no";
-      onClosedialog();
+      console.log(json)
+      updateSesh(json.data.reverse())
+      onClosedialog()
     } catch (e) {
       console.log(e);
     }
   }
 
-  function UpdateData() {
+  function EditData(){
     if (del === "yes") {
-        EditData()
+        UpdateData()
     } else {
       if (edit === "") {
         console.log("no change in data");
       }else{
-        EditData()
+        UpdateData()
       }
     }
   }
@@ -79,14 +52,13 @@ function EditData({ onClosedialog, datamode, datapassed, topicid }) {
         <div className="py-4 px-16 bg-white border shadow-xl rounded-lg">
           <div className="flex-col  items-center">
             <div className="text-black font-medium text-xl text-center">
-              Edit your {datamode}
+              Edit your Session
             </div>
 
             <div className=" mt-4 mb-2 flex justify-center">
               <textarea
-                placeholder="Topic"
                 className="border-2 p-2 w-parent rounded-md w-96"
-                defaultValue={datagot}
+                defaultValue={session.sessionTitle}
                 onChange={(e) => {
                   setEdit(e.target.value);
                 }}
@@ -97,7 +69,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid }) {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 mr-1"
                 onClick={() => {
-                  UpdateData();
+                    EditData();
                 }}
               >
                 Update
@@ -123,12 +95,14 @@ function EditData({ onClosedialog, datamode, datapassed, topicid }) {
                     UpdateData();
                   }}
                 >
-                  Delete {datamode} for sure?
+                  Delete chat session for sure?
                 </button>
               )}
               <button
                 className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
-                onClick={onClosedialog}
+                onClick={() => {
+                  onClosedialog();
+                }}
               >
                 Cancel
               </button>
@@ -140,4 +114,4 @@ function EditData({ onClosedialog, datamode, datapassed, topicid }) {
   );
 }
 
-export default EditData;
+export default EditSession;

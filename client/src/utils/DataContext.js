@@ -8,10 +8,6 @@ export const DataProvider = ({ children }) => {
   const [topics, setTopics] = useState([]);
   const [thoughts, setThoughts] = useState([]);
 
-  // useEffect(() => {
-
-  // }, []);
-
   return (
     <DataContext.Provider value={{ topics, setTopics ,thoughts, setThoughts}}>
       {children}
