@@ -25,7 +25,7 @@ function AddThought({ onClosedialog,topic }) {
           body: JSON.stringify({
             topicid: topic._id,
             thought: newThought,
-            time: "present date and time",
+            time: new Date().toISOString(),
           }),
         });
         if (!response.ok) {

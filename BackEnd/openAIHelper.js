@@ -8,7 +8,7 @@ const chatWithOpenAI = async (messages) => {
             temperature: 0.7
         }, {
             headers: {
-                'Authorization': `Bearer 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`,
+                'Authorization': `Bearer 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`,
                 'Content-Type': 'application/json'
             }
         });

@@ -33,7 +33,7 @@ function vaddtopic(obj) {
   const schema = z.object({
     userid: z.string(),
     title: z.string(),
-    time: z.string(),
+    time: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
   });
   const res = schema.safeParse(obj);
   return res;
@@ -63,7 +63,7 @@ function vaddthought(obj) {
   const schema = z.object({
     topicid: z.string(),
     thought: z.string(),
-    time: z.string(),
+    time: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
   });
   const res = schema.safeParse(obj);
   return res;
@@ -112,7 +112,7 @@ function vstartsession(obj){
   const schema = z.object({
     userid: z.string(),
     sessionTitle: z.string(),
-    time: z.string()
+    time: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/),
   });
   const res = schema.safeParse(obj);
   return res;

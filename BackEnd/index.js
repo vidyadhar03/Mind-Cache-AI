@@ -113,12 +113,14 @@ app.get("/topics/:userid", auth, async (req, res) => {
 
 app.post("/addtopic", auth, async (req, res) => {
   const response = vaddtopic(req.body);
+  console.log(response)
   if (!response.success) {
     return res
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
   const { userid, title, time } = req.body;
+  const timeAsDate = new Date(time);
   try {
     const found = await Topic.findOne({ userID: userid });
     if (found) {
@@ -127,13 +129,13 @@ app.post("/addtopic", auth, async (req, res) => {
       if (topic_found) {
         res.status(400).json({ message: "Topic already exists" });
       } else {
-        local_topics.push({ title, time });
+        local_topics.push({ title, time:timeAsDate });
         found.topics = local_topics;
         await found.save();
         res.status(200).json({ message: "Topic added", data: found.topics });
       }
     } else {
-      const newTopic = new Topic({ userID: userid, topics: [{ title, time }] });
+      const newTopic = new Topic({ userID: userid, topics: [{ title, time:timeAsDate }] });
       await newTopic.save();
       res.status(200).json({ message: "Topic added", data: newTopic.topics });
     }
@@ -201,18 +203,19 @@ app.post("/addthought", auth, async (req, res) => {
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
   const { topicid, thought, time } = req.body;
+  const timeAsDate = new Date(time);
   try {
     const found = await Thought.findOne({ topicID: topicid });
     if (found) {
       const local_thoughts = found.thoughts;
-      local_thoughts.push({ thought, time });
+      local_thoughts.push({ thought, time:timeAsDate });
       found.thoughts = local_thoughts;
       await found.save();
       res.status(200).json({ message: "Thought added", data: found.thoughts });
     } else {
       const newThought = new Thought({
         topicID: topicid,
-        thoughts: [{ thought, time }],
+        thoughts: [{ thought, time:timeAsDate }],
       });
       await newThought.save();
       res

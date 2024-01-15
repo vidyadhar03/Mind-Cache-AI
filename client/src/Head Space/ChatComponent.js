@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import EditSession from "./EditSession";
-import "./ChatComponent.css";
 
 const ChatComponent = () => {
   const location = useLocation();
@@ -14,11 +13,39 @@ const ChatComponent = () => {
   const [editSessionlayout, setEditSessionLayout] = useState(false);
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
 
+  function getPrompt() {
+    const prompt1 = 
+    `Assume the role of an AI assistant with expertise in psychological analysis and introspection. 
+    Your objective is to help me explore and understand my thoughts over time, providing insights for personal growth and self-awareness. 
+    You are presented with a series of thoughts from me, each accompanied by a timestamp indicating when the thought was added. 
+    Your task is to analyze these thoughts in the context of their timing, 
+    offer constructive insights about how my thoughts have evolved or changed over time in a personalized, 
+    conversational manner and pose questions that encourage me to delve deeper into
+     understanding my mindset and emotions associated with these thoughts.`;
+
+    const mytopic= "this is the topic under which i have stored my thoughts, my topic : "+topicTitle +",,";
+
+    const mythoughts =
+      "and here are my thoughts and timestamps stored in json form: " + JSON.stringify(thoughts) +",,";
+
+    const prompt2 =
+     `        Based on these thoughts and their respective timestamps, provide an analysis that identifies any patterns, 
+    shifts, or significant changes in my mindset or emotional state over time.
+    Offer insights into what these changes might signify and ask open-ended questions that guide me to explore more about the 
+    evolution of my thought patterns, feelings, or potential actions i might consider. 
+    End your response with open-ended questions that invite me to discuss further, explore their feelings,
+     or clarify their aspirations. Your goal is to foster an ongoing, engaging dialogue that helps
+      the user gain a deeper self-understanding of their mental journey.`;
+
+    return (prompt1+mytopic+mythoughts+prompt2)
+
+  }
+
+
   function updateSessions(sessions) {
     setUserSessions(sessions);
     setSelectedSession(sessions[0]);
   }
-
 
   const LoadSession = async (session) => {
     setSelectedSession(session);
@@ -37,8 +64,6 @@ const ChatComponent = () => {
       }
       const json = await response.json();
       setMessages(json.data);
-
-      console.log(selectedSession);
     } catch (e) {
       console.log(e);
     }
@@ -47,9 +72,7 @@ const ChatComponent = () => {
   async function Chat(analyse, session) {
     let input;
     if (analyse) {
-      input =
-        "take my customer below thoughts and provide me output assuming you are therapist , my thoughts:" +
-        JSON.stringify(thoughts);
+      input = getPrompt()
     } else {
       input = userInput;
     }
@@ -89,7 +112,7 @@ const ChatComponent = () => {
           body: JSON.stringify({
             userid: localStorage.getItem("userid"),
             sessionTitle: topicTitle,
-            time: "some random time hehe",
+            time: new Date().toISOString(),
           }),
         });
         if (!response.ok) {
@@ -111,8 +134,7 @@ const ChatComponent = () => {
       LoadSession(JSON.parse(sessionLoaded));
       getSessions();
     }
-  },[]);
-
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -158,7 +180,7 @@ const ChatComponent = () => {
         />
       )}
 
-      <div className=" bg-slate-200 overflow-y-auto">
+      <div className=" bg-slate-200 overflow-y-auto w-1/5">
         {userSessions.map((session, index) => (
           <div
             key={session._id}
@@ -187,13 +209,15 @@ const ChatComponent = () => {
         ))}
       </div>
 
-      <div className="bg-red-100">
-        <div className="mx-8 my-4 px-4  bg-white h-3/4 overflow-y-auto">
+      <div className=" w-4/5 " >
+        <div className="mx-16 my-0 px-4  bg-white h-3/4 overflow-y-auto">
           {messages.map((msg, index) => (
-            <p key={index} className="">
-              <div className="text-black font-bold">{msg.role === "user" ? "You: " : "AI: "}</div>
+            <div key={index} className="">
+              <div className="text-black font-bold mt-2 text-lg">
+                {msg.role === "user" ? "You: " : "Mind Cache AI: "}
+              </div>
               {msg.content}
-            </p>
+            </div>
           ))}
         </div>
 
@@ -203,11 +227,11 @@ const ChatComponent = () => {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="Type your message"
-            className="border-2 rounded-lg"
+            className="border-2 rounded-lg p-2 w-96"
           />
           <button
             type="submit"
-            className="ml-4 bg-blue-100 hover:bg-blue-400 rounded-lg p-2"
+            className="ml-4 bg-blue-300 hover:bg-blue-600 rounded-lg px-4 py-2"
           >
             Send
           </button>

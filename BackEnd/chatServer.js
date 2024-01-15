@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const { auth } = require("./middleware");
+const { chatWithOpenAI } = require('./openAIHelper');
 const {
   vchat,
   vsessions,
@@ -37,8 +38,11 @@ app.post("/chat", auth, async (req, res) => {
       { role: "user", content: userinput },
     ];
     //todo get response from OPEN AI
-    // const aiResponse = await chatWithOpenAI(updatedMessages);
-    const aiResponse = "I will reply once im integrated dear user!";
+    console.log("waiting for response")
+    const aiResponse = await chatWithOpenAI(updatedMessages);
+    console.log("got response from chat gpt")
+
+    // const aiResponse = "I will reply once im integrated dear user!";
     updatedMessages.push({ role: "assistant", content: aiResponse });
 
     // Save updated conversation history
@@ -104,12 +108,13 @@ app.post("/startsession", auth, async (req, res) => {
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
   const { userid, sessionTitle, time } = req.body;
+  const timeAsDate = new Date(time);
 
   try {
     const found = await ChatSession.findOne({ userID: userid });
     if (found) {
       let local_sesh = found.sessions;
-      local_sesh.push({ sessionTitle, time });
+      local_sesh.push({ sessionTitle, time:timeAsDate });
       found.sessions = local_sesh;
       await found.save();
       res.status(200).json({
@@ -120,7 +125,7 @@ app.post("/startsession", auth, async (req, res) => {
     } else {
       const newSesh = new ChatSession({
         userID: userid,
-        sessions: [{ sessionTitle, time }],
+        sessions: [{ sessionTitle, time:timeAsDate }],
       });
       await newSesh.save();
       res.status(200).json({

@@ -20,7 +20,7 @@ function AddTopic({ onClosedialog }) {
           body: JSON.stringify({
             userid: localStorage.getItem("userid"),
             title: newTopic,
-            time: "present date and time",
+            time: new Date().toISOString(),
           }),
         });
         if (!response.ok) {

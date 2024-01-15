@@ -17,7 +17,7 @@ const topicSchema = new mongoose.Schema({
   topics: [
     {
       title: String,
-      time: String,
+      time: Date,
     },
   ],
 });
@@ -29,7 +29,7 @@ const thoughtSchema = new mongoose.Schema({
   thoughts: [
     {
       thought: String,
-      time: String,
+      time: Date,
     },
   ],
 });
@@ -41,7 +41,7 @@ const ChatSessionSchema = new mongoose.Schema({
   sessions: [
     {
       sessionTitle: String,
-      time: String,
+      time: Date,
     },
   ],
 });
