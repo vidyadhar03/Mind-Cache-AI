@@ -33,9 +33,9 @@ const ChatComponent = () => {
     shifts, or significant changes in my mindset or emotional state over time.
     Offer insights into what these changes might signify and ask open-ended questions that guide me to explore more about the 
     evolution of my thought patterns, feelings, or potential actions i might consider. 
-    End your response with open-ended questions that invite me to discuss further, explore their feelings,
-     or clarify their aspirations. Your goal is to foster an ongoing, engaging dialogue that helps
-      the user gain a deeper self-understanding of their mental journey.`;
+    End your response with open-ended questions that invite me to discuss further, explore my feelings,
+     or clarify my aspirations. Your goal is to foster an ongoing, engaging dialogue that helps
+      me gain a deeper self-understanding of my mental journey.`;
 
     return (prompt1+mytopic+mythoughts+prompt2)
 

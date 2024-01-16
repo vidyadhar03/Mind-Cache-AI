@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const { auth } = require("./middleware");
-const { chatWithOpenAI } = require('./openAIHelper');
+const { chatWithOpenAI } = require("./openAIHelper");
 const {
   vchat,
   vsessions,
@@ -32,11 +32,11 @@ app.post("/chat", auth, async (req, res) => {
       user_messages = new ChatMessage({ sessionID: sessionid, messages: [] });
       await user_messages.save();
     }
+    const updatedMessages = user_messages.messages.map((item) => {
+      return { role: item.role, content: item.content };
+    });
+    updatedMessages.push({ role: "user", content: userinput });
 
-    const updatedMessages = [
-      ...user_messages.messages,
-      { role: "user", content: userinput },
-    ];
     //todo get response from OPEN AI
     console.log("waiting for response")
     const aiResponse = await chatWithOpenAI(updatedMessages);
@@ -114,7 +114,7 @@ app.post("/startsession", auth, async (req, res) => {
     const found = await ChatSession.findOne({ userID: userid });
     if (found) {
       let local_sesh = found.sessions;
-      local_sesh.push({ sessionTitle, time:timeAsDate });
+      local_sesh.push({ sessionTitle, time: timeAsDate });
       found.sessions = local_sesh;
       await found.save();
       res.status(200).json({
@@ -125,7 +125,7 @@ app.post("/startsession", auth, async (req, res) => {
     } else {
       const newSesh = new ChatSession({
         userID: userid,
-        sessions: [{ sessionTitle, time:timeAsDate }],
+        sessions: [{ sessionTitle, time: timeAsDate }],
       });
       await newSesh.save();
       res.status(200).json({
