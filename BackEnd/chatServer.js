@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const { auth } = require("./middleware");
-const { chatWithOpenAI } = require("./openAIHelper");
+const { chatWithOpenAI,StreamWithOpenAI } = require("./openAIHelper");
 const {
   vchat,
   vsessions,
@@ -13,6 +13,83 @@ const {
   veditsession,
 } = require("./validators");
 const { ChatSession, ChatMessage } = require("./models/schemas");
+//web socket
+const WebSocket = require('ws');
+const http = require('http');
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+
+// Initialize WebSocket Server
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received from client: %s', message);
+  });
+
+  console.log("Connected to WebSocket server");
+  ws.send(JSON.stringify({ message: 'Connected to WebSocket server' }));
+
+});
+
+// Function to broadcast messages to all connected clients
+const broadcast = (data) => {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+};
+
+app.post("/socketchat", auth, async (req, res) => {
+  const response = vchat(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+  const { sessionid, userinput } = req.body;
+  try {
+    //check if messages exists already
+    const found = await ChatMessage.findOne({ sessionID: sessionid });
+    let user_messages;
+    if (found) {
+      user_messages = found;
+    } else {
+      user_messages = new ChatMessage({ sessionID: sessionid, messages: [] });
+      await user_messages.save();
+    }
+    const updatedMessages = user_messages.messages.map((item) => {
+      return { role: item.role, content: item.content };
+    });
+    updatedMessages.push({ role: "user", content: userinput });
+
+    console.log("waiting for response");
+    let stream_message="";
+    let stream_messages = JSON.parse(JSON.stringify(updatedMessages));
+    stream_messages.push({ role: "assistant", content: stream_message });
+    const aiResponse = await StreamWithOpenAI(updatedMessages, (chunk) => {
+      // Broadcast each chunk to the client in real-time
+      console.log("received chunk: ", chunk)
+      stream_message+=chunk;
+      stream_messages[stream_messages.length-1].content=stream_message
+      broadcast({ sessionId: user_messages.sessionID, messages: stream_messages });
+    });
+    console.log("got full response from chat gpt");
+
+    // After streaming is complete, update the database
+    updatedMessages.push({ role: "assistant", content: aiResponse });
+    user_messages.messages = updatedMessages;
+    await user_messages.save();
+
+    res
+      .status(200)
+      .json({ sessionId: user_messages.sessionID, messages: updatedMessages });
+
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 app.post("/chat", auth, async (req, res) => {
   const response = vchat(req.body);
@@ -38,11 +115,11 @@ app.post("/chat", auth, async (req, res) => {
     updatedMessages.push({ role: "user", content: userinput });
 
     //todo get response from OPEN AI
-    console.log("waiting for response")
-    const aiResponse = await chatWithOpenAI(updatedMessages);
-    console.log("got response from chat gpt")
+    // console.log("waiting for response");
+    // const aiResponse = await chatWithOpenAI(updatedMessages);
+    // console.log("got response from chat gpt");
 
-    // const aiResponse = "I will reply once im integrated dear user!";
+    const aiResponse = "I will reply once im integrated dear user!";
     updatedMessages.push({ role: "assistant", content: aiResponse });
 
     // Save updated conversation history
@@ -168,6 +245,10 @@ app.post("/editchatsession", auth, async (req, res) => {
   }
 });
 
-app.listen("5000", () => {
-  console.log("working");
+// app.listen("5000", () => {
+//   console.log("working");
+// });
+
+server.listen(5000, () => {
+  console.log("HTTP and WebSocket server running on port 5000");
 });

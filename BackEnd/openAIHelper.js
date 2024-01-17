@@ -43,5 +43,37 @@ async function chatWithOpenAI(messages) {
   }
 }
 
-module.exports = { chatWithOpenAI };
+async function StreamWithOpenAI(messages, broadcast) {
+  let fullResponse = "";
 
+  try {
+    const stream = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      stream: true,
+    });
+
+    for await (const chunk of stream) {
+      if (chunk.choices[0]?.delta?.content) {
+        const content = chunk.choices[0].delta.content;
+        fullResponse += content;
+        broadcast(content); // Stream each chunk to the client
+      }
+    }
+
+    // for (let i =0;i<15;i++){
+    //   setTimeout(function(){
+    //     const chunk = "hey hehe";
+    //     fullResponse+=chunk;
+    //     broadcast(chunk);
+    //   },100)
+    // }
+
+    return fullResponse; // Return the full response for database update
+  } catch (e) {
+    console.error("Error communicating with OpenAI:", e);
+    return "Error getting response from AI";
+  }
+}
+
+module.exports = { chatWithOpenAI ,StreamWithOpenAI};

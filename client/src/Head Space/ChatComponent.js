@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import EditSession from "./EditSession";
 
 const ChatComponent = () => {
@@ -12,10 +12,11 @@ const ChatComponent = () => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
+  const [ws, setWs] = useState(null);
+  const messagesEndRef = useRef(null);
 
   function getPrompt() {
-    const prompt1 = 
-    `Assume the role of an AI assistant with expertise in psychological analysis and introspection. 
+    const prompt1 = `Assume the role of an AI assistant with expertise in psychological analysis and introspection. 
     Your objective is to help me explore and understand my thoughts over time, providing insights for personal growth and self-awareness. 
     You are presented with a series of thoughts from me, each accompanied by a timestamp indicating when the thought was added. 
     Your task is to analyze these thoughts in the context of their timing, 
@@ -23,13 +24,17 @@ const ChatComponent = () => {
     conversational manner and pose questions that encourage me to delve deeper into
      understanding my mindset and emotions associated with these thoughts.`;
 
-    const mytopic= "this is the topic under which i have stored my thoughts, my topic : "+topicTitle +",,";
+    const mytopic =
+      "this is the topic under which i have stored my thoughts, my topic : " +
+      topicTitle +
+      ",,";
 
     const mythoughts =
-      "and here are my thoughts and timestamps stored in json form: " + JSON.stringify(thoughts) +",,";
+      "and here are my thoughts and timestamps stored in json form: " +
+      JSON.stringify(thoughts) +
+      ",,";
 
-    const prompt2 =
-     `        Based on these thoughts and their respective timestamps, provide an analysis that identifies any patterns, 
+    const prompt2 = `        Based on these thoughts and their respective timestamps, provide an analysis that identifies any patterns, 
     shifts, or significant changes in my mindset or emotional state over time.
     Offer insights into what these changes might signify and ask open-ended questions that guide me to explore more about the 
     evolution of my thought patterns, feelings, or potential actions i might consider. 
@@ -37,10 +42,8 @@ const ChatComponent = () => {
      or clarify my aspirations. Your goal is to foster an ongoing, engaging dialogue that helps
       me gain a deeper self-understanding of my mental journey.`;
 
-    return (prompt1+mytopic+mythoughts+prompt2)
-
+    return prompt1 + mytopic + mythoughts + prompt2;
   }
-
 
   function updateSessions(sessions) {
     setUserSessions(sessions);
@@ -63,6 +66,8 @@ const ChatComponent = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
+      console.log(json.data);
+      json.data.splice(0,1);
       setMessages(json.data);
     } catch (e) {
       console.log(e);
@@ -72,13 +77,14 @@ const ChatComponent = () => {
   async function Chat(analyse, session) {
     let input;
     if (analyse) {
-      input = getPrompt()
+      input = getPrompt();
     } else {
       input = userInput;
     }
 
     try {
-      const response = await fetch("http://localhost:5000/chat", {
+      setUserInput("");
+      const response = await fetch("http://localhost:5000/socketchat", {
         method: "POST",
         headers: {
           authorization: localStorage.getItem("usertoken"),
@@ -92,9 +98,8 @@ const ChatComponent = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const json = await response.json();
-      setMessages(json.messages);
-      setUserInput("");
+      // const json = await response.json();
+      // setMessages(json.messages);
     } catch (e) {
       console.log(e);
     }
@@ -135,6 +140,51 @@ const ChatComponent = () => {
       getSessions();
     }
   }, []);
+
+  useEffect(() => {
+    // Establish WebSocket connection
+    const newWs = new WebSocket("ws://localhost:5000");
+
+    newWs.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.messages) {
+          // Update messages state with new data
+          data.messages.splice(0,1);
+          setMessages(data.messages);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    newWs.onopen = () => {
+      console.log("WebSocket connected");
+    };
+
+    newWs.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    newWs.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+
+    setWs(newWs);
+
+    // Cleanup function to close WebSocket connection when component unmounts
+    return () => {
+      newWs.close();
+    };
+  }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -209,16 +259,17 @@ const ChatComponent = () => {
         ))}
       </div>
 
-      <div className=" w-4/5 " >
+      <div className=" w-4/5 ">
         <div className="mx-16 my-0 px-4  bg-white h-3/4 overflow-y-auto">
           {messages.map((msg, index) => (
             <div key={index} className="">
               <div className="text-black font-bold mt-2 text-lg">
                 {msg.role === "user" ? "You: " : "Mind Cache AI: "}
               </div>
-              {msg.content}
+              <div className="whitespace-pre-wrap">{msg.content}</div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 flex justify-center">
