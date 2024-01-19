@@ -1,8 +1,10 @@
 import { DataContext } from "../utils/DataContext";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../Commons/NavBar";
 import AddTopic from "./AddTopic";
 import EditData from "./EditData";
+
 
 function Topics() {
   const { topics, setTopics } = useContext(DataContext);
@@ -35,6 +37,9 @@ function Topics() {
             },
           }
         );
+        if(response.status===403){
+          navigate('/signin');
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -69,6 +74,8 @@ function Topics() {
 
   return (
     <div className="">
+    <NavBar/>
+      
       {showaddtopic && <AddTopic onClosedialog={handleclose} />}
       {showedittopic && <EditData onClosedialog={handleeditclose} datamode={"topic"} datapassed={selectedtopic} topicid={selectedtopic._id}/>}
 
