@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
+import { AddThoughtAPI } from "../utils/Api";
 
 function AddThought({ onClosedialog,topic }) {
   const {  setThoughts } = useContext(DataContext);
@@ -9,35 +10,46 @@ function AddThought({ onClosedialog,topic }) {
 
   console.log(topic)
 
-  async function handleSubmit() {
-    if (newThought === "") {
-      console.log("it is empty");
+  // async function handleSubmit() {
+  //   if (newThought === "") {
+  //     console.log("it is empty");
       
-    } else {
+  //   } else {
 
-      try {
-        const response = await fetch("http://localhost:3001/addthought", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: localStorage.getItem("usertoken"),
-          },
-          body: JSON.stringify({
-            topicid: topic._id,
-            thought: newThought,
-            time: new Date().toISOString(),
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const json = await response.json();
-        setThoughts(json.data);
+  //     try {
+  //       const response = await fetch("http://localhost:3001/addthought", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           authorization: localStorage.getItem("usertoken"),
+  //         },
+  //         body: JSON.stringify({
+  //           topicid: topic._id,
+  //           thought: newThought,
+  //           time: new Date().toISOString(),
+  //         }),
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       const json = await response.json();
+  //       setThoughts(json.data);
+  //       onClosedialog();
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+
+  //   }
+  // }
+
+  async function handleCreate(){
+    if(!newThought==""){
+      const result = await AddThoughtAPI(topic._id,newThought)
+      console.log(result)
+      if(result.success){
+        setThoughts(result.data)
         onClosedialog();
-      } catch (e) {
-        console.log(e);
       }
-
     }
   }
 
@@ -65,7 +77,7 @@ function AddThought({ onClosedialog,topic }) {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
               onClick={() => {
-                handleSubmit();
+                handleCreate();
               }}
             >
               Add Thought

@@ -12,7 +12,7 @@ function NavBar(){
         }}>Mind Cache AI</div>
         {userid?(
             <button className="border-2 px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{
-                navigate(`/analyse`)
+                navigate(`/signin`)
             }}>Analyse</button>
         ):(
             <button className="border-2 px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{

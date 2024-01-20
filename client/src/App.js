@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import "./App.css";
 import NavBar from "./Commons/NavBar";
-import HeadLanding from "./Head Space/HeadLanding";
+import HeadLanding from "./Head Space/TopicLanding";
 import Topics from "./Head Space/Topics";
 import Thoughts from "./Head Space/Thoughts";
 import ChatComponent from "./Head Space/ChatComponent";
@@ -17,8 +17,6 @@ import { DataProvider } from "./utils/DataContext";
 
 function App() {
   const user = localStorage.getItem("userid");
-
-  console.log(localStorage.getItem("usertoken"));
 
   return (
     <DataProvider>

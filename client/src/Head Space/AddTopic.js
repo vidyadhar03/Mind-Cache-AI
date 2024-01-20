@@ -1,36 +1,19 @@
 import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
+import { AddTopicAPI } from "../utils/Api";
+
 
 function AddTopic({ onClosedialog }) {
   const { setTopics } = useContext(DataContext);
   let newTopic = "";
 
-  async function handleSubmit() {
-    if (newTopic === "") {
-      console.log("it is empty");
-      //todo - update UI when topic input is empty
-    } else {
-      try {
-        const response = await fetch("http://localhost:3001/addtopic", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: localStorage.getItem("usertoken"),
-          },
-          body: JSON.stringify({
-            userid: localStorage.getItem("userid"),
-            title: newTopic,
-            time: new Date().toISOString(),
-          }),
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const json = await response.json();
-        setTopics(json.data);
+  async function handleCreate(){
+    if(!newTopic==""){
+      const result = await AddTopicAPI(newTopic)
+      console.log(result)
+      if(result.success){
+        setTopics(result.data)
         onClosedialog();
-      } catch (e) {
-        console.log(e);
       }
     }
   }
@@ -57,7 +40,7 @@ function AddTopic({ onClosedialog }) {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
               onClick={() => {
-                handleSubmit();
+                handleCreate()
               }}
             >
               Add Topic

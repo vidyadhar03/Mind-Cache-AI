@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../utils/DataContext";
 
-function EditData({ onClosedialog, datamode, datapassed, topicid }) {
+function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
   const { setTopics, setThoughts } = useContext(DataContext);
 
   const [edit, setEdit] = useState("");
@@ -49,6 +49,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
+      if(json.data.length===0){emptydata(true);}
       if (datamode === "topic") {
         setTopics(json.data);
       } else {

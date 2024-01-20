@@ -1,16 +1,16 @@
 import { DataContext } from "../utils/DataContext";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../Commons/NavBar";
+import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
 import EditData from "./EditData";
-
 
 function Topics() {
   const { topics, setTopics } = useContext(DataContext);
   const [showaddtopic, setshowaddtopic] = useState(false);
   const [showedittopic, setshowedittopic] = useState(false);
-  const [selectedtopic,setSelectedtopic] = useState(null);
+  const [selectedtopic, setSelectedtopic] = useState(null);
+  const [emptytopics, setEmptyTopics] = useState(false);
   const navigate = useNavigate();
 
   const handleeditclose = () => {
@@ -37,36 +37,29 @@ function Topics() {
             },
           }
         );
-        if(response.status===403){
-          navigate('/signin');
+        if (response.status === 403) {
+          localStorage.removeItem("userid");
+          localStorage.removeItem("usertoken");
+          navigate("/");
         }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
+        if(json.data.length===0){setEmptyTopics(true)}
         setTopics(json.data);
       } catch (e) {
         console.log(e);
       }
     };
-
     fetchTopics();
   }, []);
 
-  if (topics.length === 0) {
+  if (emptytopics===false && topics.length === 0) {
     return (
       <div>
-        {showaddtopic && <AddTopic onClosedialog={handleclose} />}
-
         <div className="text-3xl text-black flex justify-center p-16">
           Loading...
-        </div>
-
-        <div
-          className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-          onClick={handleopen}
-        >
-          + Add Topic
         </div>
       </div>
     );
@@ -74,49 +67,59 @@ function Topics() {
 
   return (
     <div className="">
-    <NavBar/>
-      
       {showaddtopic && <AddTopic onClosedialog={handleclose} />}
-      {showedittopic && <EditData onClosedialog={handleeditclose} datamode={"topic"} datapassed={selectedtopic} topicid={selectedtopic._id}/>}
+      {showedittopic && (
+        <EditData
+          onClosedialog={handleeditclose}
+          datamode={"topic"}
+          datapassed={selectedtopic}
+          topicid={selectedtopic._id}
+          emptydata={setEmptyTopics}
+        />
+      )}
 
-      <div className="grid grid-cols-4 gap-2">
-        {topics.map((topic, index) => (
-          <div
-            className="bg-blue-200 mt-8 mx-4  text-center rounded-md cursor-pointer shadow-lg hover:shadow-2xl"
-            key={index}
-          >
-          
-
-            <div className="flex justify-end">
-              <img
-                className="h-4 w-4 m-2"
-                src="./editlogo.png"
-                onClick={()=>{
-                  setSelectedtopic(topic);
-                  setshowedittopic(true);
-                }}
-              />
-            </div>
-            <div
-              className="px-12 py-24 text-black text-2xl font-bold"
-              onClick={() => {
-                navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
-                  state: { data: topic },
-                });
-              }}
-            >
-              {topic.title}
-            </div>
+      {emptytopics ? (
+        <TopicLanding emptydata={setEmptyTopics}/>
+      ) : (
+        <div>
+          <div className="grid grid-cols-4 gap-2">
+            {topics.map((topic, index) => (
+              <div
+                className="bg-blue-200 mt-8 mx-4  text-center rounded-md cursor-pointer shadow-lg hover:shadow-2xl"
+                key={index}
+              >
+                <div className="flex justify-end">
+                  <img
+                    className="h-4 w-4 m-2"
+                    src="./editlogo.png"
+                    onClick={() => {
+                      setSelectedtopic(topic);
+                      setshowedittopic(true);
+                    }}
+                  />
+                </div>
+                <div
+                  className="px-12 py-24 text-black text-2xl font-bold"
+                  onClick={() => {
+                    navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
+                      state: { data: topic },
+                    });
+                  }}
+                >
+                  {topic.title}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div
-        className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-        onClick={handleopen}
-      >
-        + Add Topic
-      </div>
+          <div
+            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
+            onClick={handleopen}
+          >
+            + Add Topic
+          </div>
+        </div>
+      )}
     </div>
   );
 }

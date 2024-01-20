@@ -84,31 +84,31 @@ function vupdatethought(obj) {
 //chat server validators
 
 //chat
-function vchat(obj){
+function vchat(obj) {
   const schema = z.object({
     sessionid: z.string(),
-    userinput: z.string()
+    userinput: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;
 }
 
 //sessions
-function vsessions(obj){
+function vsessions(obj) {
   const schema = z.string().min(4);
   const res = schema.safeParse(obj);
   return res;
 }
 
 //messages
-function vmessages(obj){
+function vmessages(obj) {
   const schema = z.string().min(4);
   const res = schema.safeParse(obj);
   return res;
 }
 
 //add session
-function vstartsession(obj){
+function vstartsession(obj) {
   const schema = z.object({
     userid: z.string(),
     sessionTitle: z.string(),
@@ -119,7 +119,7 @@ function vstartsession(obj){
 }
 
 //edit session
-function veditsession(obj){
+function veditsession(obj) {
   const schema = z.object({
     userid: z.string(),
     sessionid: z.string(),
@@ -143,5 +143,5 @@ module.exports = {
   vsessions,
   vmessages,
   vstartsession,
-  veditsession
+  veditsession,
 };

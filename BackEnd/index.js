@@ -113,7 +113,6 @@ app.get("/topics/:userid", auth, async (req, res) => {
 
 app.post("/addtopic", auth, async (req, res) => {
   const response = vaddtopic(req.body);
-  console.log(response)
   if (!response.success) {
     return res
       .status(400)

@@ -91,50 +91,6 @@ app.post("/socketchat", auth, async (req, res) => {
   }
 });
 
-app.post("/chat", auth, async (req, res) => {
-  const response = vchat(req.body);
-  if (!response.success) {
-    return res
-      .status(400)
-      .json({ message: "Inputs are invalid", errors: response.error.issues });
-  }
-  const { sessionid, userinput } = req.body;
-  try {
-    //check if messages exists already
-    const found = await ChatMessage.findOne({ sessionID: sessionid });
-    let user_messages;
-    if (found) {
-      user_messages = found;
-    } else {
-      user_messages = new ChatMessage({ sessionID: sessionid, messages: [] });
-      await user_messages.save();
-    }
-    const updatedMessages = user_messages.messages.map((item) => {
-      return { role: item.role, content: item.content };
-    });
-    updatedMessages.push({ role: "user", content: userinput });
-
-    //todo get response from OPEN AI
-    // console.log("waiting for response");
-    // const aiResponse = await chatWithOpenAI(updatedMessages);
-    // console.log("got response from chat gpt");
-
-    const aiResponse = "I will reply once im integrated dear user!";
-    updatedMessages.push({ role: "assistant", content: aiResponse });
-
-    // Save updated conversation history
-    user_messages.messages = updatedMessages;
-    await user_messages.save();
-
-    res
-      .status(200)
-      .json({ sessionId: user_messages.sessionID, messages: updatedMessages });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 app.get("/sessions/:userid", async (req, res) => {
   const response = vsessions(req.params.userid);
   if (!response.success) {
@@ -245,10 +201,57 @@ app.post("/editchatsession", auth, async (req, res) => {
   }
 });
 
+server.listen(5000, () => {
+  console.log("HTTP and WebSocket server running on port 5000");
+});
+
+
+// app.post("/chat", auth, async (req, res) => {
+//   const response = vchat(req.body);
+//   if (!response.success) {
+//     return res
+//       .status(400)
+//       .json({ message: "Inputs are invalid", errors: response.error.issues });
+//   }
+//   const { sessionid, userinput } = req.body;
+//   try {
+//     //check if messages exists already
+//     const found = await ChatMessage.findOne({ sessionID: sessionid });
+//     let user_messages;
+//     if (found) {
+//       user_messages = found;
+//     } else {
+//       user_messages = new ChatMessage({ sessionID: sessionid, messages: [] });
+//       await user_messages.save();
+//     }
+//     const updatedMessages = user_messages.messages.map((item) => {
+//       return { role: item.role, content: item.content };
+//     });
+//     updatedMessages.push({ role: "user", content: userinput });
+
+//     //todo get response from OPEN AI
+//     // console.log("waiting for response");
+//     // const aiResponse = await chatWithOpenAI(updatedMessages);
+//     // console.log("got response from chat gpt");
+
+//     const aiResponse = "I will reply once im integrated dear user!";
+//     updatedMessages.push({ role: "assistant", content: aiResponse });
+
+//     // Save updated conversation history
+//     user_messages.messages = updatedMessages;
+//     await user_messages.save();
+
+//     res
+//       .status(200)
+//       .json({ sessionId: user_messages.sessionID, messages: updatedMessages });
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
 // app.listen("5000", () => {
 //   console.log("working");
 // });
 
-server.listen(5000, () => {
-  console.log("HTTP and WebSocket server running on port 5000");
-});
+
