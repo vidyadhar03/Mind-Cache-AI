@@ -8,7 +8,7 @@ export function ThoughtLanding({ topic, emptydata }) {
   const { setThoughts } = useContext(DataContext);
 
   async function handleCreate() {
-    if (!thought == "") {
+    if (thought !== "") {
       const result = await AddThoughtAPI(topic._id, thought);
       if (result.success) {
         setThoughts(result.data);
@@ -38,7 +38,7 @@ export function ThoughtLanding({ topic, emptydata }) {
         />
 
         <button
-          className="bg-blue-200 mt-2 rounded-lg py-2 px-6 hover:bg-blue-600 mt-4"
+          className="bg-blue-200 rounded-lg py-2 px-6 hover:bg-blue-600 mt-4"
           onClick={() => {
             handleCreate();
           }}

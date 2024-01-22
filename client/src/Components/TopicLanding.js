@@ -8,7 +8,7 @@ function TopicLanding({ emptydata }) {
   const { setTopics } = useContext(DataContext);
 
   async function handleCreate() {
-    if (!topic == "") {
+    if (topic !== "") {
       const result = await AddTopicAPI(topic);
       if (result.success) {
         setTopics(result.data);
@@ -23,6 +23,7 @@ function TopicLanding({ emptydata }) {
         <img
           src="/meditationlogo.png"
           className="h-auto mx-2 md:h-80 md:mx-12 rounded-full"
+          alt="logo"
         />
         <div className=" p-4 my-auto text-center max-w-xl text-black font-medium">
           <p>

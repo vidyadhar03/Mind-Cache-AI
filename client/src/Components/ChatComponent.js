@@ -12,7 +12,7 @@ const ChatComponent = () => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
-  const [ws, setWs] = useState(null);
+  // const [ws, setWs] = useState(null);
   const messagesEndRef = useRef(null);
 
   function getPrompt() {
@@ -170,7 +170,7 @@ const ChatComponent = () => {
       console.log("WebSocket disconnected");
     };
 
-    setWs(newWs);
+    // setWs(newWs);
 
     // Cleanup function to close WebSocket connection when component unmounts
     return () => {

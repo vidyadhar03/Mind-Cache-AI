@@ -1,21 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
 
 
 function NavBar(){
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const navbar = document.getElementById('navbar');
+    const height = navbar.getBoundingClientRect().height;
+    console.log(height)
+  }, []);
+
   const userid = localStorage.getItem("userid")
 
-    return <div className="w-parent flex flex-row justify-between shadow-md px-6 py-2 sticky top-0 z-10 bg-white">
-        <div className="my-auto text-lg cursor-pointer font-semibold" onClick={()=>{
+    return <div id="navbar" className="w-parent flex flex-row justify-between shadow-md px-4 py-2 sticky top-0 z-10 bg-gray-50 ">
+        <div className="flex cursor-pointer" onClick={()=>{
             navigate(`/`)
-        }}>Mind Cache AI</div>
+        }}>
+        <img src="/mindcachelogo.png" className="h-8 w-8 rounded-full mr-2" alt="logo"/>
+        <div className="my-auto text-xl font-sans text-justify" >Mind Cache AI</div>
+        </div>
         {userid?(
-            <button className="border-2 px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{
+            <button className="border-2 font-sans px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{
                 navigate(`/signin`)
             }}>Analyse</button>
         ):(
-            <button className="border-2 px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{
+            <button className="px-8 py-2 font-sans bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg font-medium " onClick={()=>{
                 navigate(`/signin`)
             }}>Sign In</button>
         )}

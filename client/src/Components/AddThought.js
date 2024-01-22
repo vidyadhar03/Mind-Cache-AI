@@ -1,55 +1,21 @@
-import { useNavigate } from "react-router-dom";
 import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 
 function AddThought({ onClosedialog,topic }) {
   const {  setThoughts } = useContext(DataContext);
-  const navigate = useNavigate();
   let newThought = "";
 
-  console.log(topic)
-
-  // async function handleSubmit() {
-  //   if (newThought === "") {
-  //     console.log("it is empty");
-      
-  //   } else {
-
-  //     try {
-  //       const response = await fetch("http://localhost:3001/addthought", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           authorization: localStorage.getItem("usertoken"),
-  //         },
-  //         body: JSON.stringify({
-  //           topicid: topic._id,
-  //           thought: newThought,
-  //           time: new Date().toISOString(),
-  //         }),
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       const json = await response.json();
-  //       setThoughts(json.data);
-  //       onClosedialog();
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-
-  //   }
-  // }
-
   async function handleCreate(){
-    if(!newThought==""){
+    if(newThought!==""){
       const result = await AddThoughtAPI(topic._id,newThought)
       console.log(result)
       if(result.success){
         setThoughts(result.data)
         onClosedialog();
       }
+    }else{
+      console.log("add thought first ")
     }
   }
 

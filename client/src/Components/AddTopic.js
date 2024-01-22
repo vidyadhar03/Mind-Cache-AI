@@ -8,7 +8,7 @@ function AddTopic({ onClosedialog }) {
   let newTopic = "";
 
   async function handleCreate(){
-    if(!newTopic==""){
+    if(newTopic!==""){
       const result = await AddTopicAPI(newTopic)
       console.log(result)
       if(result.success){
