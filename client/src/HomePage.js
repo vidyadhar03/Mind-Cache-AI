@@ -8,10 +8,10 @@ function HomePage() {
   function Intro() {
     return (
       <div className="flex flex-col md:flex-row h-[calc(100vh-52px)] border-b border-gray-300 ">
-        <div className="px-4 text-white text-4xl md:text-6xl font-bold flex justify-center items-center h-60 md:h-full md:w-60 bg-blue-400">
+        <div className="px-4 text-white text-4xl md:text-6xl font-bold flex justify-center items-center h-3/5 md:h-full md:w-3/5 bg-blue-400">
           <TypingAnimation />
         </div>
-        <div className="  flex flex-col items-center justify-center h-40 md:h-full md:w-40 bg-gray-50  ">
+        <div className="  flex flex-col items-center justify-center h-2/5 md:h-full md:w-2/5 bg-gray-50  ">
           <div className="text-black text-2xl md:text-4xl text-center mx-2 font-medium">
             Gain insights into your mind.
           </div>

@@ -21,7 +21,7 @@ function NavBar(){
         <div className="my-auto text-xl font-sans text-justify" >Mind Cache AI</div>
         </div>
         {userid?(
-            <button className="border-2 font-sans px-4 py-2 rounded-xl bg-blue-200 hover:bg-blue-400 " onClick={()=>{
+            <button className="px-8 py-2 font-sans bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg font-medium" onClick={()=>{
                 navigate(`/signin`)
             }}>Analyse</button>
         ):(
