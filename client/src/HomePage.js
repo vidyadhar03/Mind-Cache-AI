@@ -7,12 +7,13 @@ function HomePage() {
 
   function Intro() {
     return (
-      <div className="flex flex-col md:flex-row h-[calc(100vh-52px)] border-b border-gray-300 ">
-        <div className="px-4 text-white text-4xl md:text-6xl font-bold flex justify-center items-center h-3/5 md:h-full md:w-3/5 bg-blue-400">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)] border-b border-gray-300 ">
+        <div className="px-4 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-blue-400">
           <TypingAnimation />
         </div>
-        <div className="  flex flex-col items-center justify-center h-2/5 md:h-full md:w-2/5 bg-gray-50  ">
-          <div className="text-black text-2xl md:text-4xl text-center mx-2 font-medium">
+        <div className="  flex flex-col items-center justify-center h-1/2 lg:h-full lg:w-2/5 bg-gray-50 p-2 ">
+          <img src="/introspectlogo.jpg" className="h-1/2 lg-2/5 w-auto rounded-full mx-2"/>
+          <div className="text-black text-2xl lg:text-4xl text-center mx-2 mt-4 font-medium">
             Gain insights into your mind.
           </div>
           <button
@@ -58,7 +59,7 @@ function HomePage() {
         <div className="text-black text-center font-bold text-4xl">Pricing</div>
 
         <div className="flex flex-col md:flex-row md:justify-center mt-8 px-6">
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 md:w-80 bg-white">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 md:w-80">
             <div className="text-center text-4xl font-medium ">Free</div>
             <div className="mt-4 text-center text-lg ">
               10 AI Interactions per week
@@ -75,7 +76,7 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 md:w-80 bg-white font-sans">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 md:w-80 font-sans">
             <div className="text-center text-4xl font-medium">Pro</div>
             <div className="mt-4 text-center text-lg">
               100 AI Interactions per week

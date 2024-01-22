@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import EditSession from "./EditSession";
 
 const ChatComponent = () => {
@@ -12,7 +13,7 @@ const ChatComponent = () => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
-  // const [ws, setWs] = useState(null);
+  const navigate = useNavigate();
   const messagesEndRef = useRef(null);
 
   function getPrompt() {
@@ -67,7 +68,7 @@ const ChatComponent = () => {
       }
       const json = await response.json();
       console.log(json.data);
-      json.data.splice(0,1);
+      json.data.splice(0, 1);
       setMessages(json.data);
     } catch (e) {
       console.log(e);
@@ -150,7 +151,7 @@ const ChatComponent = () => {
         const data = JSON.parse(event.data);
         if (data.messages) {
           // Update messages state with new data
-          data.messages.splice(0,1);
+          data.messages.splice(0, 1);
           setMessages(data.messages);
         }
       } catch (e) {
@@ -169,8 +170,6 @@ const ChatComponent = () => {
     newWs.onclose = () => {
       console.log("WebSocket disconnected");
     };
-
-    // setWs(newWs);
 
     // Cleanup function to close WebSocket connection when component unmounts
     return () => {
@@ -221,7 +220,7 @@ const ChatComponent = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       {editSessionlayout && (
         <EditSession
           onClosedialog={handleeditclose}
@@ -231,36 +230,53 @@ const ChatComponent = () => {
       )}
 
       <div className=" bg-slate-200 overflow-y-auto w-1/5">
-        {userSessions.map((session, index) => (
-          <div
-            key={session._id}
-            className={`flex justify-between text-black text-xl px-4 py-2 m-1 rounded-lg hover:bg-slate-400 
+        <div
+          className="flex cursor-pointer px-4 py-2 sticky top-0 z-10 bg-slate-200 shadow-lg mb-4"
+          onClick={() => {
+            navigate(`/`);
+          }}
+        >
+          <img
+            src="/mindcachelogo.png"
+            className="h-8 w-8 rounded-full mr-2"
+            alt="logo"
+          />
+          <div className="my-auto text-xl font-sans text-justify">
+            Mind Cache AI
+          </div>
+        </div>
+        <div className="">
+          {userSessions.map((session, index) => (
+            <div
+              key={session._id}
+              className={`flex justify-between text-black text-xl px-4 py-2 m-1 rounded-lg hover:bg-slate-400 
               ${
                 selectedSession && session._id === selectedSession._id
                   ? "bg-red-300"
                   : "bg-slate-200"
               }`}
-            onClick={() => {
-              LoadSession(session);
-              localStorage.setItem("sessionLoaded", JSON.stringify(session));
-            }}
-          >
-            {session.sessionTitle}
-            <img
-              src="./3dotlogo.png"
-              className="w-8 h-8 cursor-pointer"
               onClick={() => {
-                setDotClickedSesh(session);
-                editSession();
+                LoadSession(session);
+                localStorage.setItem("sessionLoaded", JSON.stringify(session));
               }}
-              alt="Edit"
-            />
-          </div>
-        ))}
+            >
+              {session.sessionTitle}
+              <img
+                src="./3dotlogo.png"
+                className="w-8 h-8 cursor-pointer"
+                onClick={() => {
+                  setDotClickedSesh(session);
+                  editSession();
+                }}
+                alt="Edit"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className=" w-4/5 ">
-        <div className="mx-16 my-0 px-4  bg-white h-3/4 overflow-y-auto">
+        <div className="mx-16 my-0 px-4  bg-white h-90 overflow-y-auto">
           {messages.map((msg, index) => (
             <div key={index} className="">
               <div className="text-black font-bold mt-2 text-lg">
@@ -272,17 +288,17 @@ const ChatComponent = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 flex justify-center">
+        <form onSubmit={handleSubmit} className="px-16 py-4 h-10 flex justify-center">
           <input
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="Type your message"
-            className="border-2 rounded-lg p-2 w-96"
+            className="border-2 rounded-lg p-2 w-11/12"
           />
           <button
             type="submit"
-            className="ml-4 bg-blue-300 hover:bg-blue-600 rounded-lg px-4 py-2"
+            className="ml-4 px-6 py-2 font-sans bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg font-medium  w-1/12"
           >
             Send
           </button>

@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const { auth } = require("./middleware");
-const { chatWithOpenAI,StreamWithOpenAI } = require("./openAIHelper");
+const { StreamWithOpenAI } = require("./openAIHelper");
 const {
   vchat,
   vsessions,
@@ -69,7 +69,7 @@ app.post("/socketchat", auth, async (req, res) => {
     stream_messages.push({ role: "assistant", content: stream_message });
     const aiResponse = await StreamWithOpenAI(updatedMessages, (chunk) => {
       // Broadcast each chunk to the client in real-time
-      console.log("received chunk: ", chunk)
+      // console.log("received chunk: ", chunk)
       stream_message+=chunk;
       stream_messages[stream_messages.length-1].content=stream_message
       broadcast({ sessionId: user_messages.sessionID, messages: stream_messages });

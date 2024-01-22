@@ -80,53 +80,53 @@ function Topics() {
         />
       )}
 
-      <div className="w-full h-20 flex justify-center items-center bg-blue-200">
-        TOPICS Intro section
-      </div>
-
       {emptytopics ? (
         <TopicLanding emptydata={setEmptyTopics} />
       ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mt-2">
-          {topics.map((topic, index) => (
-            <div
-              key={index}
-              className=" bg-blue-200 h-48 md:h-56 rounded-lg shadow-md hover:shadow-lg "
-            >
+        <div>
+          <div className="w-full h-20 flex justify-center items-center bg-blue-200">
+            TOPICS Intro section
+          </div>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mt-2">
+            {topics.map((topic, index) => (
               <div
-                className="px-4 py-8 h-5/6 text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
-                onClick={() => {
-                  navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
-                    state: { data: topic },
-                  });
-                }}
+                key={index}
+                className=" bg-blue-300 h-48 md:h-56 rounded-lg shadow-md hover:shadow-lg "
               >
-                {topic.title}
-              </div>
-              <div className="h-1/6 flex justify-between items-center px-2 border-t border-blue-400">
-                <div className="">{topic.time}</div>
-                <div>
-                  <img
-                    src="/editlogo.png"
-                    className="h-4 w-4 cursor-pointer"
-                    onClick={() => {
-                      setSelectedtopic(topic);
-                      setshowedittopic(true);
-                    }}
-                  />
+                <div
+                  className="px-4 py-8 h-5/6 font-medium text-gray text-base sm:text-lg md:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  onClick={() => {
+                    navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
+                      state: { data: topic },
+                    });
+                  }}
+                >
+                  {topic.title}
+                </div>
+                <div className="h-1/6 flex justify-between items-center px-2 border-t border-blue-400">
+                  <div className="text-xs">{topic.time}</div>
+                  <div>
+                    <img
+                      src="/editlogo.png"
+                      className="h-4 w-4 cursor-pointer"
+                      onClick={() => {
+                        setSelectedtopic(topic);
+                        setshowedittopic(true);
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div
+            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
+            onClick={handleopen}
+          >
+            + Add Topic
+          </div>
         </div>
       )}
-
-      <div
-        className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-        onClick={handleopen}
-      >
-        + Add Topic
-      </div>
     </div>
   );
 

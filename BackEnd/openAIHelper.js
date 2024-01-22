@@ -21,7 +21,8 @@ const openai = new OpenAI({
 // }
 
 async function StreamWithOpenAI(messages, broadcast) {
-  let fullResponse = "";
+  //init empty when not testing
+  let fullResponse = "I will reply once i am integrated, dear Mind Cache AI User!";
 
   try {
   //   const stream = await openai.chat.completions.create({
@@ -53,4 +54,4 @@ async function StreamWithOpenAI(messages, broadcast) {
   }
 }
 
-module.exports = { chatWithOpenAI ,StreamWithOpenAI};
+module.exports = { StreamWithOpenAI};
