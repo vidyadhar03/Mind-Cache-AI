@@ -229,7 +229,7 @@ const ChatComponent = () => {
         />
       )}
 
-      <div className=" bg-slate-200 overflow-y-auto w-1/5">
+      <div className=" bg-slate-200 overflow-y-auto w-0 sm:w-72">
         <div
           className="flex cursor-pointer px-4 py-2 sticky top-0 z-10 bg-slate-200 shadow-lg mb-4"
           onClick={() => {
@@ -275,8 +275,71 @@ const ChatComponent = () => {
         </div>
       </div>
 
-      <div className=" w-4/5 ">
-        <div className="mx-16 my-0 px-4  bg-white h-90 overflow-y-auto">
+      <div className=" flex-grow ">
+        <div className="flex flex-col max-h-screen">
+
+          <div className="flex justify-between px-2 h-10 sm:h-0 border-b shadow-md">
+            <div className="flex items-center">
+              <img src="/navbaricon.png" className="h-8 w-auto" />
+            </div>
+            <div
+              className="flex cursor-pointer px-4 py-2 "
+              onClick={() => {
+                navigate(`/`);
+              }}
+            >
+              <img
+                src="/mindcachelogo.png"
+                className="h-8 w-8 rounded-full mr-2"
+                alt="logo"
+              />
+              <div className="my-auto text-xl font-sans text-justify">
+                Mind Cache AI
+              </div>
+            </div>
+            <div className="p-1"></div>
+          </div>
+
+          <div className=" bg-white mx-6 min-h-90 overflow-y-auto">
+            {messages.map((msg, index) => (
+              <div key={index} className="">
+                <div className="text-black font-bold mt-2 text-lg">
+                  {msg.role === "user" ? "You: " : "Mind Cache AI: "}
+                </div>
+                <div className="whitespace-pre-wrap">{msg.content}</div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="h-10 p-0 flex justify-center"
+          >
+            <div className="m-4 flex w-full border-2 rounded-lg overflow-hidden">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Type your message"
+                className="p-2 flex-grow"
+              />
+              <button
+                type="submit"
+                className="px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-r-lg font-medium"
+              >
+                Send
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+        {/* <div className="py-2 font-semibold text-xl h-10 sm:h-0 bg-pink-300">
+          {topicTitle}
+        </div> */}
+
+        {/* <div className=" bg-white mx-6 h-80 sm:h-90 overflow-y-auto">
           {messages.map((msg, index) => (
             <div key={index} className="">
               <div className="text-black font-bold mt-2 text-lg">
@@ -288,21 +351,23 @@ const ChatComponent = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSubmit} className="px-16 py-4 h-10 flex justify-center">
-          <input
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Type your message"
-            className="border-2 rounded-lg p-2 w-11/12"
-          />
-          <button
-            type="submit"
-            className="ml-4 px-6 py-2 font-sans bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg font-medium  w-1/12"
-          >
-            Send
-          </button>
-        </form>
+        <form onSubmit={handleSubmit} className="h-10 p-0 flex justify-center">
+          <div className="mx-6 my-4 flex w-full border-2 rounded-lg overflow-hidden">
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="Type your message"
+              className="p-2 flex-grow"
+            />
+            <button
+              type="submit"
+              className="px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-r-lg font-medium"
+            >
+              Send
+            </button>
+          </div>
+        </form> */}
       </div>
     </div>
   );

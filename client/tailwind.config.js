@@ -4,14 +4,14 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        '90': '90%',
-        '10': '10%',
+        80: "80%",
+        90: "90%",
+        10: "10%",
       },
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
+        sans: ["Poppins", "sans-serif"],
       },
     },
   },
   plugins: [],
-}
-
+};
