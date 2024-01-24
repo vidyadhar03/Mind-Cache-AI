@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        80: "80%",
-        90: "90%",
-        10: "10%",
+        80: "86%",
+        90: "93%",
+        10: "7%",
       },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],

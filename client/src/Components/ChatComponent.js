@@ -15,6 +15,11 @@ const ChatComponent = () => {
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   function getPrompt() {
     const prompt1 = `Assume the role of an AI assistant with expertise in psychological analysis and introspection. 
@@ -219,19 +224,16 @@ const ChatComponent = () => {
     setEditSessionLayout(false);
   };
 
-  return (
-    <div className="flex h-screen overflow-hidden">
-      {editSessionlayout && (
-        <EditSession
-          onClosedialog={handleeditclose}
-          session={dotclickedsesh}
-          updateSesh={updateSessions}
-        />
-      )}
-
-      <div className=" bg-slate-200 overflow-y-auto w-0 sm:w-72">
+  function UserSessionsDiv({ isVisible }) {
+    const visibilityClass = isVisible ? "" : "hidden";
+    const sestoolvisibility = isVisible ? "hidden" : "";
+    return (
+      <div
+        id="sessions"
+        className={`${visibilityClass} h-screen md:block md:w-64 min-w-64 flex-shrink-0 bg-gray-200 overflow-y-auto`}
+      >
         <div
-          className="flex cursor-pointer px-4 py-2 sticky top-0 z-10 bg-slate-200 shadow-lg mb-4"
+          className={`${sestoolvisibility} flex cursor-pointer px-4 py-2 sticky top-0 z-10 bg-gray-50 shadow-lg mb-4`}
           onClick={() => {
             navigate(`/`);
           }}
@@ -245,16 +247,23 @@ const ChatComponent = () => {
             Mind Cache AI
           </div>
         </div>
+        <div
+          className={`${visibilityClass} h-10 flex cursor-pointer px-4 py-2 bg-gray-50 sticky top-0 z-10 shadow-lg mb-4`}
+        >
+          <div className="my-auto text-xl font-sans text-justify">
+            Previous sessions
+          </div>
+        </div>
         <div className="">
           {userSessions.map((session, index) => (
             <div
               key={session._id}
-              className={`flex justify-between text-black text-xl px-4 py-2 m-1 rounded-lg hover:bg-slate-400 
-              ${
-                selectedSession && session._id === selectedSession._id
-                  ? "bg-red-300"
-                  : "bg-slate-200"
-              }`}
+              className={`flex justify-between text-black text-xl px-4 py-2 m-1 rounded-lg cursor-pointer hover:bg-slate-400 
+          ${
+            selectedSession && session._id === selectedSession._id
+              ? "bg-blue-600"
+              : "bg-slate-200"
+          }`}
               onClick={() => {
                 LoadSession(session);
                 localStorage.setItem("sessionLoaded", JSON.stringify(session));
@@ -274,49 +283,88 @@ const ChatComponent = () => {
           ))}
         </div>
       </div>
+    );
+  }
 
-      <div className=" flex-grow ">
-        <div className="flex flex-col max-h-screen">
+  return (
+    <div className="flex h-screen font-sans bg-gray-50">
+      {editSessionlayout && (
+        <EditSession
+          onClosedialog={handleeditclose}
+          session={dotclickedsesh}
+          updateSesh={updateSessions}
+        />
+      )}
 
-          <div className="flex justify-between px-2 h-10 sm:h-0 border-b shadow-md">
-            <div className="flex items-center">
-              <img src="/navbaricon.png" className="h-8 w-auto" />
-            </div>
-            <div
-              className="flex cursor-pointer px-4 py-2 "
-              onClick={() => {
-                navigate(`/`);
+      <div
+        className={`fixed inset-0 z-30 transition-opacity ${
+          isSidebarOpen ? "bg-black bg-opacity-50 backdrop-blur-sm" : "hidden"
+        }`}
+        onClick={() => setSidebarOpen(false)}
+      ></div>
+
+      <div
+        className={`fixed z-40 inset-y-0 left-0 w-64 transition duration-300 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } bg-gray-200 overflow-y-auto`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <UserSessionsDiv isVisible={true} />
+      </div>
+
+      <UserSessionsDiv isVisible={false} />
+
+      <div className="flex-grow " onClick={() => setSidebarOpen(false)}>
+        <div
+          id="toolbar"
+          className="h-10 md:h-0 md:hidden flex justify-between shadow-md"
+        >
+          <div className="flex items-center">
+            <img
+              src="/navbaricon.png"
+              className="h-8 w-auto ml-4"
+              onClick={(e) => {
+                toggleSidebar();
+                e.stopPropagation();
               }}
-            >
-              <img
-                src="/mindcachelogo.png"
-                className="h-8 w-8 rounded-full mr-2"
-                alt="logo"
-              />
-              <div className="my-auto text-xl font-sans text-justify">
-                Mind Cache AI
-              </div>
-            </div>
-            <div className="p-1"></div>
+            />
           </div>
-
-          <div className=" bg-white mx-6 min-h-90 overflow-y-auto">
-            {messages.map((msg, index) => (
-              <div key={index} className="">
-                <div className="text-black font-bold mt-2 text-lg">
-                  {msg.role === "user" ? "You: " : "Mind Cache AI: "}
-                </div>
-                <div className="whitespace-pre-wrap">{msg.content}</div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="h-10 p-0 flex justify-center"
+          <div
+            className="flex items-center cursor-pointer px-4 py-2 "
+            onClick={() => {
+              navigate(`/`);
+            }}
           >
-            <div className="m-4 flex w-full border-2 rounded-lg overflow-hidden">
+            <img
+              src="/mindcachelogo.png"
+              className="h-8 w-8 rounded-full mr-2"
+              alt="logo"
+            />
+            <div className="my-auto text-xl font-sans text-justify">
+              Mind Cache AI
+            </div>
+          </div>
+          <div className="p-1"></div>
+        </div>
+
+        <div
+          id="messages"
+          className="h-80 md:h-90 overflow-y-auto px-4 md:px-16"
+        >
+          {messages.map((msg, index) => (
+            <div key={index} className="">
+              <div className="text-black font-bold mt-2 text-lg">
+                {msg.role === "user" ? "You: " : "Mind Cache AI: "}
+              </div>
+              <div className="whitespace-pre-wrap">{msg.content}</div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div id="form" className="h-10 flex items-center ">
+          <form onSubmit={handleSubmit} className="w-full flex justify-center">
+            <div className="mx-4 md:mx-16 flex w-full border border-black rounded-lg overflow-hidden">
               <input
                 type="text"
                 value={userInput}
@@ -332,42 +380,7 @@ const ChatComponent = () => {
               </button>
             </div>
           </form>
-
         </div>
-
-        {/* <div className="py-2 font-semibold text-xl h-10 sm:h-0 bg-pink-300">
-          {topicTitle}
-        </div> */}
-
-        {/* <div className=" bg-white mx-6 h-80 sm:h-90 overflow-y-auto">
-          {messages.map((msg, index) => (
-            <div key={index} className="">
-              <div className="text-black font-bold mt-2 text-lg">
-                {msg.role === "user" ? "You: " : "Mind Cache AI: "}
-              </div>
-              <div className="whitespace-pre-wrap">{msg.content}</div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <form onSubmit={handleSubmit} className="h-10 p-0 flex justify-center">
-          <div className="mx-6 my-4 flex w-full border-2 rounded-lg overflow-hidden">
-            <input
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              placeholder="Type your message"
-              className="p-2 flex-grow"
-            />
-            <button
-              type="submit"
-              className="px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-r-lg font-medium"
-            >
-              Send
-            </button>
-          </div>
-        </form> */}
       </div>
     </div>
   );
