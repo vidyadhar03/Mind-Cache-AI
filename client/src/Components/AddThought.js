@@ -25,7 +25,7 @@ function AddThought({ onClosedialog,topic }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-      <div className="py-8 px-24 bg-white border shadow-xl rounded-lg">
+      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-white border shadow-xl rounded-lg text-center">
         <div className="flex-col  items-center">
           <div className="text-black font-medium text-xl">
             Add a thought to the {topic.title} topic to easy track

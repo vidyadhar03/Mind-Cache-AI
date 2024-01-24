@@ -68,7 +68,7 @@ function Thoughts() {
   }
 
   return (
-    <div>
+    <div className="font-sans">
       {showaddthought && (
         <AddThought onClosedialog={handleclose} topic={topicobj} />
       )}

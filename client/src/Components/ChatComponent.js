@@ -319,22 +319,12 @@ const ChatComponent = () => {
           id="toolbar"
           className="h-10 md:h-0 md:hidden flex justify-between shadow-md"
         >
-          <div className="flex items-center">
-            <img
-              src="/navbaricon.png"
-              className="h-8 w-auto ml-4"
-              onClick={(e) => {
-                toggleSidebar();
-                e.stopPropagation();
-              }}
-            />
-          </div>
           <div
             className="flex items-center cursor-pointer px-4 py-2 "
             onClick={() => {
               navigate(`/`);
             }}
-          >
+          >  
             <img
               src="/mindcachelogo.png"
               className="h-8 w-8 rounded-full mr-2"
@@ -343,8 +333,20 @@ const ChatComponent = () => {
             <div className="my-auto text-xl font-sans text-justify">
               Mind Cache AI
             </div>
+            
           </div>
-          <div className="p-1"></div>
+
+          <div className="flex items-center">
+            <img
+              src="/navbaricon.png"
+              className="h-8 w-auto mr-4"
+              onClick={(e) => {
+                toggleSidebar();
+                e.stopPropagation();
+              }}
+            />
+          </div>
+          
         </div>
 
         <div
