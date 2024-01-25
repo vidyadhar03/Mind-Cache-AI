@@ -24,8 +24,8 @@ function AddThought({ onClosedialog,topic }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-white border shadow-xl rounded-lg text-center">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
+      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-gray-50 sm:w-1/2 border shadow-xl rounded-lg text-center">
         <div className="flex-col  items-center">
           <div className="text-black font-medium text-xl">
             Add a thought to the {topic.title} topic to easy track
@@ -41,7 +41,7 @@ function AddThought({ onClosedialog,topic }) {
 
           <div className="flex justify-center ">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+              className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
               onClick={() => {
                 handleCreate();
               }}
@@ -50,7 +50,7 @@ function AddThought({ onClosedialog,topic }) {
             </button>
 
             <button
-              className="bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded ml-2"
+              className="flex-1 bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded ml-2"
               onClick={onClosedialog}
             >
               Cancel

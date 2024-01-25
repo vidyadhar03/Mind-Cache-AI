@@ -19,8 +19,8 @@ function AddTopic({ onClosedialog }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-white border shadow-xl rounded-lg">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
+      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-gray-50 border shadow-xl rounded-lg">
         <div className="flex-col  items-center">
           <div className="text-black font-medium text-lg sm:text-xl text-center">
             Add a topic which is occupying your mind lately
@@ -37,8 +37,9 @@ function AddTopic({ onClosedialog }) {
           </div>
 
           <div className="flex justify-center ">
+
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+              className="bg-blue-500 hover:bg-blue-700 flex-1 text-white font-bold py-2 px-4 rounded "
               onClick={() => {
                 handleCreate()
               }}
@@ -47,12 +48,14 @@ function AddTopic({ onClosedialog }) {
             </button>
 
             <button
-              className="bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded ml-2"
+              className="bg-white border-2 hover:bg-blue-100 flex-1 text-black font-bold py-2 px-4 rounded ml-2"
               onClick={onClosedialog}
             >
               Cancel
             </button>
+
           </div>
+
         </div>
       </div>
     </div>

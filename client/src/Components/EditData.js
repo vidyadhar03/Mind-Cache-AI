@@ -8,6 +8,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
   const [delconf, setdelconf] = useState(false);
   let del = "no";
   let datagot = "";
+  const visibilityClass = (datamode==="topic") ? "h-10" : "h-40";
 
   if (datamode === "topic") {
     datagot = datapassed.title;
@@ -75,11 +76,10 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
   }
 
   return (
-    <div>
-      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-        <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-white border shadow-xl rounded-lg">
+      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
+        <div className="  border shadow-xl rounded-lg bg-gray-50 w-96 sm:w-1/2">
 
-          <div className="flex-col  items-center">
+          <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
             <div className="text-black font-medium text-xl text-center">
               Edit your {datamode}
             </div>
@@ -87,7 +87,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
             <div className=" mt-4 mb-2 flex justify-center">
               <textarea
                 placeholder="Topic"
-                className="border-2 p-2 w-parent rounded-md w-96"
+                className={`${visibilityClass} border-2 p-2 rounded-md w-full`}
                 defaultValue={datagot}
                 onChange={(e) => {
                   setEdit(e.target.value);
@@ -138,7 +138,6 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
