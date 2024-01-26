@@ -25,7 +25,7 @@ const {
 const { auth } = require("./middleware");
 
 //hashing logic using bcrypt
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 //importing jwt secret
