@@ -60,7 +60,7 @@ const ChatComponent = () => {
     setSelectedSession(session);
     try {
       const response = await fetch(
-        "http://localhost:5000/chatmessages/" + session._id,
+        "http://localhost:3001/chatmessages/" + session._id,
         {
           method: "GET",
           headers: {
@@ -90,7 +90,7 @@ const ChatComponent = () => {
 
     try {
       setUserInput("");
-      const response = await fetch("http://localhost:5000/socketchat", {
+      const response = await fetch("http://localhost:3001/socketchat", {
         method: "POST",
         headers: {
           authorization: localStorage.getItem("usertoken"),
@@ -114,7 +114,7 @@ const ChatComponent = () => {
   useEffect(() => {
     const startSession = async () => {
       try {
-        const response = await fetch("http://localhost:5000/startsession", {
+        const response = await fetch("http://localhost:3001/startsession", {
           method: "POST",
           headers: {
             authorization: localStorage.getItem("usertoken"),
@@ -149,7 +149,7 @@ const ChatComponent = () => {
 
   useEffect(() => {
     // Establish WebSocket connection
-    const newWs = new WebSocket("ws://localhost:5000");
+    const newWs = new WebSocket("ws://localhost:3001");
 
     newWs.onmessage = (event) => {
       try {
@@ -198,7 +198,7 @@ const ChatComponent = () => {
   async function getSessions() {
     try {
       const response = await fetch(
-        "http://localhost:5000/sessions/" + localStorage.getItem("userid"),
+        "http://localhost:3001/sessions/" + localStorage.getItem("userid"),
         {
           method: "GET",
           headers: {

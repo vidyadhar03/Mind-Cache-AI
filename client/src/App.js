@@ -29,6 +29,7 @@ function RouteswithNavBar() {
   const location = useLocation();
   const user = localStorage.getItem("userid");
 
+  console.log("user info : "+ localStorage.getItem("userid"), localStorage.getItem("usertoken"))
   const hideNavBarRoutes = ["/analyse", "/signin"];
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
