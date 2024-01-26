@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { ThoughtLanding } from "./ThoughtLanding";
 import AddThought from "./AddThought";
 import EditData from "./EditData";
+const base_url = process.env.REACT_APP_API_URL;
+
 
 function Thoughts() {
   const location = useLocation();
@@ -25,7 +27,7 @@ function Thoughts() {
     const fetchThoughts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/thoughts/" + topicobj._id,
+          base_url+"thoughts/" + topicobj._id,
           {
             method: "GET",
             headers: {

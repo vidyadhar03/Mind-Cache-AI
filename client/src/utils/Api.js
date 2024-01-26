@@ -1,8 +1,10 @@
+const base_url = process.env.REACT_APP_API_URL;
+
 export async function AddTopicAPI(newTopic) {
   let result = { success: false, data: [] };
   try {
     console.log("hitting api");
-    const response = await fetch("http://localhost:3001/addtopic", {
+    const response = await fetch(base_url + "addtopic", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +33,7 @@ export async function AddTopicAPI(newTopic) {
 export async function AddThoughtAPI(topicid, newThought) {
   let result = { success: false, data: [] };
   try {
-    const response = await fetch("http://localhost:3001/addthought", {
+    const response = await fetch(base_url + "addthought", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

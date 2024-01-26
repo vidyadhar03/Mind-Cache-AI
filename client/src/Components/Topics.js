@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
 import EditData from "./EditData";
+const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
   const { topics, setTopics } = useContext(DataContext);
@@ -29,7 +30,7 @@ function Topics() {
     const fetchTopics = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/topics/" + localStorage.getItem("userid"),
+          base_url+"topics/" + localStorage.getItem("userid"),
           {
             method: "GET",
             headers: {

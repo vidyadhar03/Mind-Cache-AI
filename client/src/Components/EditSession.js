@@ -1,4 +1,5 @@
 import { useState } from "react";
+const base_url = process.env.REACT_APP_API_URL;
 
 function EditSession({ onClosedialog, session,updateSesh }) {
   const [edit, setEdit] = useState("");
@@ -8,7 +9,7 @@ function EditSession({ onClosedialog, session,updateSesh }) {
 
   async function UpdateData() {
     try {
-      const response = await fetch("http://localhost:5000/editchatsession", {
+      const response = await fetch(base_url+"editchatsession", {
         method: "POST",
         headers: {
           authorization: localStorage.getItem("usertoken"),

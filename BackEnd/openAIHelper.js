@@ -23,21 +23,22 @@ const openai = new OpenAI({
 async function StreamWithOpenAI(messages, broadcast) {
   //init empty when not testing
   let fullResponse = "I will reply once i am integrated, dear Mind Cache AI User!";
+  // let fullResponse = "";
 
   try {
-  //   const stream = await openai.chat.completions.create({
-  //     model: "gpt-3.5-turbo",
-  //     messages: messages,
-  //     stream: true,
-  //   });
+    // const stream = await openai.chat.completions.create({
+    //   model: "gpt-3.5-turbo",
+    //   messages: messages,
+    //   stream: true,
+    // });
 
-  //   for await (const chunk of stream) {
-  //     if (chunk.choices[0]?.delta?.content) {
-  //       const content = chunk.choices[0].delta.content;
-  //       fullResponse += content;
-  //       broadcast(content); // Stream each chunk to the client
-  //     }
-  //   }
+    // for await (const chunk of stream) {
+    //   if (chunk.choices[0]?.delta?.content) {
+    //     const content = chunk.choices[0].delta.content;
+    //     fullResponse += content;
+    //     broadcast(content); // Stream each chunk to the client
+    //   }
+    // }
 
     for (let i =0;i<15;i++){
       setTimeout(function(){

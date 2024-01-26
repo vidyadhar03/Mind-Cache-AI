@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../utils/DataContext";
+const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
   const { setTopics, setThoughts } = useContext(DataContext);
@@ -21,7 +22,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
       let api_url = "";
       let req_body = "";
       if (datamode === "topic") {
-        api_url = "http://localhost:3001/updatetopic";
+        api_url = base_url+"updatetopic";
         req_body = JSON.stringify({
           userid: localStorage.getItem("userid"),
           title: datapassed.title,
@@ -29,7 +30,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
           del: del,
         });
       } else {
-        api_url = "http://localhost:3001/updatethought";
+        api_url = base_url+"updatethought";
         req_body = JSON.stringify({
           topicid: topicid,
           thought: datapassed.thought,

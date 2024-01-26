@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const base_url = process.env.REACT_APP_API_URL;
 
 function SignIn() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function SignIn() {
   const SignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/signup", {
+      const response = await fetch(base_url+"signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ function SignIn() {
   const LogIn = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/login", {
+      const response = await fetch(base_url+"login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

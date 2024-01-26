@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import EditSession from "./EditSession";
 
+const base_url = process.env.REACT_APP_API_URL;
+
 const ChatComponent = () => {
   const location = useLocation();
   const topicTitle = location.state?.data;
@@ -59,15 +61,12 @@ const ChatComponent = () => {
   const LoadSession = async (session) => {
     setSelectedSession(session);
     try {
-      const response = await fetch(
-        "http://localhost:3001/chatmessages/" + session._id,
-        {
-          method: "GET",
-          headers: {
-            authorization: localStorage.getItem("usertoken"),
-          },
-        }
-      );
+      const response = await fetch(base_url + "chatmessages/" + session._id, {
+        method: "GET",
+        headers: {
+          authorization: localStorage.getItem("usertoken"),
+        },
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -90,7 +89,7 @@ const ChatComponent = () => {
 
     try {
       setUserInput("");
-      const response = await fetch("http://localhost:3001/socketchat", {
+      const response = await fetch(base_url + "socketchat", {
         method: "POST",
         headers: {
           authorization: localStorage.getItem("usertoken"),
@@ -114,7 +113,7 @@ const ChatComponent = () => {
   useEffect(() => {
     const startSession = async () => {
       try {
-        const response = await fetch("http://localhost:3001/startsession", {
+        const response = await fetch(base_url + "startsession", {
           method: "POST",
           headers: {
             authorization: localStorage.getItem("usertoken"),
@@ -149,7 +148,7 @@ const ChatComponent = () => {
 
   useEffect(() => {
     // Establish WebSocket connection
-    const newWs = new WebSocket("ws://localhost:3001");
+    const newWs = new WebSocket(process.env.REACT_APP_WS_URL);
 
     newWs.onmessage = (event) => {
       try {
@@ -198,7 +197,7 @@ const ChatComponent = () => {
   async function getSessions() {
     try {
       const response = await fetch(
-        "http://localhost:3001/sessions/" + localStorage.getItem("userid"),
+        base_url + "sessions/" + localStorage.getItem("userid"),
         {
           method: "GET",
           headers: {
@@ -324,7 +323,7 @@ const ChatComponent = () => {
             onClick={() => {
               navigate(`/`);
             }}
-          >  
+          >
             <img
               src="/mindcachelogo.png"
               className="h-8 w-8 rounded-full mr-2"
@@ -333,7 +332,6 @@ const ChatComponent = () => {
             <div className="my-auto text-xl font-sans text-justify">
               Mind Cache AI
             </div>
-            
           </div>
 
           <div className="flex items-center">
@@ -346,7 +344,6 @@ const ChatComponent = () => {
               }}
             />
           </div>
-          
         </div>
 
         <div

@@ -273,15 +273,18 @@ app.post("/updatethought", auth, async (req, res) => {
 
 //CHAT Routes
 // Initialize WebSocket Server
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received from client: %s', message);
+
+function initializeWebSocketServer(){
+  wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(message) {
+      console.log('received from client: %s', message);
+    });
+  
+    console.log("Connected to WebSocket server");
+    ws.send(JSON.stringify({ message: 'Connected to WebSocket server' }));
+  
   });
-
-  console.log("Connected to WebSocket server");
-  ws.send(JSON.stringify({ message: 'Connected to WebSocket server' }));
-
-});
+}
 
 // Function to broadcast messages to all connected clients
 const broadcast = (data) => {
@@ -301,6 +304,7 @@ app.post("/socketchat", auth, async (req, res) => {
   }
   const { sessionid, userinput } = req.body;
   try {
+    initializeWebSocketServer()
     //check if messages exists already
     const found = await ChatMessage.findOne({ sessionID: sessionid });
     let user_messages;
