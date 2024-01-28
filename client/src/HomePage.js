@@ -8,7 +8,7 @@ function HomePage() {
   function Intro() {
     return (
       <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)] border-b border-gray-300 ">
-        <div className="px-4 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-blue-400">
+        <div className="px-4 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-third-blue">
           <TypingAnimation />
         </div>
         <div className="  flex flex-col items-center justify-center h-1/2 lg:h-full lg:w-2/5 bg-gray-50 p-2 ">
@@ -17,7 +17,7 @@ function HomePage() {
             Gain insights into your mind.
           </div>
           <button
-            className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium mt-6 shadow-lg"
+            className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-6"
             onClick={() => {
               navigate(`/signin`);
             }}
@@ -71,7 +71,7 @@ function HomePage() {
                 per month
               </div>
             </div>
-            <button className="w-full py-2 bg-green-400 text-white text-lg rounded-lg font-medium">
+            <button className="w-full py-2 bg-green-600 hover:bg-green-800 text-white text-lg rounded-lg font-medium">
               Current Subscription
             </button>
           </div>
@@ -88,7 +88,8 @@ function HomePage() {
                 per month
               </div>
             </div>
-            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">
+            <button 
+            className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">
               Subscribe
             </button>
           </div>
@@ -98,7 +99,7 @@ function HomePage() {
   }
 
   return (
-    <div className="font-sans">
+    <div className="font-sans ">
       <Intro />
       {/* <BenefitsofJournaling />
       <UsersReview />

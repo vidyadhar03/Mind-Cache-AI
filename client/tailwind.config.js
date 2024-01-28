@@ -11,6 +11,13 @@ module.exports = {
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
       },
+      colors: {
+        "first-blue": "#C1D0EF",
+        "second-blue": "#7391CD",
+        "third-blue": "#314E8A",
+        "fourth-blue": "#0F285E",
+        "fifth-blue": "#000245",
+      },
     },
   },
   plugins: [],

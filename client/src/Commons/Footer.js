@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="flex flex-col">
           <div className="text-xl font-semibold my-4">Our Social Links</div>
           <div className="flex justify-center">
-            <a href="https://www.instagram.com">
+            <a href="https://www.instagram.com/mindcacheai/">
               <img
                 src="/instalogo.png"
                 alt="Instagram"

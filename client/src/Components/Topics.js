@@ -121,74 +121,16 @@ function Topics() {
             ))}
           </div>
           <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
+            className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={handleopen}
           >
-            + Add Topic
+            + Add Focus Area
           </div>
         </div>
       )}
     </div>
   );
 
-  return (
-    <div className="font-sans">
-      {showaddtopic && <AddTopic onClosedialog={handleclose} />}
-      {showedittopic && (
-        <EditData
-          onClosedialog={handleeditclose}
-          datamode={"topic"}
-          datapassed={selectedtopic}
-          topicid={selectedtopic._id}
-          emptydata={setEmptyTopics}
-        />
-      )}
-
-      {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} />
-      ) : (
-        <div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {topics.map((topic, index) => (
-              <div
-                className="flex flex-col flex-wrap bg-blue-200 mt-8 mx-4  text-center rounded-md cursor-pointer shadow-lg hover:shadow-2xl"
-                key={index}
-              >
-                <div className="flex justify-end">
-                  <img
-                    className="h-4 w-4 m-2"
-                    src="./editlogo.png"
-                    onClick={() => {
-                      setSelectedtopic(topic);
-                      setshowedittopic(true);
-                    }}
-                  />
-                </div>
-
-                <div
-                  className="bg-pink-200 h-full flex flex-col justify-center items-center px-6 py-8 text-black text-2xl font-bold overflow-hidden whitespace-normal"
-                  onClick={() => {
-                    navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
-                      state: { data: topic },
-                    });
-                  }}
-                >
-                  <div className="flex flex-wrap">{topic.title}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
-          >
-            + Add Topic
-          </div>
-        </div>
-      )}
-    </div>
-  );
 }
 
 export default Topics;
