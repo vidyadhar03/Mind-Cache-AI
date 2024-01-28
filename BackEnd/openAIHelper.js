@@ -42,7 +42,7 @@ async function StreamWithOpenAI(messages, broadcast) {
 
     for (let i =0;i<15;i++){
       setTimeout(function(){
-        const chunk = "hey hehe";
+        const chunk = "sending chunk";
         fullResponse+=chunk;
         broadcast(chunk);
       },100)
