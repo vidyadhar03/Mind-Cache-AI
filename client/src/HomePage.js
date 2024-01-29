@@ -58,8 +58,8 @@ function HomePage() {
       <div className=" flex flex-col px-6 py-8 bg-gray-50 font-sans">
         <div className="text-black text-center font-bold text-4xl">Pricing</div>
 
-        <div className="flex flex-col md:flex-row md:justify-center mt-8 px-6">
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 md:w-80">
+        <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 px-6">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 sm:w-80 ">
             <div className="text-center text-4xl font-medium ">Free</div>
             <div className="mt-4 text-center text-lg ">
               10 AI Interactions per week
@@ -76,7 +76,7 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 md:w-80 font-sans">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-80 ">
             <div className="text-center text-4xl font-medium">Pro</div>
             <div className="mt-4 text-center text-lg">
               100 AI Interactions per week
