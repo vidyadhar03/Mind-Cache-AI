@@ -73,7 +73,7 @@ function SignIn() {
   };
 
   return (
-    <div className="h-screen flex flex-col font-sans items-center bg-gray-50">
+    <div className="h-screen flex flex-col font-sans items-center bg-bgc">
       <div
         className="flex justify-center items-center mt-20 cursor-pointer"
         onClick={() => {

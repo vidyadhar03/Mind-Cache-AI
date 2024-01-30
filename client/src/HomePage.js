@@ -55,7 +55,7 @@ function HomePage() {
 
   function PricingPlans() {
     return (
-      <div className=" flex flex-col px-6 py-8 bg-gray-50 font-sans">
+      <div className=" flex flex-col px-6 py-8 bg-bgc font-sans">
         <div className="text-black text-center font-bold text-4xl">Pricing</div>
 
         <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 px-6">

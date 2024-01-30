@@ -17,7 +17,7 @@ module.exports = {
         "third-blue": "#314E8A",
         "fourth-blue": "#0F285E",
         "fifth-blue": "#000245",
-        "bgc":"#E1E8F0"
+        "bgc":"#F5F0FF"
       },
     },
   },
