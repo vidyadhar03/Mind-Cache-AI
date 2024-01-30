@@ -78,7 +78,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
 
   return (
       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
-        <div className="  border shadow-xl rounded-lg bg-gray-50 w-96 sm:w-1/2">
+        <div className="  border shadow-xl rounded-lg bg-gray-50 w-11/12 sm:w-96 ">
 
           <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
             <div className="text-black font-medium text-xl text-center">

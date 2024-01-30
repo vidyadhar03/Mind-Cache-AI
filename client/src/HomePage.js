@@ -11,7 +11,7 @@ function HomePage() {
         <div className="px-4 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-third-blue">
           <TypingAnimation />
         </div>
-        <div className="  flex flex-col items-center justify-center h-1/2 lg:h-full lg:w-2/5 bg-gray-50 p-2 ">
+        <div className="  flex flex-col items-center justify-center h-1/2 lg:h-full lg:w-2/5 bg-bgc p-2 ">
           <img src="/introspectlogo.jpg" className="h-1/2 lg-2/5 w-auto rounded-full mx-2"/>
           <div className="text-black text-2xl lg:text-4xl text-center mx-2 mt-4 font-medium">
             Gain insights into your mind.
