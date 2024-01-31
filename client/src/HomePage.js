@@ -8,7 +8,7 @@ function HomePage() {
   function Intro() {
     return (
       <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)] border-b border-gray-300 ">
-        <div className="px-4 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-third-blue">
+        <div className="px-8 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/2 lg:h-full lg:w-3/5 bg-third-blue">
           <TypingAnimation />
         </div>
         <div className="  flex flex-col items-center justify-center h-1/2 lg:h-full lg:w-2/5 bg-bgc p-2 ">

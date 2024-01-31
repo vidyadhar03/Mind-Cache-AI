@@ -6,6 +6,7 @@ import Thoughts from "./Components/Thoughts";
 import ChatComponent from "./Components/ChatComponent";
 import SignIn from "./Auth/Signin";
 import HomePage from "./HomePage";
+import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,7 +33,7 @@ function RouteswithNavBar() {
     "user info : " + localStorage.getItem("userid"),
     localStorage.getItem("usertoken")
   );
-  const hideNavBarRoutes = ["/analyse", "/signin"];
+  const hideNavBarRoutes = ["/analyse", "/signin","/refund-and-cancellation"];
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
   return (
@@ -49,6 +50,7 @@ function RouteswithNavBar() {
         <Route path="/topics/:topic" element={<Thoughts />} />
         <Route path="/analyse" element={<ChatComponent />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/refund-and-cancellation" element={<RefundsAndCancellations />} />
       </Routes>
     </>
   );

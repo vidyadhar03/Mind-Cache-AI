@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="flex flex-col md:flex-row p-8 bg-bgc border-t border-gray-300 ">
-
       <div className="flex  flex-col md:flex-row justify-center md:w-3/4">
-
         <div className="flex flex-col text-center md:flex-1">
           <div className="text-xl font-semibold ">Our Social Links</div>
           <div className="flex justify-center mt-2">
@@ -50,23 +48,38 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col md:mx-4 my-8 md:my-0 text-center md:flex-1">
-          <div className="text-xl font-semibold">FAQ & POLICY</div>
-          <div className="flex flex-col justify-center mt-2">
-            <Link to="/privacy-policy">Terms and Conditions</Link>
-            <Link to="/exchange-return" className="my-1">Privacy Policy</Link>
-            <Link to="/terms-conditions">Refunds/Cancellations</Link>
+          <div className="text-xl font-semibold">FAQ & Policy</div>
+          <div className="flex flex-col justify-center mt-2 text-sm">
+            <a
+              href="https://www.termsandconditionsgenerator.com/live.php?token=ODBUnBfevGro2FViAKbbUQytJN9L5TvJ"
+              target="_blank"
+            >
+              Terms and Conditions
+            </a>
+            <a
+              href="https://www.termsfeed.com/live/fb2bca00-ec48-4511-911c-a32343342078"
+              target="_blank"
+              className="my-1"
+            >
+              Privacy Policy
+            </a>
+            <Link to="/refund-and-cancellation">Refunds/Cancellations</Link>
           </div>
         </div>
 
         <div className="flex flex-col text-center md:flex-1">
           <div className="text-xl font-semibold">Contact Us</div>
-          <div className="flex flex-col justify-center mt-2">
-            <Link to="/privacy-policy" >+917478022333</Link>
-            <Link to="/exchange-return" className="my-1">mindcacheai03@gmail.com</Link>
-            <Link to="/terms-conditions">Refunds/Cancellations</Link>
+          <div className="flex flex-col justify-center mt-2 text-sm items-center">
+            <div>Phone: +917478022333</div>
+            <a
+              href="mailto:mindcacheai03@gmail.com"
+              className=" my-1"
+            >
+              mindcacheai03@gmail.com
+            </a>
+            <div className="w-3/4 text-center">5-5-93, 3rd lane, Naidupet, Nellore Dist., Andhra pradesh, India - 524126</div>
           </div>
         </div>
-
       </div>
 
       <div className="flex flex-col  items-center text-center mt-8 md:mt-0 md:w-1/4">
@@ -80,7 +93,6 @@ const Footer = () => {
           Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion.
         </p>
       </div>
-
     </footer>
   );
 };
