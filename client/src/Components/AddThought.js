@@ -1,21 +1,22 @@
 import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
+import { TextField } from "@mui/material";
 
-function AddThought({ onClosedialog,topic }) {
-  const {  setThoughts } = useContext(DataContext);
+function AddThought({ onClosedialog, topic }) {
+  const { setThoughts } = useContext(DataContext);
   let newThought = "";
 
-  async function handleCreate(){
-    if(newThought!==""){
-      const result = await AddThoughtAPI(topic._id,newThought)
-      console.log(result)
-      if(result.success){
-        setThoughts(result.data)
+  async function handleCreate() {
+    if (newThought !== "") {
+      const result = await AddThoughtAPI(topic._id, newThought);
+      console.log(result);
+      if (result.success) {
+        setThoughts(result.data);
         onClosedialog();
       }
-    }else{
-      console.log("add thought first ")
+    } else {
+      console.log("add thought first ");
     }
   }
 
@@ -25,32 +26,46 @@ function AddThought({ onClosedialog,topic }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
-      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-gray-50 sm:w-1/2 border shadow-xl rounded-lg text-center">
+      <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-gray-50 border shadow-xl rounded-lg w-11/12 sm:w-1/3">
         <div className="flex-col  items-center">
-          <div className="text-black font-medium text-xl">
-            Add a thought to the {topic.title} topic to easy track
+          <div className="text-black font-medium text-base text-center">
+            Take a moment to center yourself and reflect on this focus area{" "}
+            <span className="font-semibold">{topic.title}</span>. What insights or ideas come to mind? Jot
+            down your thoughts here.
           </div>
 
-          <div className=" mt-4 mb-2 flex justify-center">
-            <textarea
+          <div className=" mt-4 mb-2 flex items-center">
+            {/* <textarea
               placeholder="Enter your thought here"
               className="border-2 p-2 rounded-md w-full h-40"
               onChange={addNewThought}
-            ></textarea>
+            ></textarea> */}
+            <TextField
+              id="outlined-basic"
+              label="Reflection"
+              variant="outlined"
+              multiline
+              rows={4}
+              fullWidth
+              InputLabelProps={{
+                style: { fontFamily: "poppins" },
+              }}
+              onChange={addNewThought}
+            />
           </div>
 
           <div className="flex justify-center ">
             <button
-              className="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+              className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg  "
               onClick={() => {
                 handleCreate();
               }}
             >
-              Add Thought
+              Add
             </button>
 
             <button
-              className="flex-1 bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded ml-2"
+              className="py-2 flex-1 bg-white hover:bg-blue-100 text-black border-2 text-base rounded-lg ml-2"
               onClick={onClosedialog}
             >
               Cancel

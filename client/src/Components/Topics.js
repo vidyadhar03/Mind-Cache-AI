@@ -69,7 +69,7 @@ function Topics() {
   }
 
   return (
-    <div className="font-sans bg-gray-50 p-2">
+    <div className="font-sans bg-bgc p-2 min-h-[calc(100vh-60px)]">
       {showaddtopic && <AddTopic onClosedialog={handleclose} />}
       {showedittopic && (
         <EditData

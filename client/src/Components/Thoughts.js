@@ -87,8 +87,8 @@ function Thoughts() {
       {emptythoughts ? (
         <ThoughtLanding topic={topicobj} emptydata={setEmptyThoughts} />
       ) : (
-        <div>
-          <div className="text-black text-2xl font-bold text-center my-8">
+        <div className="bg-bgc pt-8 min-h-[calc(100vh-60px)]">
+          <div className="text-black text-2xl font-bold text-center ">
             {topicobj.title}
           </div>
 
@@ -113,10 +113,10 @@ function Thoughts() {
                   <div className="text-right text-sm font-mono  p-2">
                     {thought.time}
                   </div>
-                  <div>
+                  <div className="flex items-center">
                     <img
                       className="h-4 w-4 m-2 mt-2 cursor-pointer"
-                      src="./editlogo.png"
+                      src="/threedots.svg"
                       onClick={() => {
                         setSelectedthought(thought);
                         setshoweditthought(true);
@@ -132,10 +132,10 @@ function Thoughts() {
           </div>
 
           <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
+            className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={handleopen}
           >
-            + Add Thought
+            + Add Reflection
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../utils/DataContext";
+import { TextField } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
@@ -9,7 +10,8 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
   const [delconf, setdelconf] = useState(false);
   let del = "no";
   let datagot = "";
-  const visibilityClass = (datamode==="topic") ? "h-10" : "h-40";
+  const rowsheight = (datamode==="topic") ? 1 : 4;
+  const widthres = (datamode==="topic") ? "w-96" : "w-1/3";
 
   if (datamode === "topic") {
     datagot = datapassed.title;
@@ -78,27 +80,42 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
 
   return (
       <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
-        <div className="  border shadow-xl rounded-lg bg-gray-50 w-11/12 sm:w-96 ">
+        <div className={ ` border shadow-xl rounded-lg bg-gray-50 w-11/12 sm:${widthres}`}>
 
-          <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
-            <div className="text-black font-medium text-xl text-center">
-              Edit your {datamode}
+          <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8" >
+            <div className="text-black font-medium text-base text-center">
+              Edit your {datamode==="topic"?"Focus Area":"Reflection"}
             </div>
 
             <div className=" mt-4 mb-2 flex justify-center">
-              <textarea
+              {/* <textarea
                 placeholder="Topic"
                 className={`${visibilityClass} border-2 p-2 rounded-md w-full`}
                 defaultValue={datagot}
                 onChange={(e) => {
                   setEdit(e.target.value);
                 }}
-              ></textarea>
+              ></textarea> */}
+              <TextField
+              id="outlined-basic"
+              label="Update"
+              variant="outlined"
+              multiline
+              rows={rowsheight}
+              fullWidth
+              defaultValue={datagot}
+              InputLabelProps={{
+                style: { fontFamily: "poppins" },
+              }}
+              onChange={(e) => {
+                setEdit(e.target.value);
+              }}
+            />
             </div>
 
             <div className="flex justify-center ">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 mr-1"
+                className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
                 onClick={() => {
                   UpdateData();
                 }}
@@ -107,7 +124,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
               </button>
 
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 ml-1"
+                className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
                 onClick={() => {
                   setdelconf(true);
                 }}
@@ -119,18 +136,20 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
             <div className="flex flex-col mt-2">
               {delconf && (
                 <button
-                  className="w-full bg-red-400 border-2 hover:bg-red-600 text-black font-bold py-2 px-4 rounded "
+                  // className="w-full bg-red-400 border-2 hover:bg-red-600 text-black font-bold py-2 px-4 rounded "
+                  className="py-2 flex-1 bg-red-600 hover:bg-red-700 text-white border-2 text-base rounded-lg "
                   onClick={() => {
                     setdelconf(false);
                     del = "yes";
                     UpdateData();
                   }}
                 >
-                  Delete {datamode} for sure?
+                  Delete for sure?
                 </button>
               )}
               <button
-                className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
+                // className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
+                className="py-2 flex-1 bg-white hover:bg-blue-100 text-black border-2 text-base rounded-lg mt-2"
                 onClick={onClosedialog}
               >
                 Cancel
