@@ -77,7 +77,7 @@ const Footer = () => {
             >
               mindcacheai03@gmail.com
             </a>
-            <div className="w-3/4 text-center">5-5-93, 3rd lane, Naidupet, Nellore Dist., Andhra pradesh, India - 524126</div>
+            <div className="w-3/4 text-center">Andhra Pradesh, India.</div>
           </div>
         </div>
       </div>
