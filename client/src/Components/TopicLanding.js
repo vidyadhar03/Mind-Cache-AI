@@ -3,8 +3,11 @@ import { DataContext } from "../utils/DataContext";
 import { useContext } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 function TopicLanding({ emptydata }) {
+  const navigate = useNavigate();
   const [topic, setTopic] = useState("");
   const { setTopics } = useContext(DataContext);
 
@@ -13,7 +16,10 @@ function TopicLanding({ emptydata }) {
       const result = await AddTopicAPI(topic);
       if (result.success) {
         setTopics(result.data);
-        emptydata(false);
+        // emptydata(false);
+        navigate(`/topics`);
+      }else{
+        //toast
       }
     }
   }
