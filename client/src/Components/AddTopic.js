@@ -7,7 +7,8 @@ function AddTopic({ onClosedialog }) {
   const { setTopics } = useContext(DataContext);
   let newTopic = "";
 
-  async function handleCreate() {
+  async function handleCreate(event) {
+    event.preventDefault();
     if (newTopic !== "") {
       const result = await AddTopicAPI(newTopic);
       console.log(result);
@@ -49,9 +50,9 @@ function AddTopic({ onClosedialog }) {
           <div className="flex justify-center ">
             <button
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg  "
-              onClick={() => {
-                handleCreate();
-              }}
+              // onClick={() => {
+              //   handleCreate();
+              // }}
               type="submit"
             >
               Add

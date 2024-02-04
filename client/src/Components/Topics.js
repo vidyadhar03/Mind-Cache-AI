@@ -27,6 +27,7 @@ function Topics() {
   };
 
   useEffect(() => {
+    console.log("topics mount");
     const fetchTopics = async () => {
       try {
         const response = await fetch(

@@ -2,9 +2,16 @@ import { useNavigate } from "react-router-dom";
 import TypingAnimation from "./utils/TypeAnimation";
 import Footer from "./Commons/Footer";
 import BenefitsDropdown from "./Components/Benifits";
+import { useEffect } from "react";
 
 function HomePage() {
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(localStorage.getItem('userid')){
+      navigate(`/topics`)
+    }
+  },[])
 
   function Intro() {
     return (

@@ -33,24 +33,27 @@ function RouteswithNavBar() {
     "user info : " + localStorage.getItem("userid"),
     localStorage.getItem("usertoken")
   );
-  const hideNavBarRoutes = ["/analyse", "/signin","/refund-and-cancellation"];
+  const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation"];
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
   return (
     <>
       {showNavBar && <NavBar />}
       <Routes>
-        {user ? (
+        {/* {user ? (
           <Route path="/" element={<Topics />} />
         ) : (
           <Route path="/" element={<HomePage />} />
-        )}
-
+        )} */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/topics" element={<Topics />} />
         <Route path="/topics/:topic" element={<Thoughts />} />
         <Route path="/analyse" element={<ChatComponent />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/refund-and-cancellation" element={<RefundsAndCancellations />} />
+        <Route
+          path="/refund-and-cancellation"
+          element={<RefundsAndCancellations />}
+        />
       </Routes>
     </>
   );

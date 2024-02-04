@@ -11,12 +11,15 @@ function TopicLanding({ emptydata }) {
   const [topic, setTopic] = useState("");
   const { setTopics } = useContext(DataContext);
 
-  async function handleCreate() {
+  async function handleCreate(event) {
+    event.preventDefault();
     if (topic !== "") {
+      console.log("called api");
       const result = await AddTopicAPI(topic);
       if (result.success) {
+       console.log("result success");
         setTopics(result.data);
-        // emptydata(false);
+        emptydata(false);
         navigate(`/topics`);
       }else{
         //toast
