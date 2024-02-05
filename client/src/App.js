@@ -4,9 +4,10 @@ import NavBar from "./Commons/NavBar";
 import Topics from "./Components/Topics";
 import Thoughts from "./Components/Thoughts";
 import ChatComponent from "./Components/ChatComponent";
-import SignIn from "./Auth/Signin";
+import SignIn from "./Account/Signin";
 import HomePage from "./HomePage";
 import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
+import { UserProfile } from "./Account/UserProfile";
 import {
   BrowserRouter as Router,
   Routes,
@@ -50,6 +51,7 @@ function RouteswithNavBar() {
         <Route path="/topics/:topic" element={<Thoughts />} />
         <Route path="/analyse" element={<ChatComponent />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/account" element={<UserProfile />} />
         <Route
           path="/refund-and-cancellation"
           element={<RefundsAndCancellations />}

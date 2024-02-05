@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState ,useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import { Toast } from "../Commons/Toast";
+import Loader from "../Commons/Loader";
+import { DataContext } from "../utils/DataContext";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -14,9 +17,22 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [showsignup, setShowsignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { setGlobalEmail } = useContext(DataContext);
+  //loader
+  const [isLoading, setIsLoading] = useState(false);
+  const enableLoader = () => {
+    setIsLoading(true);
+  };
+  const disableLoader = () => {
+    setIsLoading(false);
+  };
+  //dialog
+  const [showDialog, setShowDialog] = useState(true);
+  const [dialogMessage, setDialogMessage] = useState("hehehe lol");
 
   const SignUp = async (e) => {
     e.preventDefault();
+    enableLoader();
     try {
       const response = await fetch(base_url + "signup", {
         method: "POST",
@@ -34,17 +50,24 @@ function SignIn() {
         console.log(response);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+      setDialogMessage("Sign Up successfull!");
+      setShowDialog(true);
+      disableLoader();
+      setGlobalEmail(email);
       const json = await response.json();
       console.log(json);
     } catch (e) {
       //todo - update UI to user
+      setDialogMessage("Sign Up Failed!");
+      setShowDialog(true);
+      disableLoader();
       console.error(e);
     }
   };
 
   const LogIn = async (e) => {
     e.preventDefault();
+    enableLoader();
     try {
       const response = await fetch(base_url + "login", {
         method: "POST",
@@ -62,18 +85,25 @@ function SignIn() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      setDialogMessage("Log In successfull!");
+      setShowDialog(true);
+      disableLoader();
       const json = await response.json();
       localStorage.setItem("usertoken", json.token);
       localStorage.setItem("userid", json.userid);
+      setGlobalEmail(email);
       navigate(`/topics`);
     } catch (e) {
-      //todo - update UI to user
+      setDialogMessage("Login In failed!");
+      setShowDialog(true);
+      disableLoader();
       console.error(e);
     }
   };
 
   return (
     <div className="h-screen flex flex-col font-sans items-center bg-bgc">
+      {isLoading && <Loader />}
       <div
         className="flex justify-center items-center mt-20 cursor-pointer"
         onClick={() => {
@@ -145,6 +175,12 @@ function SignIn() {
       >
         {showsignup ? "Already an user? LogIn" : "Create a new Account"}
       </div>
+
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 }
