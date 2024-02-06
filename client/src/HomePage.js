@@ -3,6 +3,7 @@ import TypingAnimation from "./utils/TypeAnimation";
 import Footer from "./Commons/Footer";
 import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -102,16 +103,121 @@ function HomePage() {
   }
 
   function HowItWorks() {
-    return (
-      <div className=" flex flex-col px-6 py-8 bg-bgc font-sans items-center">
-        <div className="text-black text-center font-bold text-2xl md:text-4xl">
-          How it works
+    const SlideInDiv = ({ children, slideDirection }) => {
+      const { ref, inView } = useInView({
+        triggerOnce: true, // Animation triggers only once
+        threshold: 0, // Triggers when 20% of the div is visible
+      });
+
+      console.log(inView);
+
+      // Determine the animation classes based on the slide direction
+      const animationClass = inView
+        ? "translate-x-0 opacity-100"
+        : // ? "opacity-50"
+        slideDirection === "left"
+        ? "-translate-x-full opacity-0"
+        : "translate-x-full opacity-0";
+
+      return (
+        <div
+          ref={ref}
+          className={`transition-all duration-700 ease-out ${animationClass}`}
+        >
+          {children}
         </div>
-        {/* <div className="text-left mt-4">
-          <span className="font-semibold">Mind Caching:</span> A dynamic way to capture and explore the evolving
-          landscape of your thoughts, uncovering the subtle patterns that shape
-          your mental well-being.
-        </div> */}
+      );
+    };
+
+    return (
+      <div className=" flex flex-col pt-8 md:pt-16 bg-bgc font-sans items-center ">
+        <div className="text-black text-center font-bold text-2xl md:text-4xl">
+          How Mind Cache AI works
+        </div>
+        <div className="flex-col  p-6 md:p-8 w-full ">
+          <div className="flex flex-col md:flex-row">
+            <div className=" w-full md:w-1/2 ">
+              <SlideInDiv slideDirection="left">
+                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg  md:mr-2">
+                  <div className="text-xl md:text-2xl font-semibold ">
+                    Step 1
+                  </div>
+                  <div className=" underline text-lg font-medium mt-2">
+                    Set Your Intentions
+                  </div>
+                  <div className="flex justify-center my-2">
+                    <img src="compass.png" className="w-28 h-28 rounded-full" />
+                  </div>
+                  <div className="mt-0">
+                    Define personal goals in chosen areas of life to focus your
+                    journey.
+                  </div>
+                </div>
+              </SlideInDiv>
+            </div>
+
+            <div className=" w-full md:w-1/2 ">
+              <SlideInDiv slideDirection="right">
+                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 slide-in-right">
+                  <div className="text-xl md:text-2xl font-semibold ">
+                    Step 2
+                  </div>
+                  <div className=" underline text-lg font-medium mt-2">
+                    Capture Your Journey
+                  </div>
+                  <div className="flex justify-center my-2">
+                    <img src="pen.png" className="w-28 h-28 rounded-full" />
+                  </div>
+                  <div className="mt-0">
+                    Log thoughts and experiences related to your goals,
+                    effortlessly.
+                  </div>
+                </div>
+              </SlideInDiv>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:mt-4">
+            <div className=" w-full md:w-1/2 ">
+              <SlideInDiv slideDirection="left">
+                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 slide-in-left">
+                  <div className="text-xl md:text-2xl font-semibold ">
+                    Step 3
+                  </div>
+                  <div className=" underline text-lg font-medium mt-2">
+                    Discover Insights with AI
+                  </div>
+                  <div className="flex justify-center my-2">
+                    <img src="bulb.png" className="w-28 h-28 rounded-full" />
+                  </div>
+                  <div className="mt-0">
+                    Gain personalized insights through AI analysis of your
+                    reflections.
+                  </div>
+                </div>
+              </SlideInDiv>
+            </div>
+
+            <div className=" w-full md:w-1/2 ">
+              <SlideInDiv slideDirection="right">
+                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2 slide-in-right">
+                  <div className="text-xl md:text-2xl font-semibold ">
+                    Step 4
+                  </div>
+                  <div className=" underline text-lg font-medium mt-2">
+                    Measure Growth and Evolve
+                  </div>
+                  <div className="flex justify-center my-2">
+                    <img src="chart.png" className="w-28 h-28 rounded-full" />
+                  </div>
+                  <div className="mt-2">
+                    Track progress over time and adapt goals as you grow.
+                  </div>
+                </div>
+              </SlideInDiv>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
