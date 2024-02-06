@@ -3,7 +3,7 @@ import { DataContext } from "../utils/DataContext";
 import { TextField } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
+function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata,toast }) {
   const { setTopics, setThoughts } = useContext(DataContext);
 
   const [edit, setEdit] = useState("");
@@ -63,6 +63,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
       onClosedialog();
     } catch (e) {
       console.log(e);
+      toast("something went wrong, try again later!")
     }
   }
 
@@ -71,7 +72,11 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
         EditData()
     } else {
       if (edit === "") {
-        console.log("no change in data");
+        if (datamode === "topic") {
+          toast("Focus Area is not updated!");
+        } else {
+          toast("Reflection is not updated!");
+        }
       }else{
         EditData()
       }
@@ -149,7 +154,7 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
               )}
               <button
                 // className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
-                className="py-2 flex-1 bg-white hover:bg-blue-100 text-black border-2 text-base rounded-lg mt-2"
+                className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
                 onClick={onClosedialog}
               >
                 Cancel

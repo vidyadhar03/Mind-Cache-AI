@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddTopic({ onClosedialog }) {
+function AddTopic({ onClosedialog,toast }) {
   const { setTopics } = useContext(DataContext);
   let newTopic = "";
 
@@ -15,7 +15,11 @@ function AddTopic({ onClosedialog }) {
       if (result.success) {
         setTopics(result.data);
         onClosedialog();
+      } else {
+        toast("something went wrong, try again later!");
       }
+    }else{
+      toast("Focus Area is empty!");
     }
   }
 
@@ -59,7 +63,7 @@ function AddTopic({ onClosedialog }) {
             </button>
 
             <button
-              className="py-2 flex-1 bg-white hover:bg-blue-100 text-black border-2 text-base rounded-lg ml-2"
+              className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg ml-2"
               onClick={onClosedialog}
             >
               Cancel

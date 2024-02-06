@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddThought({ onClosedialog, topic }) {
+function AddThought({ onClosedialog, topic, toast }) {
   const { setThoughts } = useContext(DataContext);
   let newThought = "";
 
@@ -14,9 +14,11 @@ function AddThought({ onClosedialog, topic }) {
       if (result.success) {
         setThoughts(result.data);
         onClosedialog();
+      } else {
+        toast("something went wrong, try again later!");
       }
     } else {
-      console.log("add thought first ");
+      toast("Reflection is empty!");
     }
   }
 
@@ -29,9 +31,9 @@ function AddThought({ onClosedialog, topic }) {
       <div className="py-2 mx-4 sm:py-4 px-4 sm:px-8 bg-gray-50 border shadow-xl rounded-lg w-11/12 sm:w-1/3">
         <div className="flex-col  items-center">
           <div className="text-black font-medium text-base text-center">
-            Take a moment to center yourself and reflect on this focus area{" "}
-            <span className="font-semibold">{topic.title}</span>. What insights or ideas come to mind? Jot
-            down your thoughts here.
+            Reflect on your experiences related to this focus area{" "}
+            <span className="font-semibold">{topic.title}</span>. What thoughts
+            have been recurring?
           </div>
 
           <div className=" mt-4 mb-2 flex items-center">
@@ -65,7 +67,7 @@ function AddThought({ onClosedialog, topic }) {
             </button>
 
             <button
-              className="py-2 flex-1 bg-white hover:bg-blue-100 text-black border-2 text-base rounded-lg ml-2"
+              className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg ml-2"
               onClick={onClosedialog}
             >
               Cancel

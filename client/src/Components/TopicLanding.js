@@ -6,7 +6,7 @@ import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
-function TopicLanding({ emptydata }) {
+function TopicLanding({ emptydata, toast}) {
   const navigate = useNavigate();
   const [topic, setTopic] = useState("");
   const { setTopics } = useContext(DataContext);
@@ -22,8 +22,10 @@ function TopicLanding({ emptydata }) {
         emptydata(false);
         navigate(`/topics`);
       }else{
-        //toast
+        toast("something went wrong, try again later!");
       }
+    }else{
+      toast("Focus Area is empty!");
     }
   }
 

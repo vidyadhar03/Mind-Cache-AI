@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { ThoughtLanding } from "./ThoughtLanding";
 import AddThought from "./AddThought";
 import EditData from "./EditData";
+import { Toast } from "../Commons/Toast";
 const base_url = process.env.REACT_APP_API_URL;
-
 
 function Thoughts() {
   const location = useLocation();
@@ -16,8 +16,15 @@ function Thoughts() {
   const [showeditthought, setshoweditthought] = useState(false);
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
-
+  //dialog
+  const [showDialog, setShowDialog] = useState(true);
+  const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
+  };
 
   const handleeditclose = () => {
     setshoweditthought(false);
@@ -26,15 +33,12 @@ function Thoughts() {
   useEffect(() => {
     const fetchThoughts = async () => {
       try {
-        const response = await fetch(
-          base_url+"thoughts/" + topicobj._id,
-          {
-            method: "GET",
-            headers: {
-              authorization: localStorage.getItem("usertoken"),
-            },
-          }
-        );
+        const response = await fetch(base_url + "thoughts/" + topicobj._id, {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("usertoken"),
+          },
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -72,7 +76,7 @@ function Thoughts() {
   return (
     <div className="font-sans">
       {showaddthought && (
-        <AddThought onClosedialog={handleclose} topic={topicobj} />
+        <AddThought onClosedialog={handleclose} topic={topicobj} toast={showToast} />
       )}
       {showeditthought && (
         <EditData
@@ -81,11 +85,12 @@ function Thoughts() {
           datapassed={selectedthought}
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
+          toast={showToast}
         />
       )}
 
       {emptythoughts ? (
-        <ThoughtLanding topic={topicobj} emptydata={setEmptyThoughts} />
+        <ThoughtLanding topic={topicobj} emptydata={setEmptyThoughts} toast={showToast} />
       ) : (
         <div className="bg-bgc pt-8 min-h-[calc(100vh-60px)]">
           <div className="text-black text-2xl font-bold text-center ">
@@ -139,6 +144,12 @@ function Thoughts() {
           </div>
         </div>
       )}
+
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 }

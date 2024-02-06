@@ -7,11 +7,11 @@ import { useEffect } from "react";
 function HomePage() {
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(localStorage.getItem('userid')){
-      navigate(`/topics`)
+  useEffect(() => {
+    if (localStorage.getItem("userid")) {
+      navigate(`/topics`);
     }
-  },[])
+  }, []);
 
   function Intro() {
     return (
@@ -59,10 +59,10 @@ function HomePage() {
             Artificial Intelligence
           </div>
           <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
-            Empowered by AI, Mind Cache AI acts as your insightful reflection
-            companion, spotlighting transformative patterns and insights within
-            your reflections to amplify the benefits of mind caching beyond
-            traditional journaling.
+            The integration of AI technology sets Mind Cache AI apart from
+            traditional journaling platforms. It actively engages with users'
+            content to provide valuable insights and suggestions, making
+            introspection a dynamic and rewarding experience.
           </div>
           <div className=" mt-4 font-semibold underline text-lg md:text-2xl">
             Transformative Benefits
@@ -82,7 +82,7 @@ function HomePage() {
           Our Most Impactful User Story
         </div>
 
-        <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/3">
+        <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3">
           <div className=" text-center text-lg  text-black font-medium ">
             " I have been using your app and I like your idea. This helped me
             show my psychiatrist that I am not okay, and with this, my Bpd

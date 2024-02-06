@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
 import EditData from "./EditData";
+import { Toast } from "../Commons/Toast";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -12,6 +13,9 @@ function Topics() {
   const [showedittopic, setshowedittopic] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
+  //dialog
+  const [showDialog, setShowDialog] = useState(true);
+  const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
 
   const handleeditclose = () => {
@@ -26,12 +30,17 @@ function Topics() {
     setshowaddtopic(false);
   };
 
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
+  };
+
   useEffect(() => {
     console.log("topics mount");
     const fetchTopics = async () => {
       try {
         const response = await fetch(
-          base_url+"topics/" + localStorage.getItem("userid"),
+          base_url + "topics/" + localStorage.getItem("userid"),
           {
             method: "GET",
             headers: {
@@ -71,7 +80,7 @@ function Topics() {
 
   return (
     <div className="font-sans bg-bgc p-2 min-h-[calc(100vh-60px)]">
-      {showaddtopic && <AddTopic onClosedialog={handleclose} />}
+      {showaddtopic && <AddTopic onClosedialog={handleclose} toast={showToast} />}
       {showedittopic && (
         <EditData
           onClosedialog={handleeditclose}
@@ -79,11 +88,12 @@ function Topics() {
           datapassed={selectedtopic}
           topicid={selectedtopic._id}
           emptydata={setEmptyTopics}
+          toast={showToast}
         />
       )}
 
       {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} />
+        <TopicLanding emptydata={setEmptyTopics} toast={showToast}/>
       ) : (
         <div>
           <div className="w-full h-20 flex justify-center items-center bg-blue-200">
@@ -129,9 +139,14 @@ function Topics() {
           </div>
         </div>
       )}
+
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
-
 }
 
 export default Topics;
