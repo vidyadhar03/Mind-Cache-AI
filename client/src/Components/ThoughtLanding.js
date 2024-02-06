@@ -33,8 +33,8 @@ export function ThoughtLanding({ topic, emptydata, toast }) {
 
       <div className="flex md:flex-1 justify-center items-center mt-8 md:mt-0">
         <img
-          src="/white_one_cool.jpg"
-          className="h-72 w-72 md:h-96 md:w-96 rounded-full"
+          src="/white_one_cool.png"
+          className="h-72 w-72 md:h-96 md:w-96 rounded-full object-cover"
           alt="logo"
         />
       </div>

@@ -6,6 +6,7 @@ import { ThoughtLanding } from "./ThoughtLanding";
 import AddThought from "./AddThought";
 import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
+import Loader from "../Commons/Loader";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -66,9 +67,10 @@ function Thoughts() {
   if (emptythoughts === false && thoughts.length === 0) {
     return (
       <div>
-        <div className="text-3xl text-black flex justify-center p-16">
+        {/* <div className="text-3xl text-black flex justify-center p-16">
           Loading...
-        </div>
+        </div> */}
+        <Loader/>
       </div>
     );
   }
