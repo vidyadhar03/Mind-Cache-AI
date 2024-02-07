@@ -5,6 +5,7 @@ import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
+
 function HomePage() {
   const navigate = useNavigate();
 
@@ -103,26 +104,17 @@ function HomePage() {
   }
 
   function HowItWorks() {
-    const SlideInDiv = ({ children, slideDirection }) => {
+
+    const FadeInDiv = ({ children }) => {
       const { ref, inView } = useInView({
-        triggerOnce: true, // Animation triggers only once
-        threshold: 0, // Triggers when 20% of the div is visible
+        triggerOnce: true, // Only trigger the animation once
+        threshold: 0.2, // Trigger when the div starts entering the viewport
       });
-
-      console.log(inView);
-
-      // Determine the animation classes based on the slide direction
-      const animationClass = inView
-        ? "translate-x-0 opacity-100"
-        : // ? "opacity-50"
-        slideDirection === "left"
-        ? "-translate-x-full opacity-0"
-        : "translate-x-full opacity-0";
-
+    
       return (
         <div
           ref={ref}
-          className={`transition-all duration-700 ease-out ${animationClass}`}
+          className={`transition-opacity duration-1000 ${inView ? 'opacity-100' : 'opacity-0'} `}
         >
           {children}
         </div>
@@ -137,7 +129,7 @@ function HomePage() {
         <div className="flex-col  p-6 md:p-8 w-full ">
           <div className="flex flex-col md:flex-row">
             <div className=" w-full md:w-1/2 ">
-              <SlideInDiv slideDirection="left">
+              <FadeInDiv >
                 <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg  md:mr-2">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 1
@@ -153,11 +145,11 @@ function HomePage() {
                     journey.
                   </div>
                 </div>
-              </SlideInDiv>
+              </FadeInDiv>
             </div>
 
             <div className=" w-full md:w-1/2 ">
-              <SlideInDiv slideDirection="right">
+              <FadeInDiv>
                 <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 slide-in-right">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 2
@@ -173,13 +165,13 @@ function HomePage() {
                     effortlessly.
                   </div>
                 </div>
-              </SlideInDiv>
+              </FadeInDiv>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row md:mt-4">
             <div className=" w-full md:w-1/2 ">
-              <SlideInDiv slideDirection="left">
+              <FadeInDiv>
                 <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 slide-in-left">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 3
@@ -195,11 +187,11 @@ function HomePage() {
                     reflections.
                   </div>
                 </div>
-              </SlideInDiv>
+              </FadeInDiv>
             </div>
 
             <div className=" w-full md:w-1/2 ">
-              <SlideInDiv slideDirection="right">
+              <FadeInDiv >
                 <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2 slide-in-right">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 4
@@ -214,7 +206,7 @@ function HomePage() {
                     Track progress over time and adapt goals as you grow.
                   </div>
                 </div>
-              </SlideInDiv>
+              </FadeInDiv>
             </div>
           </div>
         </div>
