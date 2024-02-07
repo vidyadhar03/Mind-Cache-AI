@@ -6,6 +6,8 @@ export const AccountDetails = () => {
   const [name, setName] = useState("");
   const { globalEmail } = useContext(DataContext);
 
+  console.log(globalEmail)
+
 
   return (
     <div className="p-4 md:p-8">

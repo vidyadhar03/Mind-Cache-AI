@@ -15,9 +15,14 @@ function Topics() {
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
   //dialog
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+  //grid dynamic style
+  const gridcolstyle =
+    topics.length > 4
+      ? "grid-cols-2  lg:grid-cols-4"
+      : "grid-cols-1  lg:grid-cols-2";
 
   const handleeditclose = () => {
     setshowedittopic(false);
@@ -72,17 +77,16 @@ function Topics() {
   if (emptytopics === false && topics.length === 0) {
     return (
       <div>
-        {/* <div className="text-3xl text-black flex justify-center p-16">
-          Loading...
-        </div> */}
-        <Loader/>
+        <Loader />
       </div>
     );
   }
 
   return (
-    <div className="font-sans bg-bgc p-2 min-h-[calc(100vh-60px)]">
-      {showaddtopic && <AddTopic onClosedialog={handleclose} toast={showToast} />}
+    <div className="font-sans bg-bgc min-h-[calc(100vh-60px)]">
+      {showaddtopic && (
+        <AddTopic onClosedialog={handleclose} toast={showToast} />
+      )}
       {showedittopic && (
         <EditData
           onClosedialog={handleeditclose}
@@ -95,20 +99,25 @@ function Topics() {
       )}
 
       {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} toast={showToast}/>
+        <TopicLanding emptydata={setEmptyTopics} toast={showToast} />
       ) : (
         <div>
-          <div className="w-full h-20 flex justify-center items-center bg-blue-200">
-            TOPICS Intro section
+
+          <div className="w-full h-20 flex justify-between items-center bg-bgc px-2  ">
+            <div className="flex justify-center text-black text-xl">Explore Your Focus Areas</div>
+            <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm">Sort</button>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mt-2">
+
+          <div
+            className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}
+          >
             {topics.map((topic, index) => (
               <div
                 key={index}
-                className=" bg-blue-300 h-48 md:h-56 rounded-lg shadow-md hover:shadow-lg "
+                className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
-                  className="px-4 py-8 h-5/6 font-medium text-gray text-base sm:text-lg md:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  className="px-4 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
                     navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
                       state: { data: topic },
@@ -117,12 +126,12 @@ function Topics() {
                 >
                   {topic.title}
                 </div>
-                <div className="h-1/6 flex justify-between items-center px-2 border-t border-blue-400">
-                  <div className="text-xs">{topic.time}</div>
+                <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
+                  <div className="text-xs ml-2">{topic.time}</div>
                   <div>
                     <img
-                      src="/editlogo.png"
-                      className="h-4 w-4 cursor-pointer"
+                      src="/editpen.svg"
+                      className="h-4 w-4 cursor-pointer mr-2"
                       onClick={() => {
                         setSelectedtopic(topic);
                         setshowedittopic(true);

@@ -15,12 +15,15 @@ function NavBar() {
   return (
     <div
       id="navbar"
-      className="w-parent flex flex-row justify-between shadow-md px-4 py-2 sticky top-0 z-10 bg-bgc font-sans"
+      className="w-parent flex flex-row justify-between shadow-md px-4 py-2 sticky top-0 z-60 bg-bgc font-sans"
     >
       <div
         className="flex cursor-pointer"
         onClick={() => {
-          navigate(`/`);
+          if(userid){navigate(`/`);}else{
+            navigate(`/topics`);
+          }
+          
         }}
       >
         <img

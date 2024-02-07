@@ -18,7 +18,7 @@ function Thoughts() {
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
   //dialog
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
 

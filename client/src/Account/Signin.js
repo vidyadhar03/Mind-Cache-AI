@@ -27,8 +27,8 @@ function SignIn() {
     setIsLoading(false);
   };
   //dialog
-  const [showDialog, setShowDialog] = useState(true);
-  const [dialogMessage, setDialogMessage] = useState("hehehe lol");
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
 
   const SignUp = async (e) => {
     e.preventDefault();

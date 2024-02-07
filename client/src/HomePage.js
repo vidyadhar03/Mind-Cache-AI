@@ -134,7 +134,7 @@ function HomePage() {
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 1
                   </div>
-                  <div className=" underline text-lg font-medium mt-2">
+                  <div className=" text-lg font-medium mt-2">
                     Set Your Intentions
                   </div>
                   <div className="flex justify-center my-2">
@@ -154,7 +154,7 @@ function HomePage() {
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 2
                   </div>
-                  <div className=" underline text-lg font-medium mt-2">
+                  <div className=" text-lg font-medium mt-2">
                     Capture Your Journey
                   </div>
                   <div className="flex justify-center my-2">
@@ -176,7 +176,7 @@ function HomePage() {
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 3
                   </div>
-                  <div className=" underline text-lg font-medium mt-2">
+                  <div className=" text-lg font-medium mt-2">
                     Discover Insights with AI
                   </div>
                   <div className="flex justify-center my-2">
@@ -196,7 +196,7 @@ function HomePage() {
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 4
                   </div>
-                  <div className=" underline text-lg font-medium mt-2">
+                  <div className=" text-lg font-medium mt-2">
                     Measure Growth and Evolve
                   </div>
                   <div className="flex justify-center my-2">
