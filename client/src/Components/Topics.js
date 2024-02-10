@@ -6,6 +6,7 @@ import AddTopic from "./AddTopic";
 import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
+import { smoothifyDate } from "../utils/DateUtils";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -102,15 +103,42 @@ function Topics() {
         <TopicLanding emptydata={setEmptyTopics} toast={showToast} />
       ) : (
         <div>
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
+            <div className="w-parent flex flex-row justify-between  ">
+              <div
+                className="flex"
+              >
+                <img
+                  src="/mindcachelogo.png"
+                  className="h-8 w-8 rounded-full mr-2"
+                  alt="logo"
+                />
+                <div className="my-auto text-black text-xl text-justify">
+                  Mind Cache AI
+                </div>
+              </div>
 
-          <div className="w-full h-20 flex justify-between items-center bg-bgc px-2  ">
-            <div className="flex justify-center text-black text-xl">Explore Your Focus Areas</div>
-            <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm">Sort</button>
+              <button
+                className="flex items-center justify-center "
+                onClick={() => {
+                  navigate(`/account`);
+                }}
+              >
+                <img src="/user-profile-new.png" className="h-8 w-8 " />
+              </button>
+            </div>
+
+            <div className="w-full mt-4 flex justify-between items-center">
+              <div className="flex justify-center text-black text-xl">
+                Explore Your Focus Areas
+              </div>
+              <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm">
+                Sort
+              </button>
+            </div>
           </div>
 
-          <div
-            className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}
-          >
+          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
             {topics.map((topic, index) => (
               <div
                 key={index}
@@ -127,7 +155,9 @@ function Topics() {
                   {topic.title}
                 </div>
                 <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
-                  <div className="text-xs ml-2">{topic.time}</div>
+                  <div className="text-xs ml-2">
+                    {smoothifyDate(topic.time.toString())}
+                  </div>
                   <div>
                     <img
                       src="/editpen.svg"

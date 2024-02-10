@@ -34,7 +34,7 @@ function RouteswithNavBar() {
     "user info : " + localStorage.getItem("userid"),
     localStorage.getItem("usertoken")
   );
-  const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation"];
+  const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation","/topics"];
   const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
   return (
