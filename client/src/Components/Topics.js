@@ -105,15 +105,13 @@ function Topics() {
         <div>
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
             <div className="w-parent flex flex-row justify-between  ">
-              <div
-                className="flex"
-              >
+              <div className="flex">
                 <img
                   src="/mindcachelogo.png"
                   className="h-8 w-8 rounded-full mr-2"
                   alt="logo"
                 />
-                <div className="my-auto text-black text-2xl text-justify font-honk">
+                <div className="my-auto text-black text-xl text-justify  ">
                   Mind Cache AI
                 </div>
               </div>
@@ -128,13 +126,20 @@ function Topics() {
               </button>
             </div>
 
-            <div className="w-full mt-4 flex justify-between items-center">
-              <div className="flex justify-center text-black text-xl">
+            <div className="w-full mt-6 flex flex-col">
+              <div className="flex  text-black text-2xl md:text-3xl">
                 Explore Your Focus Areas
               </div>
-              <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm">
-                Sort
-              </button>
+              <div className="w-full flex mt-4 mb-2">
+                <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                  <img src="/sort.png" className="h-4 w-auto mr-1" />
+                  <div>Sort</div>
+                </div>
+                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                  <img src="/info.png" className="h-4 w-auto mr-1" />
+                  <div>Info.</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -172,6 +177,7 @@ function Topics() {
               </div>
             ))}
           </div>
+          
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={handleopen}

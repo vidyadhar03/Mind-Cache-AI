@@ -12,7 +12,7 @@ export const AccountDetails = () => {
   return (
     <div className="p-4 md:p-8">
       <div>Your Account Details</div>
-      <div className="w-full md:w-1/2 mt-4">
+      <div className="w-full md:w-3/4 mt-4">
         <TextField
           id="outlined-basic"
           label="Add your Name"
@@ -25,7 +25,7 @@ export const AccountDetails = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </div>
-      <div className="w-full md:w-1/2 mt-4">
+      <div className="w-full md:w-3/4 mt-4">
         <TextField
           id="outlined-basic"
           label="Email"
@@ -41,7 +41,7 @@ export const AccountDetails = () => {
       <div className="mt-4 text-base font-medium underline">
         Reset Password
       </div>
-      <div className="text-center w-full md:w-1/2 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-8">
+      <div className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-8 cursor-pointer">
         Update Details
       </div>
     </div>

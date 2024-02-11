@@ -7,6 +7,7 @@ import AddThought from "./AddThought";
 import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
+import { smoothifyDate } from "../utils/DateUtils";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -70,7 +71,7 @@ function Thoughts() {
         {/* <div className="text-3xl text-black flex justify-center p-16">
           Loading...
         </div> */}
-        <Loader/>
+        <Loader />
       </div>
     );
   }
@@ -78,7 +79,11 @@ function Thoughts() {
   return (
     <div className="font-sans">
       {showaddthought && (
-        <AddThought onClosedialog={handleclose} topic={topicobj} toast={showToast} />
+        <AddThought
+          onClosedialog={handleclose}
+          topic={topicobj}
+          toast={showToast}
+        />
       )}
       {showeditthought && (
         <EditData
@@ -92,14 +97,66 @@ function Thoughts() {
       )}
 
       {emptythoughts ? (
-        <ThoughtLanding topic={topicobj} emptydata={setEmptyThoughts} toast={showToast} />
+        <ThoughtLanding
+          topic={topicobj}
+          emptydata={setEmptyThoughts}
+          toast={showToast}
+        />
       ) : (
-        <div className="bg-bgc pt-8 min-h-[calc(100vh-60px)]">
-          <div className="text-black text-2xl font-bold text-center ">
-            {topicobj.title}
+        <div className="bg-bgc min-h-[calc(100vh-60px)]">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
+            <div className="w-parent flex flex-row justify-between  ">
+              <div className="flex">
+                <img
+                  src="/mindcachelogo.png"
+                  className="h-8 w-8 rounded-full mr-2"
+                  alt="logo"
+                />
+                <div className="my-auto text-black text-xl text-justify  ">
+                  Mind Cache AI
+                </div>
+              </div>
+
+              <button
+                className="flex items-center justify-center "
+                onClick={() => {
+                  navigate(`/account`);
+                }}
+              >
+                <img src="/user-profile-new.png" className="h-8 w-8 " />
+              </button>
+            </div>
+
+            <div className="w-full mt-6 flex flex-col">
+              <div className="flex  text-black text-2xl md:text-3xl">
+                {topicobj.title}
+              </div>
+              <div className="w-full flex mt-4 mb-2">
+                <div
+                  className="mr-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/analyse", {
+                      state: { data: topicobj.title, thoughts: thoughts },
+                    });
+                    localStorage.setItem("sessionLoaded", "");
+                  }}
+                >
+                  <img src="/bolt.png" className="h-4 w-auto mr-1" />
+                  <div>Analyse</div>
+                </div>
+                <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                  <img src="/sort.png" className="h-4 w-auto mr-1" />
+                  <div>Sort</div>
+                </div>
+                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                  <img src="/info.png" className="h-4 w-auto mr-1" />
+                  <div>Info.</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex justify-end mr-4 font-medium">
+          {/* <div className="flex justify-end mr-4 font-medium">
             <button
               className="border-2 p-2 rounded-lg hover:bg-blue-100"
               onClick={() => {
@@ -111,14 +168,14 @@ function Thoughts() {
             >
               Analyse Thoughts
             </button>
-          </div>
+          </div> */}
 
           <div className="flex-col items-center text-center">
             {thoughts.map((thought, index) => (
-              <div key={index} className="bg-blue-200 pb-6 m-4 rounded-lg">
+              <div key={index} className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg">
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">
-                    {thought.time}
+                    {smoothifyDate(thought.time.toString())}
                   </div>
                   <div className="flex items-center">
                     <img
@@ -131,7 +188,7 @@ function Thoughts() {
                     />
                   </div>
                 </div>
-                <div className="text-center text-black text-lg">
+                <div className="text-center text-black text-base md:text-lg">
                   {thought.thought}
                 </div>
               </div>

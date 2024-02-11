@@ -4,6 +4,7 @@ import Footer from "./Commons/Footer";
 import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import NavBar from "./Commons/NavBar";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -280,6 +281,7 @@ function HomePage() {
 
   return (
     <div className="font-sans ">
+      <NavBar/>
       <Intro />
       <HowItWorks />
       <UsersReview />

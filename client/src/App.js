@@ -28,18 +28,18 @@ function App() {
 
 function RouteswithNavBar() {
   const location = useLocation();
-  const user = localStorage.getItem("userid");
+  // const user = localStorage.getItem("userid");
 
-  console.log(
-    "user info : " + localStorage.getItem("userid"),
-    localStorage.getItem("usertoken")
-  );
-  const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation","/topics"];
-  const showNavBar = !hideNavBarRoutes.includes(location.pathname);
+  // console.log(
+  //   "user info : " + localStorage.getItem("userid"),
+  //   localStorage.getItem("usertoken")
+  // );
+  // const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation","/topics"];
+  // const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
   return (
     <>
-      {showNavBar && <NavBar />}
+      {/* {showNavBar && <NavBar />} */}
       <Routes>
         {/* {user ? (
           <Route path="/" element={<Topics />} />

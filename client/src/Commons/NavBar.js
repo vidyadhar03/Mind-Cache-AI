@@ -23,7 +23,6 @@ function NavBar() {
           if(userid){navigate(`/`);}else{
             navigate(`/topics`);
           }
-          
         }}
       >
         <img
@@ -31,7 +30,7 @@ function NavBar() {
           className="h-8 w-8 rounded-full mr-2"
           alt="logo"
         />
-        <div className="my-auto text-black text-2xl font-honk text-justify">
+        <div className="my-auto text-black text-xl text-justify">
           Mind Cache AI
         </div>
       </div>

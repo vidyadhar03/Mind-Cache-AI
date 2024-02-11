@@ -11,6 +11,9 @@ module.exports = {
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
         honk: ["'Honk'", "system-ui"],
+        protest:["Protest Riot"],
+        pacifico:["Pacifico","cursive"],
+        exo:["'Exo 2'", "sans-serif"]
       },
       colors: {
         "first-blue": "#C1D0EF",

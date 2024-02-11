@@ -111,12 +111,12 @@ function SignIn() {
         }}
       >
         <img src="/mindcachelogo.png" className="w-16 h-16 rounded-full mr-4" />
-        <div className="text-fifth-blue text-2xl sm:text-4xl font-honk">
+        <div className="text-fifth-blue text-2xl sm:text-4xl font-semibold">
           Mind Cache AI
         </div>
       </div>
 
-      <div className="text-center my-10 font-semibold">
+      <div className="text-center my-10 font-semibold mx-2">
         Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion.
       </div>
 
