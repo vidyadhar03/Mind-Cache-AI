@@ -31,7 +31,7 @@ function NavBar() {
           className="h-8 w-8 rounded-full mr-2"
           alt="logo"
         />
-        <div className="my-auto text-black text-xl text-justify">
+        <div className="my-auto text-black text-2xl font-honk text-justify">
           Mind Cache AI
         </div>
       </div>

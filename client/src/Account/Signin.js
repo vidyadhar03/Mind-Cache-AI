@@ -111,7 +111,7 @@ function SignIn() {
         }}
       >
         <img src="/mindcachelogo.png" className="w-16 h-16 rounded-full mr-4" />
-        <div className="text-fifth-blue text-2xl sm:text-4xl font-bold">
+        <div className="text-fifth-blue text-2xl sm:text-4xl font-honk">
           Mind Cache AI
         </div>
       </div>

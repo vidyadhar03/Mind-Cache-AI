@@ -88,7 +88,7 @@ const Footer = () => {
           alt="Mind Cache AI Logo"
           className="h-20 w-20 rounded-full my-0"
         />
-        <div className="text-xl font-semibold my-4">Mind Cache AI</div>
+        <div className="text-2xl font-semibold my-4 font-honk">Mind Cache AI</div>
         <p>
           Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion.
         </p>

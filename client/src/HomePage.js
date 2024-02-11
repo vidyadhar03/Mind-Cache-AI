@@ -5,7 +5,6 @@ import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-
 function HomePage() {
   const navigate = useNavigate();
 
@@ -49,15 +48,13 @@ function HomePage() {
           Why Mind Cache AI ?
         </div>
         <div className="text-center mt-8 flex flex-col items-center md:text-xl md:w-2/3 px-2 py-4 md:px-6 md:py-4 border shadow-lg rounded-lg">
-          <div className="font-semibold underline text-lg md:text-2xl">
-            Mind Caching
-          </div>
+          <div className="font-semibold text-lg md:text-2xl">Mind Caching</div>
           <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
             A dynamic way to capture and explore the evolving landscape of your
             thoughts, uncovering the subtle patterns that shape your mental
             well-being.
           </div>
-          <div className="font-semibold underline mt-4 text-lg md:text-2xl">
+          <div className="font-semibold mt-4 text-lg md:text-2xl">
             Artificial Intelligence
           </div>
           <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
@@ -66,7 +63,7 @@ function HomePage() {
             content to provide valuable insights and suggestions, making
             introspection a dynamic and rewarding experience.
           </div>
-          <div className=" mt-4 font-semibold underline text-lg md:text-2xl">
+          <div className=" mt-4 font-semibold text-lg md:text-2xl">
             Transformative Benefits
           </div>
           <div className="mt-2 md:mt-4 text-base md:text-lg text-center md:w-2/3">
@@ -104,17 +101,18 @@ function HomePage() {
   }
 
   function HowItWorks() {
-
     const FadeInDiv = ({ children }) => {
       const { ref, inView } = useInView({
         triggerOnce: true, // Only trigger the animation once
         threshold: 0.2, // Trigger when the div starts entering the viewport
       });
-    
+
       return (
         <div
           ref={ref}
-          className={`transition-opacity duration-1000 ${inView ? 'opacity-100' : 'opacity-0'} `}
+          className={`transition-opacity duration-1000 ${
+            inView ? "opacity-100" : "opacity-0"
+          } `}
         >
           {children}
         </div>
@@ -129,7 +127,7 @@ function HomePage() {
         <div className="flex-col  p-6 md:p-8 w-full ">
           <div className="flex flex-col md:flex-row">
             <div className=" w-full md:w-1/2 ">
-              <FadeInDiv >
+              <FadeInDiv>
                 <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg  md:mr-2">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 1
@@ -191,7 +189,7 @@ function HomePage() {
             </div>
 
             <div className=" w-full md:w-1/2 ">
-              <FadeInDiv >
+              <FadeInDiv>
                 <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2 slide-in-right">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 4
@@ -221,15 +219,14 @@ function HomePage() {
           Pricing
         </div>
 
-        <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 px-6">
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 sm:w-80 ">
-            <div className="text-center text-2xl md:text-4xl font-medium ">
-              Free
-            </div>
-            <div className="mt-4 text-center text-lg ">
-              10 AI Interactions per week
-            </div>
-            <div className=" text-center text-lg ">20 Topic creation Limit</div>
+        <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 ">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 w-full sm:w-96 text-center">
+            <div className=" text-2xl md:text-4xl font-medium ">Free Plan</div>
+            <div className="text-base mt-2">Explorer</div>
+            <ul className="list-disc pl-6 mt-4 text-lg text-left">
+              <li className="mt-2">10 AI Guidance Entries per month.</li>
+              <li className="mt-2">10 focus area creation limit.</li>
+            </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium ">Rs.0</div>
               <div className="flex flex-col justify-end text-md ml-1 ">
@@ -241,18 +238,35 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-80 ">
-            <div className="text-center text-2xl md:text-4xl font-medium">
-              Pro
-            </div>
-            <div className="mt-4 text-center text-lg">
-              100 AI Interactions per week
-            </div>
-            <div className=" text-center text-lg">Unlimited Topic creation</div>
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center">
+            <div className="text-2xl md:text-4xl font-medium">Monthly Plan</div>
+            <div className="text-base mt-2">Enhancer</div>
+            <ul className="list-disc pl-6 mt-4 text-lg text-left">
+              <li className="mt-2">150 AI Guidance Entries per month.</li>
+              <li className="mt-2">Unlimited focus area creation.</li>
+            </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium">Rs.129</div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per month
+              </div>
+            </div>
+            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">
+              Subscribe
+            </button>
+          </div>
+
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center">
+            <div className="text-2xl md:text-4xl font-medium">Annual Plan</div>
+            <div className="text-base mt-2">Visionary</div>
+            <ul className="list-disc pl-6 mt-4 text-lg text-left">
+              <li className="mt-2">200 AI Guidance Entries per month.</li>
+              <li className="mt-2">Unlimited focus area creation.</li>
+            </ul>
+            <div className="flex justify-center mt-16 mb-4">
+              <div className="text-4xl font-medium">Rs.999</div>
+              <div className="flex flex-col justify-end text-md ml-1">
+                per year
               </div>
             </div>
             <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">

@@ -10,6 +10,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
+        honk: ["'Honk'", "system-ui"],
       },
       colors: {
         "first-blue": "#C1D0EF",
