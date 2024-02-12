@@ -86,6 +86,7 @@ function vupdatethought(obj) {
 //chat
 function vchat(obj) {
   const schema = z.object({
+    userid: z.string(),
     sessionid: z.string(),
     userinput: z.string(),
   });

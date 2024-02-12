@@ -1,4 +1,4 @@
-import { useState ,useContext} from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
@@ -30,74 +30,92 @@ function SignIn() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
+  function checkForm (){
+    console.log(email,password)
+    if (email === "" || password === "") {
+      setDialogMessage("Email and password can not be empty!");
+      setShowDialog(true);
+      return false;
+    }
+    return true;
+  };
+
   const SignUp = async (e) => {
     e.preventDefault();
-    enableLoader();
-    try {
-      const response = await fetch(base_url + "signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
-      });
+    if (checkForm()) {
+      enableLoader();
+      try {
+        const response = await fetch(base_url + "signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+          }),
+        });
 
-      if (!response.ok) {
-        console.log(response);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+          const json = await response.json();
+          console.log(json);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        setDialogMessage("Sign Up successfull!");
+        setShowDialog(true);
+        disableLoader();
+        const json = await response.json();
+        localStorage.setItem("usertoken", json.token);
+        localStorage.setItem("userid", json.userid);
+        setGlobalEmail(email);
+        navigate(`/topics`);
+      } catch (e) {
+        //todo - update UI to user
+        setDialogMessage("Sign Up Failed!");
+        setShowDialog(true);
+        disableLoader();
+        console.error(e);
       }
-      setDialogMessage("Sign Up successfull!");
-      setShowDialog(true);
-      disableLoader();
-      setGlobalEmail(email);
-      const json = await response.json();
-      console.log(json);
-    } catch (e) {
-      //todo - update UI to user
-      setDialogMessage("Sign Up Failed!");
-      setShowDialog(true);
-      disableLoader();
-      console.error(e);
     }
   };
 
   const LogIn = async (e) => {
     e.preventDefault();
-    enableLoader();
-    try {
-      const response = await fetch(base_url + "login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+    if (checkForm()) {
+      enableLoader();
+      try {
+        const response = await fetch(base_url + "login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
 
-      if (!response.ok) {
-        console.log(response);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+          const json = await response.json();
+          console.log(json);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        setDialogMessage("Log In successfull!");
+        setShowDialog(true);
+        disableLoader();
+        const json = await response.json();
+        localStorage.setItem("usertoken", json.token);
+        localStorage.setItem("userid", json.userid);
+        setGlobalEmail(email);
+        navigate(`/topics`);
+      } catch (e) {
+        setDialogMessage("Login In failed!");
+        setShowDialog(true);
+        disableLoader();
+        console.error(e);
       }
-
-      setDialogMessage("Log In successfull!");
-      setShowDialog(true);
-      disableLoader();
-      const json = await response.json();
-      localStorage.setItem("usertoken", json.token);
-      localStorage.setItem("userid", json.userid);
-      setGlobalEmail(email);
-      navigate(`/topics`);
-    } catch (e) {
-      setDialogMessage("Login In failed!");
-      setShowDialog(true);
-      disableLoader();
-      console.error(e);
     }
   };
 

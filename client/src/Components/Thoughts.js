@@ -106,7 +106,16 @@ function Thoughts() {
         <div className="bg-bgc min-h-[calc(100vh-60px)]">
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
             <div className="w-parent flex flex-row justify-between  ">
-              <div className="flex">
+              <div
+                className="flex cursor-pointer"
+                onClick={() => {
+                  if (localStorage.getItem('userid')) {
+                    navigate(`/`);
+                  } else {
+                    navigate(`/topics`);
+                  }
+                }}
+              >
                 <img
                   src="/mindcachelogo.png"
                   className="h-8 w-8 rounded-full mr-2"
@@ -156,23 +165,12 @@ function Thoughts() {
             </div>
           </div>
 
-          {/* <div className="flex justify-end mr-4 font-medium">
-            <button
-              className="border-2 p-2 rounded-lg hover:bg-blue-100"
-              onClick={() => {
-                navigate("/analyse", {
-                  state: { data: topicobj.title, thoughts: thoughts },
-                });
-                localStorage.setItem("sessionLoaded", "");
-              }}
-            >
-              Analyse Thoughts
-            </button>
-          </div> */}
-
           <div className="flex-col items-center text-center">
             {thoughts.map((thought, index) => (
-              <div key={index} className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg">
+              <div
+                key={index}
+                className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
+              >
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">
                     {smoothifyDate(thought.time.toString())}

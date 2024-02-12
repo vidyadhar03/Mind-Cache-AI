@@ -8,6 +8,14 @@ const userSchema = new mongoose.Schema({
   name: String,
   password: String,
   email: String,
+  joinDate:Date,
+  subscriptionDetails:{
+    isSubscribed:{ type: Boolean, default: false },
+    plan:{ type: String, default: "" },
+    SubscribedDate:{ type: Date, default: Date.now },
+    amount:{ type: Number, default: 0 },
+    aiInteractions:{ type: Number, default: 0 },
+  }
 });
 const User = mongoose.model("User", userSchema);
 
