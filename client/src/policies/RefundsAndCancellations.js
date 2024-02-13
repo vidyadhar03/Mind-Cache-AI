@@ -17,6 +17,7 @@ export function RefundsAndCancellations() {
           <img
             src="/mindcachelogo.png"
             className="w-16 h-16 rounded-full mr-4"
+            alt="website logo"
           />
           <div className="text-fifth-blue text-2xl sm:text-4xl font-bold">
             Mind Cache AI

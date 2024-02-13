@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
@@ -128,7 +128,7 @@ function SignIn() {
           navigate(`/`);
         }}
       >
-        <img src="/mindcachelogo.png" className="w-16 h-16 rounded-full mr-4" />
+        <img src="/mindcachelogo.png" className="w-16 h-16 rounded-full mr-4" alt="" />
         <div className="text-fifth-blue text-2xl sm:text-4xl font-semibold">
           Mind Cache AI
         </div>

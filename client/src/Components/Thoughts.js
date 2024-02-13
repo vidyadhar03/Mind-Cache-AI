@@ -132,7 +132,7 @@ function Thoughts() {
                   navigate(`/account`);
                 }}
               >
-                <img src="/user-profile-new.png" className="h-8 w-8 " />
+                <img src="/user-profile-new.png" className="h-8 w-8 " alt="" />
               </button>
             </div>
 
@@ -150,15 +150,15 @@ function Thoughts() {
                     localStorage.setItem("sessionLoaded", "");
                   }}
                 >
-                  <img src="/bolt.png" className="h-4 w-auto mr-1" />
+                  <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Analyse</div>
                 </div>
                 <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/sort.png" className="h-4 w-auto mr-1" />
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Sort</div>
                 </div>
                 <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/info.png" className="h-4 w-auto mr-1" />
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Info.</div>
                 </div>
               </div>
@@ -179,6 +179,7 @@ function Thoughts() {
                     <img
                       className="h-4 w-4 m-2 mt-2 cursor-pointer"
                       src="/threedots.svg"
+                      alt=""
                       onClick={() => {
                         setSelectedthought(thought);
                         setshoweditthought(true);

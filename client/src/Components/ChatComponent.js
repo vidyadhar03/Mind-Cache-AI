@@ -339,6 +339,7 @@ const ChatComponent = () => {
             <img
               src="/navbaricon.png"
               className="h-8 w-auto mr-4"
+              alt=""
               onClick={(e) => {
                 toggleSidebar();
                 e.stopPropagation();

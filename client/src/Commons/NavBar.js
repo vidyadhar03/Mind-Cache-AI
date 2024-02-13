@@ -38,7 +38,7 @@ function NavBar() {
       {userid? <button className="flex items-center justify-center " onClick={()=>{
         navigate(`/account`);
       }}>
-        <img src="/user-profile-new.png" className="h-8 w-8 "/>
+        <img src="/user-profile-new.png" className="h-8 w-8 " alt=""/>
         {/* <div className="flex-col items-end">Account</div> */}
       </button>:<div>
       <button

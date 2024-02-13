@@ -1,6 +1,5 @@
 // import logo from './logo.svg';
-import "./App.css";
-import NavBar from "./Commons/NavBar";
+// import "./App.css";
 import Topics from "./Components/Topics";
 import Thoughts from "./Components/Thoughts";
 import ChatComponent from "./Components/ChatComponent";
@@ -12,7 +11,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
 } from "react-router-dom";
 import { DataProvider } from "./utils/DataContext";
 
@@ -27,7 +25,7 @@ function App() {
 }
 
 function RouteswithNavBar() {
-  const location = useLocation();
+  // const location = useLocation();
   // const user = localStorage.getItem("userid");
 
   // console.log(

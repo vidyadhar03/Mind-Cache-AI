@@ -5,6 +5,7 @@ import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NavBar from "./Commons/NavBar";
+import "./App.css"
 
 function HomePage() {
   const navigate = useNavigate();
@@ -17,14 +18,15 @@ function HomePage() {
 
   function Intro() {
     return (
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)]  ">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)]  bg-bgc">
         <div className="px-8 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/3 lg:h-full lg:w-3/5 bg-third-blue">
           <TypingAnimation />
         </div>
-        <div className="  flex flex-col items-center justify-center h-2/3 lg:h-full lg:w-2/5 bg-bgc p-2 ">
+        <div className="  flex flex-col items-center justify-center h-2/3 lg:h-full lg:w-2/5  p-2 slide-in-right ">
           <img
             src="/introspectlogo.jpg"
             className="h-1/2 lg-2/5 w-auto rounded-full mx-2"
+            alt="introspect"  
           />
           <div className="text-black text-2xl lg:text-4xl text-center mx-2 mt-4 font-medium">
             Gain insights into your mind.
@@ -103,8 +105,9 @@ function HomePage() {
 
   function HowItWorks() {
     const FadeInDiv = ({ children }) => {
+      console.log(window.innerWidth)
       const { ref, inView } = useInView({
-        triggerOnce: true, // Only trigger the animation once
+        triggerOnce: false, // Only trigger the animation once
         threshold: 0.2, // Trigger when the div starts entering the viewport
       });
 
@@ -137,7 +140,7 @@ function HomePage() {
                     Set Your Intentions
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="compass.png" className="w-28 h-28 rounded-full" />
+                    <img src="compass.png" className="w-28 h-28 rounded-full" alt="compass" />
                   </div>
                   <div className="mt-0">
                     Define personal goals in chosen areas of life to focus your
@@ -149,7 +152,7 @@ function HomePage() {
 
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 slide-in-right">
+                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 ">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 2
                   </div>
@@ -157,7 +160,7 @@ function HomePage() {
                     Capture Your Journey
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="pen.png" className="w-28 h-28 rounded-full" />
+                    <img src="pen.png" className="w-28 h-28 rounded-full" alt="pen" />
                   </div>
                   <div className="mt-0">
                     Log thoughts and experiences related to your goals,
@@ -171,7 +174,7 @@ function HomePage() {
           <div className="flex flex-col md:flex-row md:mt-4">
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 slide-in-left">
+                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 ">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 3
                   </div>
@@ -179,7 +182,7 @@ function HomePage() {
                     Discover Insights with AI
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="bulb.png" className="w-28 h-28 rounded-full" />
+                    <img src="bulb.png" className="w-28 h-28 rounded-full" alt="bulb"/>
                   </div>
                   <div className="mt-0">
                     Gain personalized insights through AI analysis of your
@@ -191,7 +194,7 @@ function HomePage() {
 
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2 slide-in-right">
+                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 4
                   </div>
@@ -199,7 +202,7 @@ function HomePage() {
                     Measure Growth and Evolve
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="chart.png" className="w-28 h-28 rounded-full" />
+                    <img src="chart.png" className="w-28 h-28 rounded-full" alt="chart"/> 
                   </div>
                   <div className="mt-2">
                     Track progress over time and adapt goals as you grow.
@@ -225,8 +228,9 @@ function HomePage() {
             <div className=" text-2xl md:text-4xl font-medium ">Free Plan</div>
             <div className="text-base mt-2">Explorer</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">
-              <li className="mt-2">10 AI Guidance Entries per month.</li>
-              <li className="mt-2">10 focus area creation limit.</li>
+              <li className="mt-2">10 AI Interactions per month.</li>
+              <li className="mt-2">10 Focus area creation limit.</li>
+              <li className="mt-2">30 Reflections per Focus area.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium ">Rs.0</div>
@@ -243,8 +247,9 @@ function HomePage() {
             <div className="text-2xl md:text-4xl font-medium">Monthly Plan</div>
             <div className="text-base mt-2">Enhancer</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">
-              <li className="mt-2">150 AI Guidance Entries per month.</li>
-              <li className="mt-2">Unlimited focus area creation.</li>
+              <li className="mt-2">150 AI Interactions per month.</li>
+              <li className="mt-2">Unlimited Focus area creation.</li>
+              <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium">Rs.129</div>
@@ -261,8 +266,9 @@ function HomePage() {
             <div className="text-2xl md:text-4xl font-medium">Annual Plan</div>
             <div className="text-base mt-2">Visionary</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">
-              <li className="mt-2">200 AI Guidance Entries per month.</li>
-              <li className="mt-2">Unlimited focus area creation.</li>
+              <li className="mt-2">200 AI Interactions per month.</li>
+              <li className="mt-2">Unlimited Focus area creation.</li>
+              <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium">Rs.999</div>
@@ -281,7 +287,7 @@ function HomePage() {
 
   return (
     <div className="font-sans ">
-      <NavBar/>
+      <NavBar />
       <Intro />
       <HowItWorks />
       <UsersReview />

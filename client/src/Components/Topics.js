@@ -122,7 +122,7 @@ function Topics() {
                   navigate(`/account`);
                 }}
               >
-                <img src="/user-profile-new.png" className="h-8 w-8 " />
+                <img src="/user-profile-new.png" className="h-8 w-8 " alt="" />
               </button>
             </div>
 
@@ -132,11 +132,11 @@ function Topics() {
               </div>
               <div className="w-full flex mt-4 mb-2">
                 <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/sort.png" className="h-4 w-auto mr-1" />
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt=""/> 
                   <div>Sort</div>
                 </div>
                 <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/info.png" className="h-4 w-auto mr-1" />
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />  
                   <div>Info.</div>
                 </div>
               </div>
@@ -167,6 +167,7 @@ function Topics() {
                     <img
                       src="/editpen.svg"
                       className="h-4 w-4 cursor-pointer mr-2"
+                      alt=""
                       onClick={() => {
                         setSelectedtopic(topic);
                         setshowedittopic(true);
