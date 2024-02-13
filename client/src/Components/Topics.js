@@ -84,7 +84,7 @@ function Topics() {
   }
 
   return (
-    <div className="font-sans bg-bgc min-h-[calc(100vh-60px)]">
+    <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
         <AddTopic onClosedialog={handleclose} toast={showToast} />
       )}
@@ -102,7 +102,7 @@ function Topics() {
       {emptytopics ? (
         <TopicLanding emptydata={setEmptyTopics} toast={showToast} />
       ) : (
-        <div>
+        <div className="">
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
             <div className="w-parent flex flex-row justify-between  ">
               <div className="flex">

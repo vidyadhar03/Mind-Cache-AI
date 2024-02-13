@@ -1,35 +1,23 @@
-function getSubDetails() {
+export function getSubDetails() {
   const subscriptionDetailsStr = localStorage.getItem("subscriptionDetails");
   const subscriptionDetails = JSON.parse(subscriptionDetailsStr);
   return subscriptionDetails;
 }
 
-function setSubDetails(subscriptionDetails) {
+export function setSubDetails(subscriptionDetails) {
   const subscriptionDetailsStr = JSON.stringify(subscriptionDetails);
   localStorage.setItem("subscriptionDetails", subscriptionDetailsStr);
 }
 
 
-function isEligible() {
+export function isEligible() {
   const subscriptionDetails = getSubDetails();
   const currentCount = subscriptionDetails.aiInteractionCount;
-  const planLimit = getPlanLimit(subscriptionDetails.plan); // Function to return the limit based on the plan
-
-  // Check if the current billing cycle has ended
-  let startDate = user.joinDate;
-  if (subscriptionDetails.isSubscribed) {
-    startDate = subscriptionDetails.billingCycleStartDate;
-  }
-
-  const daysSinceStart = Math.floor(
-    (Date.now() - startDate) / (1000 * 60 * 60 * 24)
-  );
-
-  
-
+  const planLimit = subscriptionDetails.isSubscribed? getPlanLimit(subscriptionDetails.plan):10;
+  return planLimit-currentCount>0?true:false;
 }
 
-function getPlanLimit(plan) {
+export function getPlanLimit(plan) {
   if (plan === "monthly") {
     return 150;
   } else {

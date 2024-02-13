@@ -103,7 +103,7 @@ function Thoughts() {
           toast={showToast}
         />
       ) : (
-        <div className="bg-bgc min-h-[calc(100vh-60px)]">
+        <div className="bg-bgc min-h-screen">
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
             <div className="w-parent flex flex-row justify-between  ">
               <div

@@ -102,10 +102,7 @@ app.post("/socketchat", auth, async (req, res) => {
 
     //AI interaction count increment
     const user = await User.findById(userid);
-    let startDate = user.joinDate;
-    if (user.subscriptionDetails.isSubscribed) {
-      startDate = user.subscriptionDetails.billingCycleStartDate;
-    }
+    let  startDate = user.subscriptionDetails.billingCycleStartDate;
 
     const daysSinceStart = Math.floor(
       (Date.now() - startDate) / (1000 * 60 * 60 * 24)
@@ -124,7 +121,7 @@ app.post("/socketchat", auth, async (req, res) => {
 
     res
       .status(200)
-      .json({ sessionId: user_messages.sessionID, messages: updatedMessages });
+      .json({ sessionId: user_messages.sessionID, messages: updatedMessages, updatedAICount:user.subscriptionDetails.aiInteractionCount});
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal server error" });

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
+import { setSubDetails } from "../utils/SubscriptionDetails";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -66,8 +67,8 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
-        localStorage.setItem("aicount", json.aiInteractions);
         localStorage.setItem("email", email);
+        setSubDetails(json.subscriptionDetails);
         navigate(`/topics`);
       } catch (e) {
         //todo - update UI to user
@@ -107,8 +108,8 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
-        localStorage.setItem("aicount", json.aiInteractions);
         localStorage.setItem("email", email);
+        setSubDetails(json.subscriptionDetails);
         navigate(`/topics`);
       } catch (e) {
         setDialogMessage("Login In failed!");

@@ -86,7 +86,7 @@ router.post("/login", async (req, res) => {
           message: "Logged in!",
           token: token,
           userid: found._id.toString(),
-          subscriptionDetails: foundUser.subscriptionDetails,
+          subscriptionDetails: found.subscriptionDetails,
         });
       } else {
         res.status(401).json({ message: "wrong credentials!" });
