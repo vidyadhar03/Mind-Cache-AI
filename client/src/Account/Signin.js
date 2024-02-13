@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
-import { DataContext } from "../utils/DataContext";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -17,7 +16,6 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [showsignup, setShowsignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { setGlobalEmail } = useContext(DataContext);
   //loader
   const [isLoading, setIsLoading] = useState(false);
   const enableLoader = () => {
@@ -30,15 +28,15 @@ function SignIn() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
-  function checkForm (){
-    console.log(email,password)
+  function checkForm() {
+    console.log(email, password);
     if (email === "" || password === "") {
       setDialogMessage("Email and password can not be empty!");
       setShowDialog(true);
       return false;
     }
     return true;
-  };
+  }
 
   const SignUp = async (e) => {
     e.preventDefault();
@@ -68,7 +66,8 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
-        setGlobalEmail(email);
+        localStorage.setItem("aicount", json.aiInteractions);
+        localStorage.setItem("email", email);
         navigate(`/topics`);
       } catch (e) {
         //todo - update UI to user
@@ -108,7 +107,8 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
-        setGlobalEmail(email);
+        localStorage.setItem("aicount", json.aiInteractions);
+        localStorage.setItem("email", email);
         navigate(`/topics`);
       } catch (e) {
         setDialogMessage("Login In failed!");

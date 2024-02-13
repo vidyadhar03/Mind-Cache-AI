@@ -1,13 +1,9 @@
 import { useState,useContext } from "react";
 import { TextField } from "@mui/material";
-import { DataContext } from "../utils/DataContext";
 
 export const AccountDetails = () => {
   const [name, setName] = useState("");
-  const { globalEmail } = useContext(DataContext);
-
-  console.log(globalEmail)
-
+  const globalEmail = localStorage.getItem("email");
 
   return (
     <div className="p-4 md:p-8">

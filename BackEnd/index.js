@@ -3,11 +3,11 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
-const userRoutes = require('./userRoutes'); 
+const userRoutes = require("./userRoutes");
 const port = process.env.PORT || 3001;
 
 //importing DB models
-const {ChatSession, ChatMessage } = require("./models/schemas");
+const { ChatSession, ChatMessage, User } = require("./models/schemas");
 
 //input validators
 const {
@@ -25,27 +25,24 @@ const { auth } = require("./middleware");
 const { StreamWithOpenAI } = require("./openAIHelper");
 
 //websocket related
-const WebSocket = require('ws');
-const http = require('http');
+const WebSocket = require("ws");
+const http = require("http");
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-
 //USER Routes
-app.use('/', userRoutes);
-
+app.use("/", userRoutes);
 
 //CHAT Routes
 // Initialize WebSocket Server
-function initializeWebSocketServer(){
-  wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
-      console.log('received from client: %s', message);
+function initializeWebSocketServer() {
+  wss.on("connection", function connection(ws) {
+    ws.on("message", function incoming(message) {
+      console.log("received from client: %s", message);
     });
-  
+
     console.log("Connected to WebSocket server");
-    ws.send(JSON.stringify({ message: 'Connected to WebSocket server' }));
-  
+    ws.send(JSON.stringify({ message: "Connected to WebSocket server" }));
   });
 }
 
@@ -65,9 +62,9 @@ app.post("/socketchat", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { sessionid, userinput } = req.body;
+  const { userid, sessionid, userinput } = req.body;
   try {
-    initializeWebSocketServer()
+    initializeWebSocketServer();
     //check if messages exists already
     const found = await ChatMessage.findOne({ sessionID: sessionid });
     let user_messages;
@@ -83,15 +80,18 @@ app.post("/socketchat", auth, async (req, res) => {
     updatedMessages.push({ role: "user", content: userinput });
 
     console.log("waiting for response");
-    let stream_message="";
+    let stream_message = "";
     let stream_messages = JSON.parse(JSON.stringify(updatedMessages));
     stream_messages.push({ role: "assistant", content: stream_message });
     const aiResponse = await StreamWithOpenAI(updatedMessages, (chunk) => {
       // Broadcast each chunk to the client in real-time
       // console.log("received chunk: ", chunk)
-      stream_message+=chunk;
-      stream_messages[stream_messages.length-1].content=stream_message
-      broadcast({ sessionId: user_messages.sessionID, messages: stream_messages });
+      stream_message += chunk;
+      stream_messages[stream_messages.length - 1].content = stream_message;
+      broadcast({
+        sessionId: user_messages.sessionID,
+        messages: stream_messages,
+      });
     });
     console.log("got full response from chat gpt");
 
@@ -100,10 +100,31 @@ app.post("/socketchat", auth, async (req, res) => {
     user_messages.messages = updatedMessages;
     await user_messages.save();
 
+    //AI interaction count increment
+    const user = await User.findById(userid);
+    let startDate = user.joinDate;
+    if (user.subscriptionDetails.isSubscribed) {
+      startDate = user.subscriptionDetails.billingCycleStartDate;
+    }
+
+    const daysSinceStart = Math.floor(
+      (Date.now() - startDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysSinceStart >= 30) {
+      // It's a new billing cycle
+      user.subscriptionDetails.aiInteractionCount = 1; // Reset to 1 as this is the first interaction of the new cycle
+      user.subscriptionDetails.billingCycleStartDate = Date.now();
+    } else {
+      // Increment within the current cycle
+      user.subscriptionDetails.aiInteractionCount++;
+    }
+
+    await user.save();
+
     res
       .status(200)
       .json({ sessionId: user_messages.sessionID, messages: updatedMessages });
-
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal server error" });

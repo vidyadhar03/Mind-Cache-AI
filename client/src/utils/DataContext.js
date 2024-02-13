@@ -7,10 +7,9 @@ export const useData = () => useContext(DataContext);
 export const DataProvider = ({ children }) => {
   const [topics, setTopics] = useState([]);
   const [thoughts, setThoughts] = useState([]);
-  const [globalEmail,setGlobalEmail] = useState("");
 
   return (
-    <DataContext.Provider value={{ topics, setTopics ,thoughts, setThoughts,globalEmail,setGlobalEmail}}>
+    <DataContext.Provider value={{ topics, setTopics ,thoughts, setThoughts}}>
       {children}
     </DataContext.Provider>
   );

@@ -96,6 +96,7 @@ const ChatComponent = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userid: localStorage.getItem("userid"),
           sessionid: session._id,
           userinput: input,
         }),

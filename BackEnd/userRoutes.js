@@ -42,9 +42,14 @@ router.post("/signup", async (req, res) => {
     if (found) {
       return res.status(400).json({ message: "user already exists" });
     }
-    const date = Date.now()
+    const date = Date.now();
     const hashedpassword = await bcrypt.hash(password, saltRounds);
-    const newUser = new User({ name, password: hashedpassword, email, joinDate:date });
+    const newUser = new User({
+      name,
+      password: hashedpassword,
+      email,
+      joinDate: date,
+    });
     await newUser.save();
     const foundUser = await User.findOne({ email: email });
     const token = jwt.sign({ userId: foundUser._id }, secret, {
@@ -54,6 +59,7 @@ router.post("/signup", async (req, res) => {
       message: "user signed up succesfully!",
       token: token,
       userid: foundUser._id.toString(),
+      subscriptionDetails: foundUser.subscriptionDetails,
     });
   } catch (e) {
     console.log(e);
@@ -80,6 +86,7 @@ router.post("/login", async (req, res) => {
           message: "Logged in!",
           token: token,
           userid: found._id.toString(),
+          subscriptionDetails: foundUser.subscriptionDetails,
         });
       } else {
         res.status(401).json({ message: "wrong credentials!" });
