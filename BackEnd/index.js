@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const userRoutes = require("./userRoutes");
+const subscriptionRoutes= require("./paymentGateway");
 const port = process.env.PORT || 3001;
 
 //importing DB models
@@ -32,6 +33,9 @@ const wss = new WebSocket.Server({ server });
 
 //USER Routes
 app.use("/", userRoutes);
+
+//Subscription Routes
+app.use("/", subscriptionRoutes);
 
 //CHAT Routes
 // Initialize WebSocket Server

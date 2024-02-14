@@ -20,8 +20,8 @@ function NavBar() {
       <div
         className="flex cursor-pointer"
         onClick={() => {
-          if(userid){navigate(`/`);}else{
-            navigate(`/topics`);
+          if(userid){navigate(`/topics`);}else{
+            navigate(`/`);
           }
         }}
       >

@@ -7,6 +7,7 @@ import SignIn from "./Account/Signin";
 import HomePage from "./HomePage";
 import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import { UserProfile } from "./Account/UserProfile";
+import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
 import {
   BrowserRouter as Router,
   Routes,
@@ -50,6 +51,7 @@ function RouteswithNavBar() {
         <Route path="/analyse" element={<ChatComponent />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<UserProfile />} />
+        <Route path="/subscription" element={<CreateSubscription/>} />
         <Route
           path="/refund-and-cancellation"
           element={<RefundsAndCancellations />}

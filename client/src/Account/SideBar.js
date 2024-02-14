@@ -5,9 +5,10 @@ export const SideBar = ({ modifyActiveTab }) => {
 
 
     const logout = () =>{
-        localStorage.removeItem("userid")
-        localStorage.removeItem("usertoken")
-        localStorage.removeItem("sessionLoaded")
+        localStorage.removeItem("userid");
+        localStorage.removeItem("usertoken");
+        localStorage.removeItem("sessionLoaded");
+        localStorage.removeItem("email");
         navigate(`/`)
     }
 

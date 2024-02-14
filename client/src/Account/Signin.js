@@ -10,7 +10,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import icons
 
 const base_url = process.env.REACT_APP_API_URL;
 
-function SignIn() {
+function SignIn({plan}) {
   const navigate = useNavigate();
   const name = "tracker user";
   const [email, setEmail] = useState("");
@@ -28,6 +28,9 @@ function SignIn() {
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+
+  
+  if(plan){console.log("exists")}else{console.log("doesnt exist")}
 
   function checkForm() {
     console.log(email, password);

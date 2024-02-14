@@ -105,7 +105,6 @@ function HomePage() {
 
   function HowItWorks() {
     const FadeInDiv = ({ children }) => {
-      console.log(window.innerWidth)
       const { ref, inView } = useInView({
         triggerOnce: false, // Only trigger the animation once
         threshold: 0.2, // Trigger when the div starts entering the viewport
@@ -217,6 +216,11 @@ function HomePage() {
   }
 
   function PricingPlans() {
+
+    function Subscribe(plan){
+      navigate(`/subscription`);
+    }
+
     return (
       <div className=" flex flex-col px-6 py-8 bg-bgc font-sans">
         <div className="text-black text-center font-bold text-2xl md:text-4xl">
@@ -257,7 +261,8 @@ function HomePage() {
                 per month
               </div>
             </div>
-            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">
+            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+            onClick={()=>{Subscribe("montly")}}>
               Subscribe
             </button>
           </div>
@@ -276,7 +281,8 @@ function HomePage() {
                 per year
               </div>
             </div>
-            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium">
+            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+            onClick={()=>{Subscribe("annual")}}>
               Subscribe
             </button>
           </div>

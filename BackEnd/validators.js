@@ -131,6 +131,15 @@ function veditsession(obj) {
   return res;
 }
 
+//payment gateway
+function vsubscription(obj){
+  const schema = z.object({
+    userid: z.string()
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 module.exports = {
   vsignup,
   vlogin,
@@ -145,4 +154,5 @@ module.exports = {
   vmessages,
   vstartsession,
   veditsession,
+  vsubscription
 };
