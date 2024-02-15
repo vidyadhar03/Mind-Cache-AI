@@ -134,7 +134,7 @@ function veditsession(obj) {
 //payment gateway
 function vsubscription(obj){
   const schema = z.object({
-    userid: z.string()
+    plan: z.string()
   });
   const res = schema.safeParse(obj);
   return res;

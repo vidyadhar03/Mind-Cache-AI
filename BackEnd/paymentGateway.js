@@ -8,6 +8,7 @@ const { vsubscription } = require("./validators");
 const { auth } = require("./middleware");
 
 router.post("/subscription", async (req, res) => {
+  console.log(req.body);
   const response = vsubscription(req.body);
   if (!response.success) {
     return res
@@ -37,16 +38,18 @@ router.post("/subscription", async (req, res) => {
     });
 
     if (!response.ok) {
+      const data = await response.json();
+      console.log(data);
       throw new Error("Network response was not ok.");
     }
 
     const data = await response.json();
+    console.log(data);
     res.status(200).json(data);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 module.exports = router;
