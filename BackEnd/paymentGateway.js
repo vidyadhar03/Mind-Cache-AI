@@ -1,5 +1,8 @@
 const express = require("express");
+const crypto = require("crypto");
+const bodyParser = require("body-parser");
 const router = express.Router();
+router.use(bodyParser.json());
 
 //input validators
 const { vsubscription } = require("./validators");
@@ -7,8 +10,11 @@ const { vsubscription } = require("./validators");
 //auth middleware
 const { auth } = require("./middleware");
 
+//webhook secret
+const webhookSecret = process.env.webhook_secret;
+
 router.post("/subscription", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const response = vsubscription(req.body);
   if (!response.success) {
     return res
@@ -44,12 +50,44 @@ router.post("/subscription", async (req, res) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     res.status(200).json(data);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+router.post("/webhook", (req, res) => {
+  const sig = req.headers["x-razorpay-signature"];
+  const body = req.body;
+  console.log(req.body);
+
+  switch (body.event) {
+    case "subscription.activated":
+      const expectedSig = crypto
+        .createHmac("sha256", webhookSecret)
+        .update(JSON.stringify(body))
+        .digest("hex");
+
+      if (sig === expectedSig) {
+        console.log("Valid signature. Processing event...");
+        // Process the event here (e.g., update subscription status)
+        console.log("subscription object", body.payload.subscription.entity);
+        console.log("payment object:", body.payload.payment.entity);
+        res.status(200).send("Webhook processed successfully");
+      } else {
+        console.log("Invalid signature. Ignoring.");
+        res.status(403).send("Invalid signature");
+      }
+      break;
+    // Handle other events
+    case "subscription.cancelled":
+      // Handle subscription activation
+      break;
+  }
+
+  res.status(200).send("okay");
 });
 
 module.exports = router;

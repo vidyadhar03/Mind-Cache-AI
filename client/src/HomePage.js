@@ -295,8 +295,8 @@ function HomePage() {
     <div className="font-sans ">
       <NavBar />
       <Intro />
-      <HowItWorks />
       <UsersReview />
+      <HowItWorks />
       <BenefitsofJournaling />
       <PricingPlans />
       <Footer />
