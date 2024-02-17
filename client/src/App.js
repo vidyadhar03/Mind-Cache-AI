@@ -1,5 +1,3 @@
-// import logo from './logo.svg';
-// import "./App.css";
 import Topics from "./Components/Topics";
 import Thoughts from "./Components/Thoughts";
 import ChatComponent from "./Components/ChatComponent";
@@ -8,7 +6,7 @@ import HomePage from "./HomePage";
 import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import { UserProfile } from "./Account/UserProfile";
 import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
-import { SubscriptionWaiting } from "./Payment Gateway/SubscriptionWaiting";
+import SubscriptionConfirmation from "./Payment Gateway/SubscriptionWaiting";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import {
   BrowserRouter as Router,
@@ -28,25 +26,10 @@ function App() {
 }
 
 function RouteswithNavBar() {
-  // const location = useLocation();
-  // const user = localStorage.getItem("userid");
-
-  // console.log(
-  //   "user info : " + localStorage.getItem("userid"),
-  //   localStorage.getItem("usertoken")
-  // );
-  // const hideNavBarRoutes = ["/analyse", "/signin", "/refund-and-cancellation","/topics"];
-  // const showNavBar = !hideNavBarRoutes.includes(location.pathname);
 
   return (
     <>
-      {/* {showNavBar && <NavBar />} */}
       <Routes>
-        {/* {user ? (
-          <Route path="/" element={<Topics />} />
-        ) : (
-          <Route path="/" element={<HomePage />} />
-        )} */}
         <Route path="/" element={<HomePage />} />
         <Route path="/topics" element={<Topics />} />
         <Route path="/topics/:topic" element={<Thoughts />} />
@@ -54,7 +37,7 @@ function RouteswithNavBar() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<UserProfile />} />
         <Route path="/subscription" element={<CreateSubscription/>} />
-        <Route path="/subscription-confirmation" element={<SubscriptionWaiting/>} />
+        <Route path="/subscription-confirmation" element={<SubscriptionConfirmation/>} />
         <Route path="/subscription-status" element={<SubscriptionStatus/>} />
         <Route
           path="/refund-and-cancellation"

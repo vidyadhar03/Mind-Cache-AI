@@ -18,7 +18,7 @@ export function isEligible() {
 }
 
 export function getPlanLimit(plan) {
-  if (plan === "monthly") {
+  if (plan === "Monthly") {
     return 150;
   } else {
     return 200;
