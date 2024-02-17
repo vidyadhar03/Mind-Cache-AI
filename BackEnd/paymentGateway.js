@@ -27,8 +27,8 @@ router.post("/subscription", async (req, res) => {
     const YOUR_KEY_SECRET = process.env.Payment_test_key_secret;
     const YOUR_KEY_ID = process.env.Payment_test_key_id;
     const plan_id =
-      plan === "monthly" ? "plan_NaRZy52S0ovofg" : "plan_NaRctqXWIuyaD4";
-    const total_count = 60;
+      plan === "Monthly" ? "plan_NaRZy52S0ovofg" : "plan_NaRctqXWIuyaD4";
+    const total_count = (plan === "Monthly") ? 60 : 5 ;
 
     const response = await fetch("https://api.razorpay.com/v1/subscriptions", {
       method: "POST",
@@ -39,7 +39,7 @@ router.post("/subscription", async (req, res) => {
       body: JSON.stringify({
         plan_id: plan_id,
         total_count: total_count,
-        customer_notify: 1,
+        customer_notify: 1
       }),
     });
 
@@ -75,10 +75,10 @@ router.post("/webhook", (req, res) => {
         // Process the event here (e.g., update subscription status)
         console.log("subscription object", body.payload.subscription.entity);
         console.log("payment object:", body.payload.payment.entity);
-        res.status(200).send("Webhook processed successfully");
+        return res.status(200).send("Webhook processed successfully");
       } else {
         console.log("Invalid signature. Ignoring.");
-        res.status(403).send("Invalid signature");
+        return res.status(403).send("Invalid signature");
       }
       break;
     // Handle other events
@@ -89,5 +89,18 @@ router.post("/webhook", (req, res) => {
 
   res.status(200).send("okay");
 });
+
+router.post('/path-for-callback', (req, res) => {
+
+  console.log("callback is fired",req.body);
+  // Process payment parameters like razorpay_payment_id, razorpay_order_id, and razorpay_signature
+  // You might save these details in your database and/or initiate further actions based on payment success
+
+  // Redirect the user or send a response that your frontend can use to inform the user or update the UI
+  res.redirect('https://your-frontend-domain.com/payment-success'); // Redirect to a success page
+  // OR
+  // res.json({ success: true, message: 'Payment successful' }); // Send a success response
+});
+
 
 module.exports = router;

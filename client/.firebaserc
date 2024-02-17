@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "mind-cache-ai"
-  }
+    "default": "mindcaching",
+    "mind caching": "mindcaching"
+  },
+  "targets": {},
+  "etags": {}
 }

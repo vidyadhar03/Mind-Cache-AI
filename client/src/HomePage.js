@@ -5,7 +5,7 @@ import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NavBar from "./Commons/NavBar";
-import "./App.css"
+import "./App.css";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function HomePage() {
           <img
             src="/introspectlogo.jpg"
             className="h-1/2 lg-2/5 w-auto rounded-full mx-2"
-            alt="introspect"  
+            alt="introspect"
           />
           <div className="text-black text-2xl lg:text-4xl text-center mx-2 mt-4 font-medium">
             Gain insights into your mind.
@@ -86,7 +86,7 @@ function HomePage() {
 
         <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3">
           <div className=" text-center text-lg  text-black font-medium ">
-            " I have been using your app and I like your idea. This helped me
+            " I have been using your product and I like your idea. This helped me
             show my psychiatrist that I am not okay, and with this, my Bpd
             diagnosis came. "
           </div>
@@ -139,7 +139,11 @@ function HomePage() {
                     Set Your Intentions
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="compass.png" className="w-28 h-28 rounded-full" alt="compass" />
+                    <img
+                      src="compass.png"
+                      className="w-28 h-28 rounded-full"
+                      alt="compass"
+                    />
                   </div>
                   <div className="mt-0">
                     Define personal goals in chosen areas of life to focus your
@@ -159,7 +163,11 @@ function HomePage() {
                     Capture Your Journey
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="pen.png" className="w-28 h-28 rounded-full" alt="pen" />
+                    <img
+                      src="pen.png"
+                      className="w-28 h-28 rounded-full"
+                      alt="pen"
+                    />
                   </div>
                   <div className="mt-0">
                     Log thoughts and experiences related to your goals,
@@ -181,7 +189,11 @@ function HomePage() {
                     Discover Insights with AI
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="bulb.png" className="w-28 h-28 rounded-full" alt="bulb"/>
+                    <img
+                      src="bulb.png"
+                      className="w-28 h-28 rounded-full"
+                      alt="bulb"
+                    />
                   </div>
                   <div className="mt-0">
                     Gain personalized insights through AI analysis of your
@@ -201,7 +213,11 @@ function HomePage() {
                     Measure Growth and Evolve
                   </div>
                   <div className="flex justify-center my-2">
-                    <img src="chart.png" className="w-28 h-28 rounded-full" alt="chart"/> 
+                    <img
+                      src="chart.png"
+                      className="w-28 h-28 rounded-full"
+                      alt="chart"
+                    />
                   </div>
                   <div className="mt-2">
                     Track progress over time and adapt goals as you grow.
@@ -217,8 +233,8 @@ function HomePage() {
 
   function PricingPlans() {
 
-    function Subscribe(plan){
-      navigate(`/subscription`);
+    function Subscribe(plan) {
+      navigate(`/subscription`, { state: { plan } });
     }
 
     return (
@@ -261,8 +277,12 @@ function HomePage() {
                 per month
               </div>
             </div>
-            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-            onClick={()=>{Subscribe("montly")}}>
+            <button
+              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+              onClick={() => {
+                Subscribe("Monthly");
+              }}
+            >
               Subscribe
             </button>
           </div>
@@ -281,8 +301,12 @@ function HomePage() {
                 per year
               </div>
             </div>
-            <button className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-            onClick={()=>{Subscribe("annual")}}>
+            <button
+              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+              onClick={() => {
+                Subscribe("Annual");
+              }}
+            >
               Subscribe
             </button>
           </div>
