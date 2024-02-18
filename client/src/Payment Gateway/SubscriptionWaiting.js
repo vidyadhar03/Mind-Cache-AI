@@ -1,32 +1,87 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
-import { CircularProgress} from "@mui/material";
+import { Toast } from "../Commons/Toast";
+import Loader from "../Commons/Loader";
+import { CircularProgress } from "@mui/material";
+const base_url = process.env.REACT_APP_API_URL;
 
 const SubscriptionConfirmation = () => {
+  const navigate = useNavigate();
 
   const [status, setStatus] = useState("Processing");
+  //loader
+  const [isLoading, setIsLoading] = useState(false);
+  const enableLoader = () => {
+    setIsLoading(true);
+  };
+  const disableLoader = () => {
+    setIsLoading(false);
+  };
+  //dialog
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
 
-  function updateSubDetails(payment,subscription){
-    console.log(payment);
-    console.log(subscription);
+  async function updateSubDetails(payment, subscription) {
+    enableLoader();
+    try {
+      const response = await fetch(base_url + "updatedetails", {
+        method: "POST",
+        body: JSON.stringify({
+          usermail: localStorage.getItem("email"),
+          subid: subscription.id,
+          planid: subscription.plan_id,
+          payid: payment.id,
+          currency: payment.currency,
+          status: payment.status,
+          orderid: payment.order_id,
+          invoiceid: payment.invoice_id,
+          email: payment.email,
+          contact: payment.contact,
+        }),
+        headers: {
+          authorization: localStorage.getItem("usertoken"),
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 403) {
+        localStorage.removeItem("userid");
+        localStorage.removeItem("usertoken");
+        navigate("/");
+      }
+      if (!response.ok) {
+        const json = await response.json();
+        console.log(json);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      disableLoader();
+      const status = subscription.status;
+      navigate(`/subscription-status`, { state: { status } });
+    } catch (e) {
+      console.log(e);
+      setDialogMessage("Something went wrong, Try again!.");
+      setShowDialog(true);
+    }
   }
 
   useEffect(() => {
-    // Replace 'ws://yourserver.com/updates' with your WebSocket server URL
     const socket = new WebSocket(process.env.REACT_APP_WS_URL);
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
-      // No need to send a message to the server if you're only listening for updates
     };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      // Assuming the server sends an object with 'subscription' and 'payment' properties
       if (data.subscription && data.payment) {
         setStatus("confirmed");
-        updateSubDetails(data.payment,data.subscription);
+        if (data.subscription.status === "active") {
+          updateSubDetails(data.payment, data.subscription);
+        } else {
+          const status = data.subscription.status;
+          navigate(`/subscription-status`, { state: { status } });
+        }
       }
     };
 
@@ -38,7 +93,7 @@ const SubscriptionConfirmation = () => {
       console.log("WebSocket connection closed");
     };
 
-    // Clean up on component unmount
+    // Cleaning up on component unmount
     return () => {
       socket.close();
     };
@@ -46,6 +101,7 @@ const SubscriptionConfirmation = () => {
 
   return (
     <div className="bg-bgc font-sans">
+      {isLoading && <Loader />}
       <NavBar />
       <div className="p-6 flex flex-col justify-center items-center ">
         <div>
@@ -75,6 +131,11 @@ const SubscriptionConfirmation = () => {
         )}
       </div>
       <Footer />
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 };

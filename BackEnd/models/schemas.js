@@ -16,6 +16,17 @@ const userSchema = new mongoose.Schema({
     billingCycleStartDate:{ type: Date, default: Date.now },
     amount:{ type: Number, default: 0 },
     aiInteractionCount:{ type: Number, default: 0 },
+    subscription_id:{ type: String, default: "" },
+    plan_id:{ type: String, default: "" },
+  },
+  paymentDetails:{
+    payment_id:{ type: String, default: "" },
+    currency:{ type: String, default: "" },
+    status:{ type: String, default: "" },
+    order_id:{ type: String, default: "" },
+    invoice_id:{ type: String, default: "" },
+    email:{ type: String, default: "" },
+    contact:{ type: String, default: "" },
   }
 });
 const User = mongoose.model("User", userSchema);

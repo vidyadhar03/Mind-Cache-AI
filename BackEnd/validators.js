@@ -140,6 +140,23 @@ function vsubscription(obj){
   return res;
 }
 
+function vupdateDetails(obj){
+  const schema = z.object({
+    usermail: z.string(),
+    subid: z.string(),
+    planid: z.string(),
+    payid: z.string(),
+    currency: z.string(),
+    status: z.string(),
+    orderid: z.string(),
+    invoiceid: z.string(),
+    email: z.string(),
+    contact: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 module.exports = {
   vsignup,
   vlogin,
@@ -154,5 +171,6 @@ module.exports = {
   vmessages,
   vstartsession,
   veditsession,
-  vsubscription
+  vsubscription,
+  vupdateDetails
 };

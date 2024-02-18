@@ -89,10 +89,6 @@ export function CreateSubscription() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setDialogMessage(
-        "Ensure you revisit this tab for your subscription info."
-      );
-      setShowDialog(true);
       disableLoader();
       navigate(`/subscription-confirmation`)
       window.open(data.short_url, "_blank");
