@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import NavBar from "../Commons/NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
@@ -104,13 +104,17 @@ export function CreateSubscription() {
     }
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="bg-bgc font-sans">
       {isLoading && <Loader />}
       <NavBar />
       <div className="p-6 flex flex-col justify-center items-center ">
         <div>
-          <img src="/payment.png" className="h-40 w-40 rounded-full" />
+          <img src="/payment.png" className="h-40 w-40 rounded-full" alt=""/>
         </div>
         <div className="text-center text-2xl md:text-4xl font-semibold mt-8">
           {plan === "Monthly" ? "Monthly" : "Annual"} Plan Subscription
@@ -124,7 +128,7 @@ export function CreateSubscription() {
             <ul key={index}>
               <li>
                 <div className="flex items-center mt-2">
-                  <img src="/check.png" className="h-4 w-auto mr-4" />
+                  <img src="/check.png" className="h-4 w-auto mr-4" alt=""/>
                   <div>{point}</div>
                 </div>
               </li>

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
+import { CircularProgress} from "@mui/material";
 
 const SubscriptionConfirmation = () => {
-  const [subscriptionDetails, setSubscriptionDetails] = useState(null);
-  const [paymentDetails, setPaymentDetails] = useState(null);
+
+  const [status, setStatus] = useState("Processing");
+
+  function updateSubDetails(payment,subscription){
+    console.log(payment);
+    console.log(subscription);
+  }
 
   useEffect(() => {
     // Replace 'ws://yourserver.com/updates' with your WebSocket server URL
@@ -19,9 +25,8 @@ const SubscriptionConfirmation = () => {
       const data = JSON.parse(event.data);
       // Assuming the server sends an object with 'subscription' and 'payment' properties
       if (data.subscription && data.payment) {
-        setSubscriptionDetails(data.subscription);
-        setPaymentDetails(data.payment);
-        // Perform any additional logic upon receiving the data
+        setStatus("confirmed");
+        updateSubDetails(data.payment,data.subscription);
       }
     };
 
@@ -40,22 +45,35 @@ const SubscriptionConfirmation = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bg-bgc font-sans">
       <NavBar />
-      <h2>Subscription Confirmation</h2>
-      {subscriptionDetails && (
+      <div className="p-6 flex flex-col justify-center items-center ">
         <div>
-          <h3>Subscription Details</h3>
-          <pre>{JSON.stringify(subscriptionDetails, null, 2)}</pre>
+          <img src="/waiting.png" className="h-40 w-40 rounded-full" alt="" />
         </div>
-      )}
-      {paymentDetails && (
-        <div>
-          <h3>Payment Details</h3>
-          <pre>{JSON.stringify(paymentDetails, null, 2)}</pre>
+        <div className="text-center text-2xl font-semibold mt-8">
+          Subscription Confirmation
         </div>
-      )}
-      {!subscriptionDetails && <p>Waiting for subscription confirmation...</p>}
+        {status === "Processing" ? (
+          <div className="flex flex-col justify-center items-center text-center">
+            <CircularProgress className="my-4" />
+            <div className="mb-60 mt-8">
+              Kindly finalize your subscription in the newly opened tab. After
+              you complete this step, please allow us up to a minute to process
+              and confirm your subscription on this page. We appreciate your
+              patience and will notify you the moment everything is set. Thank
+              you!
+            </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="text-2xl text-green-500 font-semibold mt-8">
+              Your Subscription is confirmed!
+            </div>
+            <div className="mt-4 mb-60 text-lg">Finalising the status.</div>
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );

@@ -24,7 +24,7 @@ const Loader = () => {
   return (
     <>
       <AnimationStyles />
-      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[9999]">
+      <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[9998]">
         <div className="border-4 border-t-[#3498db] border-solid rounded-full w-12 h-12" style={spinnerStyle}></div>
       </div>
     </>
