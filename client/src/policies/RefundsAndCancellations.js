@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Footer from "../Commons/Footer";
 
 export function RefundsAndCancellations() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="bg-bgc font-sans">

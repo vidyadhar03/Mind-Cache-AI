@@ -4,6 +4,7 @@ import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
+import { setSubDetails } from "../utils/SubscriptionDetails";
 import { CircularProgress } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -39,6 +40,7 @@ const SubscriptionConfirmation = () => {
           invoiceid: payment.invoice_id,
           email: payment.email,
           contact: payment.contact,
+          amount:payment.amount.toString(),
         }),
         headers: {
           authorization: localStorage.getItem("usertoken"),
@@ -56,6 +58,8 @@ const SubscriptionConfirmation = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       disableLoader();
+      const json = await response.json();
+      setSubDetails(json.subscriptionDetails);
       const status = subscription.status;
       navigate(`/subscription-status`, { state: { status } });
     } catch (e) {

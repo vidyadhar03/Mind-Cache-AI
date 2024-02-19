@@ -16,6 +16,11 @@ const { initWebSocketServer } = require('./websocketServer');
 // Initialize WebSocket server
 initWebSocketServer(server);
 
+//test
+app.get("/",(req,res)=>{
+  res.send("welcome to mind cachce");
+})
+
 //USER Routes
 app.use("/", userRoutes);
 

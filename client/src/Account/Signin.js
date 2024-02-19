@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { setSubDetails } from "../utils/SubscriptionDetails";
@@ -10,13 +10,16 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import icons
 
 const base_url = process.env.REACT_APP_API_URL;
 
-function SignIn({plan}) {
+function SignIn() {
   const navigate = useNavigate();
-  const name = "tracker user";
+  const location = useLocation();
+  const plan = location.state?.plan;
+  const name = "";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showsignup, setShowsignup] = useState(false);
+  const [showsignup, setShowsignup] = useState(plan ? true : false);
   const [showPassword, setShowPassword] = useState(false);
+
   //loader
   const [isLoading, setIsLoading] = useState(false);
   const enableLoader = () => {
@@ -29,8 +32,11 @@ function SignIn({plan}) {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
-  
-  if(plan){console.log("exists")}else{console.log("doesnt exist")}
+  if (plan) {
+    console.log("exists");
+  } else {
+    console.log("doesnt exist");
+  }
 
   function checkForm() {
     console.log(email, password);
@@ -72,7 +78,11 @@ function SignIn({plan}) {
         localStorage.setItem("userid", json.userid);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
-        navigate(`/topics`);
+        if (plan) {
+          navigate(`/subscription`, { state: { plan } });
+        } else {
+          navigate(`/topics`);
+        }
       } catch (e) {
         //todo - update UI to user
         setDialogMessage("Sign Up Failed!");
@@ -132,15 +142,25 @@ function SignIn({plan}) {
           navigate(`/`);
         }}
       >
-        <img src="/mindcachelogo.png" className="w-16 h-16 rounded-full mr-4" alt="" />
+        <img
+          src="/mindcachelogo.png"
+          className="w-16 h-16 rounded-full mr-4"
+          alt=""
+        />
         <div className="text-fifth-blue text-2xl sm:text-4xl font-semibold">
           Mind Cache AI
         </div>
       </div>
 
-      <div className="text-center my-10 font-semibold mx-2">
-        Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion.
-      </div>
+      {plan ? (
+        <div className="text-center font-semibold my-10 mx-2">
+          Kindly create your account before we proceed for subscription.
+        </div>
+      ) : (
+        <div className="text-center my-10 font-semibold mx-2">
+          Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion.
+        </div>
+      )}
 
       <div className="w-11/12 sm:w-96 px-4 py-6 border-2 rounded-lg shadow-lg">
         <form className="flex flex-col " onSubmit={showsignup ? SignUp : LogIn}>

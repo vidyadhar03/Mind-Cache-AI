@@ -86,8 +86,8 @@ function HomePage() {
 
         <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3">
           <div className=" text-center text-lg  text-black font-medium ">
-            " I have been using your product and I like your idea. This helped me
-            show my psychiatrist that I am not okay, and with this, my Bpd
+            " I have been using your product and I like your idea. This helped
+            me show my psychiatrist that I am not okay, and with this, my Bpd
             diagnosis came. "
           </div>
           <div className="flex mt-4 justify-center items-center">
@@ -232,9 +232,12 @@ function HomePage() {
   }
 
   function PricingPlans() {
-
     function Subscribe(plan) {
-      navigate(`/subscription`, { state: { plan } });
+      if (localStorage.getItem("usertoken")) {
+        navigate(`/subscription`, { state: { plan } });
+      } else {
+        navigate(`/signin`, { state: { plan } });
+      }
     }
 
     return (

@@ -12,12 +12,14 @@ const userSchema = new mongoose.Schema({
   subscriptionDetails:{
     isSubscribed:{ type: Boolean, default: false },
     plan:{ type: String, default: "" },
-    SubscribedDate:{ type: Date, default: Date.now },
     billingCycleStartDate:{ type: Date, default: Date.now },
-    amount:{ type: Number, default: 0 },
     aiInteractionCount:{ type: Number, default: 0 },
+  },
+  privateSubDetails:{
     subscription_id:{ type: String, default: "" },
     plan_id:{ type: String, default: "" },
+    SubscribedDate:{ type: Date, default: Date.now },
+    amount:{ type: Number, default: 0 },
   },
   paymentDetails:{
     payment_id:{ type: String, default: "" },

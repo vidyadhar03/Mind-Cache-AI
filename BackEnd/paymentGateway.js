@@ -7,14 +7,13 @@ const { broadcast } = require("./websocketServer");
 router.use(bodyParser.json());
 
 //input validators
-const { vsubscription,vupdateDetails } = require("./validators");
+const { vsubscription, vupdateDetails, vcancelsub } = require("./validators");
 
 //auth middleware
 const { auth } = require("./middleware");
 
 // //importing DB models
 const { User } = require("./models/schemas");
-const { stat } = require("fs");
 
 //webhook secret
 const webhookSecret = process.env.webhook_secret;
@@ -58,7 +57,7 @@ router.post("/webhook", (req, res) => {
   res.status(200).send("okay");
 });
 
-router.post("/subscription", async (req, res) => {
+router.post("/subscription", auth, async (req, res) => {
   const response = vsubscription(req.body);
   if (!response.success) {
     return res
@@ -102,7 +101,61 @@ router.post("/subscription", async (req, res) => {
   }
 });
 
-router.post("/updatedetails",auth,async (req, res) => {
+router.post("/cancelsubscription", auth, async (req, res) => {
+  const response = vcancelsub(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+
+  const { usermail } = req.body;
+  try {
+    const YOUR_KEY_SECRET = process.env.Payment_test_key_secret;
+    const YOUR_KEY_ID = process.env.Payment_test_key_id;
+    const user = await User.findOne({ email: usermail });
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist!" });
+    }
+    const subid = user.privateSubDetails.subscription_id;
+    const response = await fetch(
+      `https://api.razorpay.com/v1/subscriptions/${subid}/cancel`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`${YOUR_KEY_ID}:${YOUR_KEY_SECRET}`)}`,
+        },
+        body: JSON.stringify({
+          cancel_at_cycle_end: 0,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const data = await response.json();
+      console.log(data);
+      throw new Error("Network response was not ok.");
+    }
+
+    const data = await response.json();
+    const short_url = data.short_url;
+
+    user.subscriptionDetails.isSubscribed=false;
+    user.subscriptionDetails.plan="";
+    user.subscriptionDetails.aiInteractionCount=0;
+    user.subscriptionDetails.billingCycleStartDate=Date.now;
+
+    await user.save()
+    
+    res.status(200).json({ subscriptionDetails: user.subscriptionDetails , short_url:short_url});
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/updatedetails", auth, async (req, res) => {
   const response = vupdateDetails(req.body);
   if (!response.success) {
     return res
@@ -120,14 +173,20 @@ router.post("/updatedetails",auth,async (req, res) => {
     invoiceid,
     email,
     contact,
+    amount,
   } = req.body;
 
   try {
     const user = await User.findOne({ email: usermail });
     if (user) {
-      user.subscriptionDetails.subscription_id = subid;
-      user.subscriptionDetails.plan_id = planid;
-      user.subscriptionDetails.SubscribedDate = Date.now();
+      user.subscriptionDetails.isSubscribed = true;
+      user.subscriptionDetails.plan = (amount===12900)?"Monthly":"Annual";
+      user.subscriptionDetails.aiInteractionCount = 0;
+      user.privateSubDetails.subscription_id = subid;
+      user.privateSubDetails.plan_id = planid;
+      user.privateSubDetails.SubscribedDate = Date.now();
+      user.privateSubDetails.amount = amount;
+      user.subscriptionDetails.billingCycleStartDate = Date.now();
       user.paymentDetails.payment_id = payid;
       user.paymentDetails.currency = currency;
       user.paymentDetails.status = status;
@@ -138,7 +197,7 @@ router.post("/updatedetails",auth,async (req, res) => {
 
       await user.save();
 
-      res.status(200).json({ message: "Updated user details!" });
+      res.status(200).json({ subscriptionDetails: user.subscriptionDetails });
     } else {
       res.status(400).json({ message: "User does not exist!" });
     }

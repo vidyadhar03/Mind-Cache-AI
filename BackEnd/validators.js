@@ -131,6 +131,14 @@ function veditsession(obj) {
   return res;
 }
 
+function vcancelsub(obj) {
+  const schema = z.object({
+    usermail: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 //payment gateway
 function vsubscription(obj){
   const schema = z.object({
@@ -152,6 +160,7 @@ function vupdateDetails(obj){
     invoiceid: z.string(),
     email: z.string(),
     contact: z.string(),
+    amount: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;
@@ -172,5 +181,6 @@ module.exports = {
   vstartsession,
   veditsession,
   vsubscription,
-  vupdateDetails
+  vupdateDetails,
+  vcancelsub
 };

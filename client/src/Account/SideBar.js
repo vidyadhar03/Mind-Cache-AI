@@ -9,6 +9,7 @@ export const SideBar = ({ modifyActiveTab }) => {
         localStorage.removeItem("usertoken");
         localStorage.removeItem("sessionLoaded");
         localStorage.removeItem("email");
+        localStorage.removeItem("subscriptionDetails");
         navigate(`/`)
     }
 
