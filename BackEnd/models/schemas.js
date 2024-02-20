@@ -5,24 +5,30 @@ mongoose.connect(mongouri);
 
 // User Schema
 const userSchema = new mongoose.Schema({
-  name: String,
-  password: String,
-  email: String,
-  joinDate:Date,
+  name: { type: String, default: "" },
+  password: { type: String, default: "" },
+  email: { type: String, default: "" },
+  joinDate:{ type: Date, default: Date.now() },
+  subscription_id:{ type: String, default: "" },
   subscriptionDetails:{
     isSubscribed:{ type: Boolean, default: false },
     plan:{ type: String, default: "" },
-    billingCycleStartDate:{ type: Date, default: Date.now },
+    billingCycleStartDate:{ type: Date, default: Date.now() },
     aiInteractionCount:{ type: Number, default: 0 },
-  },
+  }
+});
+const User = mongoose.model("User", userSchema);
+
+// Subscription Schema
+const subSchema = new mongoose.Schema({
+  subscription_id:{ type: String, default: "" },
+  payment_id:{ type: String, default: "" },
   privateSubDetails:{
-    subscription_id:{ type: String, default: "" },
     plan_id:{ type: String, default: "" },
-    SubscribedDate:{ type: Date, default: Date.now },
+    SubscribedDate:{ type: Date, default: Date.now() },
     amount:{ type: Number, default: 0 },
   },
   paymentDetails:{
-    payment_id:{ type: String, default: "" },
     currency:{ type: String, default: "" },
     status:{ type: String, default: "" },
     order_id:{ type: String, default: "" },
@@ -31,7 +37,7 @@ const userSchema = new mongoose.Schema({
     contact:{ type: String, default: "" },
   }
 });
-const User = mongoose.model("User", userSchema);
+const Subscription = mongoose.model("Subscription", subSchema);
 
 // Topic Schema
 const topicSchema = new mongoose.Schema({
@@ -85,4 +91,4 @@ const chatMessageSchema = new mongoose.Schema({
 });
 const ChatMessage = mongoose.model("Chat Message", chatMessageSchema);
 
-module.exports = { User, Topic, Thought, ChatSession, ChatMessage };
+module.exports = { User, Subscription, Topic, Thought, ChatSession, ChatMessage };

@@ -131,6 +131,15 @@ function veditsession(obj) {
   return res;
 }
 
+//payment gateway
+function vsubscription(obj){
+  const schema = z.object({
+    plan: z.string()
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 function vcancelsub(obj) {
   const schema = z.object({
     usermail: z.string(),
@@ -139,10 +148,13 @@ function vcancelsub(obj) {
   return res;
 }
 
-//payment gateway
-function vsubscription(obj){
+function vconfirmpay(obj){
   const schema = z.object({
-    plan: z.string()
+    usermail: z.string(),
+    subid: z.string(),
+    payid: z.string(),
+    signature: z.string(),
+    plan:z.string()
   });
   const res = schema.safeParse(obj);
   return res;
@@ -182,5 +194,6 @@ module.exports = {
   veditsession,
   vsubscription,
   vupdateDetails,
-  vcancelsub
+  vcancelsub,
+  vconfirmpay
 };

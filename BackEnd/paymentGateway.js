@@ -1,24 +1,28 @@
 const express = require("express");
 const crypto = require("crypto");
 const bodyParser = require("body-parser");
-const WebSocket = require("ws");
 const router = express.Router();
-const { broadcast } = require("./websocketServer");
+// const { broadcast } = require("./websocketServer");
 router.use(bodyParser.json());
 
 //input validators
-const { vsubscription, vupdateDetails, vcancelsub } = require("./validators");
+const {
+  vsubscription,
+  vupdateDetails,
+  vcancelsub,
+  vconfirmpay,
+} = require("./validators");
 
 //auth middleware
 const { auth } = require("./middleware");
 
 // //importing DB models
-const { User } = require("./models/schemas");
+const { User, Subscription } = require("./models/schemas");
 
 //webhook secret
 const webhookSecret = process.env.webhook_secret;
 
-router.post("/webhook", (req, res) => {
+router.post("/webhook", async (req, res) => {
   const sig = req.headers["x-razorpay-signature"];
   const body = req.body;
   console.log(req.body);
@@ -36,11 +40,36 @@ router.post("/webhook", (req, res) => {
         console.log("subscription object", body.payload.subscription.entity);
         console.log("payment object:", body.payload.payment.entity);
 
-        // Broadcast subscription and payment objects through WebSocket
-        broadcast({
-          subscription: body.payload.subscription.entity,
-          payment: body.payload.payment.entity,
-        });
+        const subscription = body.payload.subscription.entity;
+        const payment = body.payload.payment.entity;
+
+        // // Broadcast subscription and payment objects through WebSocket
+        // broadcast({
+        //   subscription: body.payload.subscription.entity,
+        //   payment: body.payload.payment.entity,
+        // });
+
+        try {
+          const sub = await Subscription.findOne({
+            subscription_id: subscription.id,
+          });
+
+          if (sub) {
+            sub.privateSubDetails.plan_id = subscription.plan_id;
+            sub.privateSubDetails.SubscribedDate = Date.now();
+            sub.privateSubDetails.amount = payment.amount.toString();
+
+            sub.paymentDetails.currency = payment.currency;
+            sub.paymentDetails.status = payment.status;
+            sub.paymentDetails.order_id = payment.order_id;
+            sub.paymentDetails.invoice_id = payment.invoice_id;
+            sub.paymentDetails.email = payment.email;
+            sub.paymentDetails.contact = payment.contact;
+            await sub.save();
+          }
+        } catch (e) {
+          console.log(e);
+        }
 
         return res.status(200).send("Webhook processed successfully");
       } else {
@@ -50,7 +79,6 @@ router.post("/webhook", (req, res) => {
       break;
     // Handle other events
     case "subscription.cancelled":
-      // Handle subscription activation
       break;
   }
 
@@ -141,14 +169,74 @@ router.post("/cancelsubscription", auth, async (req, res) => {
     const data = await response.json();
     const short_url = data.short_url;
 
-    user.subscriptionDetails.isSubscribed=false;
-    user.subscriptionDetails.plan="";
-    user.subscriptionDetails.aiInteractionCount=0;
-    user.subscriptionDetails.billingCycleStartDate=Date.now;
+    user.subscriptionDetails.isSubscribed = false;
+    user.subscriptionDetails.plan = "";
+    user.subscriptionDetails.aiInteractionCount = 0;
+    user.subscriptionDetails.billingCycleStartDate = Date.now;
 
-    await user.save()
-    
-    res.status(200).json({ subscriptionDetails: user.subscriptionDetails , short_url:short_url});
+    await user.save();
+
+    res.status(200).json({
+      subscriptionDetails: user.subscriptionDetails,
+      short_url: short_url,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/confirmpayment", auth, async (req, res) => {
+  const response = vconfirmpay(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+
+  const { usermail, subid, payid, signature, plan } = req.body;
+  try {
+    const YOUR_KEY_SECRET = process.env.Payment_test_key_secret;
+    const user = await User.findOne({ email: usermail });
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist!" });
+    }
+
+    // Constructing the expected signature using subscription_id and payment_id
+    const payload = `${payid}|${subid}`;
+    const generated_signature = crypto
+      .createHmac("sha256", YOUR_KEY_SECRET)
+      .update(payload)
+      .digest("hex");
+
+    if (generated_signature === signature) {
+      try {
+        user.subscription_id = subid;
+        user.subscriptionDetails.isSubscribed = true;
+        user.subscriptionDetails.plan = plan;
+        user.subscriptionDetails.aiInteractionCount = 0;
+        user.subscriptionDetails.billingCycleStartDate = Date.now();
+
+        await user.save();
+
+        const subscription = new Subscription({
+          subscription_id: subid,
+          payment_id: payid,
+        });
+
+        await subscription.save();
+
+        res.status(200).json({
+          subscriptionDetails: user.subscriptionDetails,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid payment signature" });
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal server error" });
@@ -180,7 +268,7 @@ router.post("/updatedetails", auth, async (req, res) => {
     const user = await User.findOne({ email: usermail });
     if (user) {
       user.subscriptionDetails.isSubscribed = true;
-      user.subscriptionDetails.plan = (amount===12900)?"Monthly":"Annual";
+      user.subscriptionDetails.plan = amount === 12900 ? "Monthly" : "Annual";
       user.subscriptionDetails.aiInteractionCount = 0;
       user.privateSubDetails.subscription_id = subid;
       user.privateSubDetails.plan_id = planid;

@@ -123,7 +123,11 @@ function SignIn() {
         localStorage.setItem("userid", json.userid);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
-        navigate(`/topics`);
+        if (plan) {
+          navigate(`/subscription`, { state: { plan } });
+        } else {
+          navigate(`/topics`);
+        }
       } catch (e) {
         setDialogMessage("Login In failed!");
         setShowDialog(true);

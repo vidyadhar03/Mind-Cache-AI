@@ -7,6 +7,7 @@ import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import { UserProfile } from "./Account/UserProfile";
 import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
 import SubscriptionConfirmation from "./Payment Gateway/SubscriptionWaiting";
+// import { SubscriptionInitiation } from "./Payment Gateway/SubscriptionInitiation";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import {
   BrowserRouter as Router,

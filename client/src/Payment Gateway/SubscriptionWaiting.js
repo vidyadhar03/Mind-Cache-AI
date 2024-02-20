@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 import { Toast } from "../Commons/Toast";
@@ -10,6 +10,8 @@ const base_url = process.env.REACT_APP_API_URL;
 
 const SubscriptionConfirmation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const data = location.state?.data;
 
   const [status, setStatus] = useState("Processing");
   //loader
@@ -24,84 +26,131 @@ const SubscriptionConfirmation = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
-  async function updateSubDetails(payment, subscription) {
-    enableLoader();
-    try {
-      const response = await fetch(base_url + "updatedetails", {
-        method: "POST",
-        body: JSON.stringify({
-          usermail: localStorage.getItem("email"),
-          subid: subscription.id,
-          planid: subscription.plan_id,
-          payid: payment.id,
-          currency: payment.currency,
-          status: payment.status,
-          orderid: payment.order_id,
-          invoiceid: payment.invoice_id,
-          email: payment.email,
-          contact: payment.contact,
-          amount:payment.amount.toString(),
-        }),
-        headers: {
-          authorization: localStorage.getItem("usertoken"),
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 403) {
-        localStorage.removeItem("userid");
-        localStorage.removeItem("usertoken");
-        navigate("/");
-      }
-      if (!response.ok) {
-        const json = await response.json();
-        console.log(json);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      disableLoader();
-      const json = await response.json();
-      setSubDetails(json.subscriptionDetails);
-      const status = subscription.status;
-      navigate(`/subscription-status`, { state: { status } });
-    } catch (e) {
-      console.log(e);
-      setDialogMessage("Something went wrong, Try again!.");
-      setShowDialog(true);
-    }
-  }
-
   useEffect(() => {
-    const socket = new WebSocket(process.env.REACT_APP_WS_URL);
-
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.subscription && data.payment) {
-        setStatus("confirmed");
-        if (data.subscription.status === "active") {
-          updateSubDetails(data.payment, data.subscription);
-        } else {
-          const status = data.subscription.status;
-          navigate(`/subscription-status`, { state: { status } });
+    window.scrollTo(0, 0);
+    async function confirmPayment() {
+      enableLoader();
+      try {
+        const response = await fetch(base_url + "confirmpayment", {
+          method: "POST",
+          body: JSON.stringify({
+            usermail: localStorage.getItem("email"),
+            subid: data.subscriptionId,
+            payid: data.paymentid,
+            signature: data.signature,
+            plan:data.plan
+          }),
+          headers: {
+            authorization: localStorage.getItem("usertoken"),
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 403) {
+          localStorage.removeItem("userid");
+          localStorage.removeItem("usertoken");
+          localStorage.removeItem("sessionLoaded");
+          localStorage.removeItem("email");
+          localStorage.removeItem("subscriptionDetails");
+          navigate(`/`);
         }
+        if (!response.ok) {
+          const json = await response.json();
+          console.log(json);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        disableLoader();
+        const json = await response.json();
+        setSubDetails(json.subscriptionDetails);
+        setStatus("done");
+        // const status = subscription.status;
+        // navigate(`/subscription-status`, { state: { status } });
+      } catch (e) {
+        console.log(e);
+        setDialogMessage("Something went wrong, Try again!.");
+        setShowDialog(true);
       }
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
-    // Cleaning up on component unmount
-    return () => {
-      socket.close();
-    };
+    }
+    confirmPayment();
   }, []);
+
+  // async function updateSubDetails(payment, subscription) {
+  //   enableLoader();
+  //   try {
+  //     const response = await fetch(base_url + "updatedetails", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         usermail: localStorage.getItem("email"),
+  //         subid: subscription.id,
+  //         planid: subscription.plan_id,
+  //         payid: payment.id,
+  //         currency: payment.currency,
+  //         status: payment.status,
+  //         orderid: payment.order_id,
+  //         invoiceid: payment.invoice_id,
+  //         email: payment.email,
+  //         contact: payment.contact,
+  //         amount:payment.amount.toString(),
+  //       }),
+  //       headers: {
+  //         authorization: localStorage.getItem("usertoken"),
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     if (response.status === 403) {
+  //       localStorage.removeItem("userid");
+  //       localStorage.removeItem("usertoken");
+  //       navigate("/");
+  //     }
+  //     if (!response.ok) {
+  //       const json = await response.json();
+  //       console.log(json);
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     disableLoader();
+  //     const json = await response.json();
+  //     setSubDetails(json.subscriptionDetails);
+  //     const status = subscription.status;
+  //     navigate(`/subscription-status`, { state: { status } });
+  //   } catch (e) {
+  //     console.log(e);
+  //     setDialogMessage("Something went wrong, Try again!.");
+  //     setShowDialog(true);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   const socket = new WebSocket(process.env.REACT_APP_WS_URL);
+
+  //   socket.onopen = () => {
+  //     console.log("WebSocket connection established");
+  //   };
+
+  //   socket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     if (data.subscription && data.payment) {
+  //       setStatus("confirmed");
+  //       if (data.subscription.status === "active") {
+  //         updateSubDetails(data.payment, data.subscription);
+  //       } else {
+  //         const status = data.subscription.status;
+  //         navigate(`/subscription-status`, { state: { status } });
+  //       }
+  //     }
+  //   };
+
+  //   socket.onerror = (error) => {
+  //     console.error("WebSocket error:", error);
+  //   };
+
+  //   socket.onclose = () => {
+  //     console.log("WebSocket connection closed");
+  //   };
+
+  //   // Cleaning up on component unmount
+  //   return () => {
+  //     socket.close();
+  //   };
+  // }, []);
 
   return (
     <div className="bg-bgc font-sans">

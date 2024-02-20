@@ -18,7 +18,7 @@ initWebSocketServer(server);
 
 //test
 app.get("/",(req,res)=>{
-  res.send("welcome to mind cachce");
+  res.send("Welcome to Mind Cachce AI");
 })
 
 //USER Routes
