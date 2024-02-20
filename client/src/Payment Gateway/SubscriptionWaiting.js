@@ -38,7 +38,7 @@ const SubscriptionConfirmation = () => {
             subid: data.subscriptionId,
             payid: data.paymentid,
             signature: data.signature,
-            plan:data.plan
+            plan: data.plan,
           }),
           headers: {
             authorization: localStorage.getItem("usertoken"),
@@ -51,6 +51,8 @@ const SubscriptionConfirmation = () => {
           localStorage.removeItem("sessionLoaded");
           localStorage.removeItem("email");
           localStorage.removeItem("subscriptionDetails");
+          setDialogMessage("Authentication failed, Kindly Login again!.");
+          setShowDialog(true);
           navigate(`/`);
         }
         if (!response.ok) {

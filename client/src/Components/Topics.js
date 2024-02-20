@@ -42,6 +42,16 @@ function Topics() {
     setShowDialog(true);
   };
 
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
+
   useEffect(() => {
     const fetchTopics = async () => {
       try {
@@ -55,9 +65,7 @@ function Topics() {
           }
         );
         if (response.status === 403) {
-          localStorage.removeItem("userid");
-          localStorage.removeItem("usertoken");
-          navigate("/");
+          logout();
         }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,7 +93,11 @@ function Topics() {
   return (
     <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
-        <AddTopic onClosedialog={handleclose} toast={showToast} />
+        <AddTopic
+          onClosedialog={handleclose}
+          toast={showToast}
+          logout={logout}
+        />
       )}
       {showedittopic && (
         <EditData
@@ -95,6 +107,7 @@ function Topics() {
           topicid={selectedtopic._id}
           emptydata={setEmptyTopics}
           toast={showToast}
+          logout={logout}
         />
       )}
 
@@ -131,11 +144,11 @@ function Topics() {
               </div>
               <div className="w-full flex mt-4 mb-2">
                 <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/sort.png" className="h-4 w-auto mr-1" alt=""/> 
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Sort</div>
                 </div>
                 <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />  
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Info.</div>
                 </div>
               </div>
@@ -177,7 +190,7 @@ function Topics() {
               </div>
             ))}
           </div>
-          
+
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={handleopen}

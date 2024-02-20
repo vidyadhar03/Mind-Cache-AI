@@ -1,7 +1,7 @@
 import { useState } from "react";
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditSession({ onClosedialog, session,updateSesh }) {
+function EditSession({ onClosedialog, session,updateSesh,logout }) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
@@ -22,7 +22,9 @@ function EditSession({ onClosedialog, session,updateSesh }) {
           del: del,
         }),
       });
-
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

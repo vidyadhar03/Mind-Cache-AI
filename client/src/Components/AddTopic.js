@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddTopic({ onClosedialog,toast }) {
+function AddTopic({ onClosedialog, toast, logout }) {
   const { setTopics } = useContext(DataContext);
   let newTopic = "";
 
@@ -16,9 +16,13 @@ function AddTopic({ onClosedialog,toast }) {
         setTopics(result.data);
         onClosedialog();
       } else {
-        toast("something went wrong, try again later!");
+        if (result.logout) {
+          logout();
+        } else {
+          toast("something went wrong, try again later!");
+        }
       }
-    }else{
+    } else {
       toast("Focus Area is empty!");
     }
   }

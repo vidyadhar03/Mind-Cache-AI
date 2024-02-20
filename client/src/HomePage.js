@@ -50,7 +50,7 @@ function HomePage() {
         <div className="text-black text-center font-bold text-2xl md:text-4xl">
           Why Mind Cache AI ?
         </div>
-        <div className="text-center mt-8 flex flex-col items-center md:text-xl md:w-2/3 px-2 py-4 md:px-6 md:py-4 border shadow-lg rounded-lg">
+        <div className="bg-card text-center mt-8 flex flex-col items-center md:text-xl md:w-2/3 px-2 py-4 md:px-6 md:py-4 border shadow-lg rounded-lg">
           <div className="font-semibold text-lg md:text-2xl">Mind Caching</div>
           <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
             A dynamic way to capture and explore the evolving landscape of your
@@ -84,7 +84,7 @@ function HomePage() {
           Our Most Impactful User Story
         </div>
 
-        <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3">
+        <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3 bg-card">
           <div className=" text-center text-lg  text-black font-medium ">
             " I have been using your product and I like your idea. This helped
             me show my psychiatrist that I am not okay, and with this, my Bpd
@@ -131,12 +131,12 @@ function HomePage() {
           <div className="flex flex-col md:flex-row">
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg  md:mr-2">
+                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg  md:mr-2 bg-card">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 1
                   </div>
                   <div className=" text-lg font-medium mt-2">
-                    Set Your Intentions
+                    Set Your Focus Areas
                   </div>
                   <div className="flex justify-center my-2">
                     <img
@@ -155,7 +155,7 @@ function HomePage() {
 
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 ">
+                <div className="p-2 md:p-4 my-6 md:my-0 text-center border  rounded-lg shadow-lg md:ml-2 bg-card">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 2
                   </div>
@@ -181,7 +181,7 @@ function HomePage() {
           <div className="flex flex-col md:flex-row md:mt-4">
             <div className=" w-full md:w-1/2 ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 ">
+                <div className="p-2 md:p-4 text-center border  rounded-lg shadow-lg md:mr-2 bg-card">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 3
                   </div>
@@ -203,9 +203,9 @@ function HomePage() {
               </FadeInDiv>
             </div>
 
-            <div className=" w-full md:w-1/2 ">
+            <div className=" w-full md:w-1/2  ">
               <FadeInDiv>
-                <div className="p-2 md:p-4 my-4 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2">
+                <div className="p-2 md:p-4 my-6 md:my-0 text-center border  rounded-lg shadow-lg  md:ml-2 bg-card">
                   <div className="text-xl md:text-2xl font-semibold ">
                     Step 4
                   </div>
@@ -247,7 +247,7 @@ function HomePage() {
         </div>
 
         <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 ">
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 w-full sm:w-96 text-center">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg md:mx-4 w-full sm:w-96 text-center bg-card">
             <div className=" text-2xl md:text-4xl font-medium ">Free Plan</div>
             <div className="text-base mt-2">Explorer</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">
@@ -266,7 +266,7 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center bg-card">
             <div className="text-2xl md:text-4xl font-medium">Monthly Plan</div>
             <div className="text-base mt-2">Enhancer</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">
@@ -290,7 +290,7 @@ function HomePage() {
             </button>
           </div>
 
-          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center">
+          <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg mt-6 md:mt-0 md:mx-4 sm:w-96 text-center bg-card">
             <div className="text-2xl md:text-4xl font-medium">Annual Plan</div>
             <div className="text-base mt-2">Visionary</div>
             <ul className="list-disc pl-6 mt-4 text-lg text-left">

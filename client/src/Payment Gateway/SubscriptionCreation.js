@@ -78,7 +78,12 @@ export function CreateSubscription() {
         if (response.status === 403) {
           localStorage.removeItem("userid");
           localStorage.removeItem("usertoken");
-          navigate("/");
+          localStorage.removeItem("sessionLoaded");
+          localStorage.removeItem("email");
+          localStorage.removeItem("subscriptionDetails");
+          setDialogMessage("Authentication failed, Kindly Login again!.");
+          setShowDialog(true);
+          navigate(`/`);
         }
         if (!response.ok) {
           const data = await response.json();

@@ -16,6 +16,9 @@ module.exports = {
         exo: ["'Exo 2'", "sans-serif"],
       },
       colors: {
+        "cardi":"#EAECFF",
+        // "card":"#ECEAFF",
+        "card":"#F5F0FF",
         "first-blue": "#C1D0EF",
         "second-blue": "#7391CD",
         "third-blue": "#314E8A",

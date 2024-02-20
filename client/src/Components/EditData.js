@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../utils/DataContext";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata,toast }) {
+function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata,toast,logout }) {
   const { setTopics, setThoughts } = useContext(DataContext);
-
+  const navigate = useNavigate();
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
@@ -49,6 +50,9 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata,toas
           "Content-Type": "application/json",
         },
       });
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

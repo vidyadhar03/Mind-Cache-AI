@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddThought({ onClosedialog, topic, toast }) {
+function AddThought({ onClosedialog, topic, toast,logout }) {
   const { setThoughts } = useContext(DataContext);
   let newThought = "";
 
@@ -15,7 +15,11 @@ function AddThought({ onClosedialog, topic, toast }) {
         setThoughts(result.data);
         onClosedialog();
       } else {
-        toast("something went wrong, try again later!");
+        if (result.logout) {
+          logout();
+        } else {
+          toast("something went wrong, try again later!");
+        }
       }
     } else {
       toast("Reflection is empty!");

@@ -76,6 +76,9 @@ const ChatComponent = () => {
           authorization: localStorage.getItem("usertoken"),
         },
       });
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -87,6 +90,21 @@ const ChatComponent = () => {
       console.log(e);
     }
   };
+
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
+  };
+
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
 
   async function Chat(analyse, session) {
     if (isEligible()) {
@@ -111,12 +129,15 @@ const ChatComponent = () => {
             userinput: input,
           }),
         });
+        if (response.status === 403) {
+          logout();
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
         const subDetails = getSubDetails();
-        subDetails.aiInteractionCount=json.updatedAICount;
+        subDetails.aiInteractionCount = json.updatedAICount;
         setSubDetails(subDetails);
       } catch (e) {
         console.log(e);
@@ -142,6 +163,9 @@ const ChatComponent = () => {
             time: new Date().toISOString(),
           }),
         });
+        if (response.status === 403) {
+          logout();
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -222,6 +246,9 @@ const ChatComponent = () => {
           },
         }
       );
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -309,6 +336,7 @@ const ChatComponent = () => {
           onClosedialog={handleeditclose}
           session={dotclickedsesh}
           updateSesh={updateSessions}
+          logout={logout}
         />
       )}
 

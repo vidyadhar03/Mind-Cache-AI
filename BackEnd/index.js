@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const userRoutes = require("./userRoutes");
-const subscriptionRoutes= require("./paymentGateway");
+const subscriptionRoutes= require("./paymentRoutes");
 const chatRoutes = require("./chatRoutes");
 const port = process.env.PORT || 3001;
 

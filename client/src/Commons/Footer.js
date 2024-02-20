@@ -77,7 +77,7 @@ const Footer = () => {
             >
               mindcacheai03@gmail.com
             </a>
-            <div className="w-3/4 text-center">Nyati office,Viman Nagar, Pune. Maharastra - 411014</div>
+            <div className="w-3/4 text-center">Pune, India.</div>
           </div>
         </div>
       </div>

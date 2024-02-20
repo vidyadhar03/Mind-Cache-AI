@@ -97,7 +97,7 @@ router.post("/socketchat", auth, async (req, res) => {
   }
 });
 
-router.get("/sessions/:userid", async (req, res) => {
+router.get("/sessions/:userid", auth,async (req, res) => {
   const response = vsessions(req.params.userid);
   if (!response.success) {
     return res

@@ -32,6 +32,16 @@ function Thoughts() {
     setshoweditthought(false);
   };
 
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
+
   useEffect(() => {
     const fetchThoughts = async () => {
       try {
@@ -41,6 +51,9 @@ function Thoughts() {
             authorization: localStorage.getItem("usertoken"),
           },
         });
+        if (response.status === 403) {
+          logout();
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -83,6 +96,7 @@ function Thoughts() {
           onClosedialog={handleclose}
           topic={topicobj}
           toast={showToast}
+          logout={logout}          
         />
       )}
       {showeditthought && (
@@ -93,6 +107,7 @@ function Thoughts() {
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
           toast={showToast}
+          logout={logout}
         />
       )}
 
