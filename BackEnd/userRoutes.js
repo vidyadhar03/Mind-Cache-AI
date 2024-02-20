@@ -165,7 +165,7 @@ router.post("/updatetopic", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { userid, title, edit, del } = req.body;
+  const { userid, title, edit, del, pin } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
     let local_topics = found.topics;
@@ -175,7 +175,12 @@ router.post("/updatetopic", auth, async (req, res) => {
     if (del === "yes") {
       local_topics.splice(index, 1);
     } else {
-      local_topics[index].title = edit;
+      if (pin === "yes" || pin==="no") {
+        const b = (pin==="yes")?true:false;
+        local_topics[index].pinned = b;
+      } else {
+        local_topics[index].title = edit;
+      }
     }
 
     found.topics = local_topics;

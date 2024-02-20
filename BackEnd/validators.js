@@ -46,6 +46,7 @@ function vupdatetopic(obj) {
     title: z.string(),
     edit: z.string(),
     del: z.string(),
+    pin: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;

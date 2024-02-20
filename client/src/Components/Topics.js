@@ -25,6 +25,18 @@ function Topics() {
       ? "grid-cols-2  lg:grid-cols-4"
       : "grid-cols-1  lg:grid-cols-2";
 
+  let pinned_topics = [];
+  let unpinned_topics = [];
+  for (let topic of topics) {
+    if (topic.pinned) {
+      pinned_topics.push(topic);
+    } else {
+      unpinned_topics.push(topic);
+    }
+  }
+  const finalTopics = [...pinned_topics, ...unpinned_topics];
+  console.log(finalTopics);
+
   const handleeditclose = () => {
     setshowedittopic(false);
   };
@@ -74,6 +86,7 @@ function Topics() {
         if (json.data.length === 0) {
           setEmptyTopics(true);
         }
+        console.log(json.data);
         setTopics(json.data);
       } catch (e) {
         console.log(e);
@@ -156,20 +169,25 @@ function Topics() {
           </div>
 
           <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
-            {topics.map((topic, index) => (
+            {finalTopics.map((topic, index) => (
               <div
                 key={index}
                 className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
-                  className="px-4 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
                     navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
                       state: { data: topic },
                     });
                   }}
                 >
-                  {topic.title}
+                  {topic.pinned && (
+                    <div className="w-1/5 pl-2">
+                      <img src="/pinned.png" className="h-6 w-6 mr-1" />
+                    </div>
+                  )}
+                  <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>{topic.title}</div>
                 </div>
                 <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
                   <div className="text-xs ml-2">
