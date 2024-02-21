@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../utils/DataContext";
+import { useState } from "react";
 import { TextField } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -171,7 +170,7 @@ function EditData({
                   UpdateData();
                 }}
               >
-                <img src="/pinned.png" className="h-6 w-6 mr-2" />
+                <img src="/pinned.png" className="h-6 w-6 mr-2" alt=""/>
                 <div>{(datapassed.pinned)?"Unpin":"Pin"}</div>
               </button>
             ) : (

@@ -6,12 +6,14 @@ import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
+import { FocusAreaInfo } from "./LearnMore";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
   const [topics, setTopics] = useState([]);
   const [showaddtopic, setshowaddtopic] = useState(false);
   const [showedittopic, setshowedittopic] = useState(false);
+  const [showinfo, setshowinfo] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
   const [sort,setSort] = useState(" by latest");
@@ -41,6 +43,10 @@ function Topics() {
     const reversedTopics = [...topics].reverse();
     setTopics(pinTopics(reversedTopics));
     setSort(sort===" by latest"?" by oldest":" by latest");
+  }
+
+  const handlecloseInfo = () =>{
+    setshowinfo(false);
   }
 
   const handleeditclose = () => {
@@ -133,6 +139,11 @@ function Topics() {
           logout={logout}
         />
       )}
+      {showinfo&&(
+        <FocusAreaInfo
+        onClosedialog={handlecloseInfo}
+        />
+      )}
 
       {emptytopics ? (
         <TopicLanding
@@ -178,7 +189,8 @@ function Topics() {
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Sort {sort}</div>
                 </div>
-                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                onClick={()=>{setshowinfo(true);}}>
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Info.</div>
                 </div>
@@ -202,7 +214,7 @@ function Topics() {
                 >
                   {topic.pinned && (
                     <div className="w-1/5 pl-2">
-                      <img src="/pinned.png" className="h-6 w-6 mr-1" />
+                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt=""/>
                     </div>
                   )}
                   <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>
