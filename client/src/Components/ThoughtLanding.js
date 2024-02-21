@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { DataContext } from "../utils/DataContext";
-import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import NavBar from "../Commons/NavBar";
 
-export function ThoughtLanding({ topic, emptydata, toast }) {
+export function ThoughtLanding({ topic, emptydata, setThoughts, toast }) {
   const [thought, setThought] = useState("");
-  const { setThoughts } = useContext(DataContext);
 
   async function handleCreate(event) {
     event.preventDefault();

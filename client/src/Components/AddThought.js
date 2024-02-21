@@ -1,10 +1,7 @@
-import { DataContext } from "../utils/DataContext";
-import { useContext } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddThought({ onClosedialog, topic, toast,logout }) {
-  const { setThoughts } = useContext(DataContext);
+function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
   let newThought = "";
 
   async function handleCreate() {

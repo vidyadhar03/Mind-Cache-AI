@@ -59,6 +59,7 @@ const thoughtSchema = new mongoose.Schema({
     {
       thought: String,
       time: Date,
+      collapse: { type: Boolean, default: false },
     },
   ],
 });

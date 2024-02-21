@@ -77,6 +77,7 @@ function vupdatethought(obj) {
     thought: z.string(),
     edit: z.string(),
     del: z.string(),
+    collapse: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;

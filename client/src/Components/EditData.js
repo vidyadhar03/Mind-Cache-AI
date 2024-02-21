@@ -10,15 +10,16 @@ function EditData({
   topicid,
   emptydata,
   toast,
+  setThoughts,
   setTopics,
   pinTopics,
   logout,
 }) {
-  const { setThoughts } = useContext(DataContext);
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
   let pin = "";
+  let collapse = "";
   let datagot = "";
   const rowsheight = datamode === "topic" ? 1 : 4;
   const widthres = datamode === "topic" ? "w-96" : "w-1/3";
@@ -49,6 +50,7 @@ function EditData({
           thought: datapassed.thought,
           edit: edit,
           del: del,
+          collapse: collapse
         });
       }
       console.log(req_body);
@@ -85,7 +87,7 @@ function EditData({
   }
 
   function UpdateData() {
-    if (del === "yes" || pin === "yes" || pin==="no") {
+    if (del === "yes" || pin === "yes" || pin==="no"|| collapse === "yes" || collapse ==="no") {
       EditData();
     } else {
       if (edit === "") {
@@ -175,9 +177,12 @@ function EditData({
             ) : (
               <button
                 className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
-                onClick={onClosedialog}
+                onClick={()=>{
+                  collapse = (datapassed.collapse)?"no":"yes";
+                  UpdateData();
+                }}
               >
-                <div>Collapse Reflection</div>
+                <div>{(datapassed.collapse)?"Show Reflection":"Collapse"}</div>
               </button>
             )}
             <button

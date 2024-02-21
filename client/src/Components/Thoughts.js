@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { DataContext } from "../utils/DataContext";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThoughtLanding } from "./ThoughtLanding";
 import AddThought from "./AddThought";
@@ -13,15 +12,22 @@ const base_url = process.env.REACT_APP_API_URL;
 function Thoughts() {
   const location = useLocation();
   const topicobj = location.state?.data;
-  const { thoughts, setThoughts } = useContext(DataContext);
+  const [thoughts, setThoughts] = useState([]);
   const [showaddthought, setshowaddthought] = useState(false);
   const [showeditthought, setshoweditthought] = useState(false);
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
+  const [sort, setSort] = useState(" by latest");
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+
+  function reverseThoughts() {
+    const reverseThoughts = [...thoughts].reverse();
+    setThoughts(reverseThoughts);
+    setSort(sort === " by latest" ? " by oldest" : " by latest");
+  }
 
   const showToast = (message) => {
     setDialogMessage(message);
@@ -95,8 +101,9 @@ function Thoughts() {
         <AddThought
           onClosedialog={handleclose}
           topic={topicobj}
+          setThoughts={setThoughts}
           toast={showToast}
-          logout={logout}          
+          logout={logout}
         />
       )}
       {showeditthought && (
@@ -106,6 +113,7 @@ function Thoughts() {
           datapassed={selectedthought}
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
+          setThoughts={setThoughts}
           toast={showToast}
           logout={logout}
         />
@@ -115,6 +123,7 @@ function Thoughts() {
         <ThoughtLanding
           topic={topicobj}
           emptydata={setEmptyThoughts}
+          setThoughts={setThoughts}
           toast={showToast}
         />
       ) : (
@@ -124,7 +133,7 @@ function Thoughts() {
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
-                  if (localStorage.getItem('userid')) {
+                  if (localStorage.getItem("userid")) {
                     navigate(`/`);
                   } else {
                     navigate(`/topics`);
@@ -168,9 +177,12 @@ function Thoughts() {
                   <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Analyse</div>
                 </div>
-                <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                <div
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={reverseThoughts}
+                >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort</div>
+                  <div>Sort {sort}</div>
                 </div>
                 <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
@@ -203,7 +215,10 @@ function Thoughts() {
                   </div>
                 </div>
                 <div className="text-center text-black text-base md:text-lg">
-                  {thought.thought}
+                  {thought.collapse?(<div className="italic">** Reflection hidden **</div>):(
+                    <div>
+                    {thought.thought}</div>
+                  )}
                 </div>
               </div>
             ))}

@@ -254,7 +254,7 @@ router.post("/updatethought", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { topicid, thought, edit, del } = req.body;
+  const { topicid, thought, edit, del, collapse } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
     console.log(found);
@@ -265,7 +265,12 @@ router.post("/updatethought", auth, async (req, res) => {
     if (del === "yes") {
       local_thoughts.splice(index, 1);
     } else {
-      local_thoughts[index].thought = edit;
+      if (collapse === "yes" || collapse==="no") {
+        const b = (collapse==="yes")?true:false;
+        local_thoughts[index].collapse = b;
+      } else {
+        local_thoughts[index].thought = edit;
+      }
     }
     found.thoughts = local_thoughts;
     await found.save();
