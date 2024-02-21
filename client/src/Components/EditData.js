@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../utils/DataContext";
 import { TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -11,10 +10,11 @@ function EditData({
   topicid,
   emptydata,
   toast,
+  setTopics,
+  pinTopics,
   logout,
 }) {
-  const { setTopics, setThoughts } = useContext(DataContext);
-  const navigate = useNavigate();
+  const { setThoughts } = useContext(DataContext);
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
@@ -71,7 +71,7 @@ function EditData({
         emptydata(true);
       }
       if (datamode === "topic") {
-        setTopics(json.data);
+        setTopics(pinTopics(json.data));
       } else {
         setThoughts(json.data);
       }

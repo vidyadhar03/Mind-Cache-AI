@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { DataContext } from "../utils/DataContext";
-import { useContext } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../Commons/NavBar";
 
-function TopicLanding({ emptydata, toast }) {
+function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
   const navigate = useNavigate();
   const [topic, setTopic] = useState("");
-  const { setTopics } = useContext(DataContext);
 
   async function handleCreate(event) {
     event.preventDefault();
@@ -18,7 +15,7 @@ function TopicLanding({ emptydata, toast }) {
       const result = await AddTopicAPI(topic);
       if (result.success) {
         console.log("result success");
-        setTopics(result.data);
+        setTopics(pinTopics(result.data));
         emptydata(false);
         navigate(`/topics`);
       } else {

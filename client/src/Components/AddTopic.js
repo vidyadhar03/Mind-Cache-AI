@@ -1,10 +1,7 @@
-import { DataContext } from "../utils/DataContext";
-import { useContext } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
-function AddTopic({ onClosedialog, toast, logout }) {
-  const { setTopics } = useContext(DataContext);
+function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
   let newTopic = "";
 
   async function handleCreate(event) {
@@ -13,7 +10,7 @@ function AddTopic({ onClosedialog, toast, logout }) {
       const result = await AddTopicAPI(newTopic);
       console.log(result);
       if (result.success) {
-        setTopics(result.data);
+        setTopics(pinTopics(result.data));
         onClosedialog();
       } else {
         if (result.logout) {
@@ -36,13 +33,6 @@ function AddTopic({ onClosedialog, toast, logout }) {
           </div>
 
           <div className=" mt-4 mb-2 flex items-center">
-            {/* <input
-              placeholder="Topic"
-              className="border-2 p-2 w-parent rounded-md w-full"
-              onChange={(e) => {
-                newTopic = e.target.value;
-              }}
-            ></input> */}
             <TextField
               id="outlined-basic"
               label="Focus Area"
@@ -58,9 +48,6 @@ function AddTopic({ onClosedialog, toast, logout }) {
           <div className="flex justify-center ">
             <button
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg  "
-              // onClick={() => {
-              //   handleCreate();
-              // }}
               type="submit"
             >
               Add

@@ -1,5 +1,4 @@
-import { DataContext } from "../utils/DataContext";
-import { useContext, useState, useEffect } from "react";
+import {  useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
@@ -10,11 +9,12 @@ import { smoothifyDate } from "../utils/DateUtils";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
-  const { topics, setTopics } = useContext(DataContext);
+  const [topics, setTopics] = useState([]);
   const [showaddtopic, setshowaddtopic] = useState(false);
   const [showedittopic, setshowedittopic] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
+  const [sort,setSort] = useState(" by latest");
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -25,17 +25,23 @@ function Topics() {
       ? "grid-cols-2  lg:grid-cols-4"
       : "grid-cols-1  lg:grid-cols-2";
 
-  let pinned_topics = [];
-  let unpinned_topics = [];
-  for (let topic of topics) {
-    if (topic.pinned) {
-      pinned_topics.push(topic);
-    } else {
-      unpinned_topics.push(topic);
-    }
+  function pinTopics(updatedTopics) {
+    const { pinned, unpinned } = updatedTopics.reduce(
+      (acc, topic) => {
+        topic.pinned ? acc.pinned.push(topic) : acc.unpinned.push(topic);
+        return acc;
+      },
+      { pinned: [], unpinned: [] }
+    );
+    const pinnedTopics = [...pinned, ...unpinned];
+    return pinnedTopics;
   }
-  const finalTopics = [...pinned_topics, ...unpinned_topics];
-  console.log(finalTopics);
+
+  function reverseTopics() {
+    const reversedTopics = [...topics].reverse();
+    setTopics(pinTopics(reversedTopics));
+    setSort(sort===" by latest"?" by oldest":" by latest");
+  }
 
   const handleeditclose = () => {
     setshowedittopic(false);
@@ -87,7 +93,7 @@ function Topics() {
           setEmptyTopics(true);
         }
         console.log(json.data);
-        setTopics(json.data);
+        setTopics(pinTopics(json.data));
       } catch (e) {
         console.log(e);
       }
@@ -109,6 +115,8 @@ function Topics() {
         <AddTopic
           onClosedialog={handleclose}
           toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
           logout={logout}
         />
       )}
@@ -120,12 +128,19 @@ function Topics() {
           topicid={selectedtopic._id}
           emptydata={setEmptyTopics}
           toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
           logout={logout}
         />
       )}
 
       {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} toast={showToast} />
+        <TopicLanding
+          emptydata={setEmptyTopics}
+          toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
+        />
       ) : (
         <div className="">
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
@@ -156,9 +171,12 @@ function Topics() {
                 Explore Your Focus Areas
               </div>
               <div className="w-full flex mt-4 mb-2">
-                <div className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
+                <div
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={reverseTopics}
+                >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort</div>
+                  <div>Sort {sort}</div>
                 </div>
                 <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
@@ -169,7 +187,7 @@ function Topics() {
           </div>
 
           <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
-            {finalTopics.map((topic, index) => (
+            {topics.map((topic, index) => (
               <div
                 key={index}
                 className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
@@ -187,7 +205,9 @@ function Topics() {
                       <img src="/pinned.png" className="h-6 w-6 mr-1" />
                     </div>
                   )}
-                  <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>{topic.title}</div>
+                  <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>
+                    {topic.title}
+                  </div>
                 </div>
                 <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
                   <div className="text-xs ml-2">
