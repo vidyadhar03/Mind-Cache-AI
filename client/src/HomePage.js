@@ -57,7 +57,7 @@ function HomePage() {
             thoughts, uncovering the subtle patterns that shape your mental
             well-being.
           </div>
-          <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
+          <div className="mt-2 text-base md:text-lg  md:w-2/3">
             Mind Cache AI incorporates scientific principles related to the
             benefits of journaling and structured reflection for mental health.
             These principles are grounded in psychological research that shows

@@ -176,7 +176,7 @@ function Thoughts() {
                   }}
                 >
                   <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Analyse using AI</div>
+                  <div>Analyse</div>
                 </div>
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"

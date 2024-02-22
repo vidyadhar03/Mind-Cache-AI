@@ -43,6 +43,7 @@ function vaddtopic(obj) {
 function vupdatetopic(obj) {
   const schema = z.object({
     userid: z.string(),
+    topicid: z.string(),
     title: z.string(),
     edit: z.string(),
     del: z.string(),

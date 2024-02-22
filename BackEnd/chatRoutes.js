@@ -195,6 +195,8 @@ router.post("/editchatsession", auth, async (req, res) => {
     );
     if (del === "yes") {
       local_sesh.splice(index, 1);
+      //deleting corresponding chat messages related to the session
+      await ChatMessage.deleteOne({sessionID:sessionid});
     } else {
       local_sesh[index].sessionTitle = edit;
     }

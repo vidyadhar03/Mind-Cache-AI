@@ -37,6 +37,7 @@ function EditData({
         api_url = base_url + "updatetopic";
         req_body = JSON.stringify({
           userid: localStorage.getItem("userid"),
+          topicid: datapassed._id,
           title: datapassed.title,
           edit: edit,
           del: del,
