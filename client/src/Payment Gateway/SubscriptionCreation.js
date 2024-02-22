@@ -73,6 +73,7 @@ export function CreateSubscription() {
           },
           body: JSON.stringify({
             plan: plan,
+            usermail: localStorage.getItem("email"),
           }),
         });
         if (response.status === 403) {
@@ -141,7 +142,7 @@ export function CreateSubscription() {
         subscription_id: subId,
         name: "Mind Cache AI",
         description: "Monthly Test Plan",
-        image: "/mindcachelogo.jpg",
+        image: "/mindcachelogo.png",
         handler: function (response) {
           // Handle success: you can use response.razorpay_payment_id, response.razorpay_subscription_id
           console.log("response after the payment:", response);
@@ -149,17 +150,18 @@ export function CreateSubscription() {
             paymentid: response.razorpay_payment_id,
             subscriptionId: response.razorpay_subscription_id,
             signature: response.razorpay_signature,
-            plan:plan
+            plan: plan,
           };
           navigate(`/subscription-confirmation`, { state: { data } });
         },
-        modal: {
-          ondismiss: function () {
-            console.log("Payment modal was closed");
-          },
-        },
+        // modal: {
+        //   ondismiss: function () {
+        //     console.log("Payment modal was closed");
+        //   },
+        // },
         theme: {
-          color: "#F37254",
+          // color: "#F37254",
+          color: "#0F285E",
         },
       };
 
@@ -167,6 +169,9 @@ export function CreateSubscription() {
       rzp.on("payment.failed", function (response) {
         console.error("Payment failed:", response);
         alert("Payment Failed: " + response.error.description);
+        const status = "failure";
+        const errord= response.error.description;
+        navigate(`/subscription-status`, { state: { status },error: {errord} });
       });
       rzp.open();
     } catch (error) {

@@ -6,7 +6,7 @@ import HomePage from "./HomePage";
 import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import { UserProfile } from "./Account/UserProfile";
 import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
-import SubscriptionConfirmation from "./Payment Gateway/SubscriptionWaiting";
+import SubscriptionConfirmation from "./Payment Gateway/SubscriptionConfirmation";
 // import { SubscriptionInitiation } from "./Payment Gateway/SubscriptionInitiation";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import {

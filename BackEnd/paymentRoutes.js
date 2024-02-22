@@ -36,19 +36,11 @@ router.post("/webhook", async (req, res) => {
 
       if (sig === expectedSig) {
         console.log("Valid signature. Processing event...");
-        // Process the event here (e.g., update subscription status)
         console.log("subscription object", body.payload.subscription.entity);
         console.log("payment object:", body.payload.payment.entity);
 
         const subscription = body.payload.subscription.entity;
         const payment = body.payload.payment.entity;
-
-        // // Broadcast subscription and payment objects through WebSocket
-        // broadcast({
-        //   subscription: body.payload.subscription.entity,
-        //   payment: body.payload.payment.entity,
-        // });
-
         try {
           const sub = await Subscription.findOne({
             subscription_id: subscription.id,
@@ -67,6 +59,18 @@ router.post("/webhook", async (req, res) => {
             sub.paymentDetails.contact = payment.contact;
             await sub.save();
           }
+
+          const user = await User.findOne({ subscription_id: subscription.id });
+          if (user) {
+            user.subscriptionDetails.isSubscribed = true;
+            user.subscriptionDetails.plan =
+              subscription.plan_id === process.env.monthly_planid
+                ? "Monthly"
+                : "Annual";
+            user.subscriptionDetails.billingCycleStartDate = Date.now();
+            user.aiInteractionCount = 0;
+            await user.save();
+          }
         } catch (e) {
           console.log(e);
         }
@@ -79,6 +83,35 @@ router.post("/webhook", async (req, res) => {
       break;
     // Handle other events
     case "subscription.cancelled":
+      const expectedSigc = crypto
+        .createHmac("sha256", webhookSecret)
+        .update(JSON.stringify(body))
+        .digest("hex");
+      if (sig === expectedSigc) {
+        console.log("Valid signature. Processing event...");
+        // Process the event here (e.g., update subscription status)
+        console.log("subscription object", body.payload.subscription.entity);
+
+        const subscription = body.payload.subscription.entity;
+
+        try {
+          const user = await User.findOne({ subscription_id: subscription.id });
+          if (user) {
+            user.subscriptionDetails.isSubscribed = false;
+            user.subscriptionDetails.plan = "";
+            user.subscriptionDetails.billingCycleStartDate = Date.now();
+            user.aiInteractionCount = 0;
+            await user.save();
+          }
+        } catch (e) {
+          console.log(e);
+        }
+
+        return res.status(200).send("Webhook processed successfully");
+      } else {
+        console.log("Invalid signature. Ignoring.");
+        return res.status(403).send("Invalid signature");
+      }
       break;
   }
 
@@ -93,12 +126,14 @@ router.post("/subscription", auth, async (req, res) => {
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
 
-  const { plan } = req.body;
+  const { plan, usermail } = req.body;
   try {
     const YOUR_KEY_SECRET = process.env.Payment_test_key_secret;
     const YOUR_KEY_ID = process.env.Payment_test_key_id;
     const plan_id =
-      plan === "Monthly" ? "plan_NaRZy52S0ovofg" : "plan_NaRctqXWIuyaD4";
+      plan === "Monthly"
+        ? process.env.monthly_planid
+        : process.env.annual_planid;
     const total_count = plan === "Monthly" ? 60 : 5;
 
     const response = await fetch("https://api.razorpay.com/v1/subscriptions", {
@@ -117,10 +152,15 @@ router.post("/subscription", auth, async (req, res) => {
     if (!response.ok) {
       const data = await response.json();
       console.log(data);
-      throw new Error("Network response was not ok.");
+      res.status(500).json({ message: "Network response was not ok." });
+      // throw new Error("Network response was not ok.");
     }
 
     const data = await response.json();
+
+    const user = await User.findOne({ email: usermail });
+    user.subscription_id = data.id;
+    await user.save();
     // console.log(data);
     res.status(200).json(data);
   } catch (e) {
@@ -145,7 +185,7 @@ router.post("/cancelsubscription", auth, async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "User does not exist!" });
     }
-    const subid = user.privateSubDetails.subscription_id;
+    const subid = user.subscription_id;
     const response = await fetch(
       `https://api.razorpay.com/v1/subscriptions/${subid}/cancel`,
       {
@@ -172,7 +212,7 @@ router.post("/cancelsubscription", auth, async (req, res) => {
     user.subscriptionDetails.isSubscribed = false;
     user.subscriptionDetails.plan = "";
     user.subscriptionDetails.aiInteractionCount = 0;
-    user.subscriptionDetails.billingCycleStartDate = Date.now;
+    user.subscriptionDetails.billingCycleStartDate = Date.now();
 
     await user.save();
 
@@ -243,55 +283,55 @@ router.post("/confirmpayment", auth, async (req, res) => {
   }
 });
 
-router.post("/updatedetails", auth, async (req, res) => {
-  const response = vupdateDetails(req.body);
-  if (!response.success) {
-    return res
-      .status(400)
-      .json({ message: "Inputs are invalid", errors: response.error.issues });
-  }
-  const {
-    usermail,
-    subid,
-    planid,
-    payid,
-    currency,
-    status,
-    orderid,
-    invoiceid,
-    email,
-    contact,
-    amount,
-  } = req.body;
+// router.post("/updatedetails", auth, async (req, res) => {
+//   const response = vupdateDetails(req.body);
+//   if (!response.success) {
+//     return res
+//       .status(400)
+//       .json({ message: "Inputs are invalid", errors: response.error.issues });
+//   }
+//   const {
+//     usermail,
+//     subid,
+//     planid,
+//     payid,
+//     currency,
+//     status,
+//     orderid,
+//     invoiceid,
+//     email,
+//     contact,
+//     amount,
+//   } = req.body;
 
-  try {
-    const user = await User.findOne({ email: usermail });
-    if (user) {
-      user.subscriptionDetails.isSubscribed = true;
-      user.subscriptionDetails.plan = amount === 12900 ? "Monthly" : "Annual";
-      user.subscriptionDetails.aiInteractionCount = 0;
-      user.privateSubDetails.subscription_id = subid;
-      user.privateSubDetails.plan_id = planid;
-      user.privateSubDetails.SubscribedDate = Date.now();
-      user.privateSubDetails.amount = amount;
-      user.subscriptionDetails.billingCycleStartDate = Date.now();
-      user.paymentDetails.payment_id = payid;
-      user.paymentDetails.currency = currency;
-      user.paymentDetails.status = status;
-      user.paymentDetails.order_id = orderid;
-      user.paymentDetails.invoice_id = invoiceid;
-      user.paymentDetails.email = email;
-      user.paymentDetails.contact = contact;
+//   try {
+//     const user = await User.findOne({ email: usermail });
+//     if (user) {
+//       user.subscriptionDetails.isSubscribed = true;
+//       user.subscriptionDetails.plan = amount === 12900 ? "Monthly" : "Annual";
+//       user.subscriptionDetails.aiInteractionCount = 0;
+//       user.privateSubDetails.subscription_id = subid;
+//       user.privateSubDetails.plan_id = planid;
+//       user.privateSubDetails.SubscribedDate = Date.now();
+//       user.privateSubDetails.amount = amount;
+//       user.subscriptionDetails.billingCycleStartDate = Date.now();
+//       user.paymentDetails.payment_id = payid;
+//       user.paymentDetails.currency = currency;
+//       user.paymentDetails.status = status;
+//       user.paymentDetails.order_id = orderid;
+//       user.paymentDetails.invoice_id = invoiceid;
+//       user.paymentDetails.email = email;
+//       user.paymentDetails.contact = contact;
 
-      await user.save();
+//       await user.save();
 
-      res.status(200).json({ subscriptionDetails: user.subscriptionDetails });
-    } else {
-      res.status(400).json({ message: "User does not exist!" });
-    }
-  } catch (e) {
-    res.status(500).json({ message: "Internal server error!" });
-  }
-});
+//       res.status(200).json({ subscriptionDetails: user.subscriptionDetails });
+//     } else {
+//       res.status(400).json({ message: "User does not exist!" });
+//     }
+//   } catch (e) {
+//     res.status(500).json({ message: "Internal server error!" });
+//   }
+// });
 
 module.exports = router;
