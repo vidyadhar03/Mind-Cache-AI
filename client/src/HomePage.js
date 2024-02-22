@@ -57,14 +57,25 @@ function HomePage() {
             thoughts, uncovering the subtle patterns that shape your mental
             well-being.
           </div>
+          <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
+            Mind Cache AI incorporates scientific principles related to the
+            benefits of journaling and structured reflection for mental health.
+            These principles are grounded in psychological research that shows
+            regular introspection can enhance self-awareness, reduce stress, and
+            improve emotional well-being.
+          </div>
           <div className="font-semibold mt-4 text-lg md:text-2xl">
             Artificial Intelligence
           </div>
           <div className="mt-2 md:mt-4 text-base md:text-lg  md:w-2/3">
-            The integration of AI technology sets Mind Cache AI apart from
-            traditional journaling platforms. It actively engages with users'
-            content to provide valuable insights and suggestions, making
-            introspection a dynamic and rewarding experience.
+            Mind Cache AI distinguishes itself by integrating AI technology with
+            principles of cognitive behavioral therapy (CBT), enhancing
+            traditional journaling approaches. This dynamic platform aids users
+            in identifying thought and behavior patterns and fosters positive
+            changes through engaging insights and suggestions. The AI's active
+            analysis of user content transforms introspection into a rewarding
+            experience, providing personalized, constructive feedback that
+            encourages deeper self-awareness and growth.
           </div>
           <div className=" mt-4 font-semibold text-lg md:text-2xl">
             Transformative Benefits

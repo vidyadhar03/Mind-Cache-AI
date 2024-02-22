@@ -7,6 +7,7 @@ import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
+import { ReflectionInfo } from "./ReflectionInfo";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -15,6 +16,7 @@ function Thoughts() {
   const [thoughts, setThoughts] = useState([]);
   const [showaddthought, setshowaddthought] = useState(false);
   const [showeditthought, setshoweditthought] = useState(false);
+  const [showinfo, setshowinfo] = useState(false);
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
   const [sort, setSort] = useState(" by latest");
@@ -32,10 +34,6 @@ function Thoughts() {
   const showToast = (message) => {
     setDialogMessage(message);
     setShowDialog(true);
-  };
-
-  const handleeditclose = () => {
-    setshoweditthought(false);
   };
 
   function logout() {
@@ -76,14 +74,6 @@ function Thoughts() {
     fetchThoughts();
   }, [topicobj]);
 
-  const handleopen = () => {
-    setshowaddthought(true);
-  };
-
-  const handleclose = () => {
-    setshowaddthought(false);
-  };
-
   if (emptythoughts === false && thoughts.length === 0) {
     return (
       <div>
@@ -99,7 +89,9 @@ function Thoughts() {
     <div className="font-sans">
       {showaddthought && (
         <AddThought
-          onClosedialog={handleclose}
+          onClosedialog={() => {
+            setshowaddthought(false);
+          }}
           topic={topicobj}
           setThoughts={setThoughts}
           toast={showToast}
@@ -108,7 +100,9 @@ function Thoughts() {
       )}
       {showeditthought && (
         <EditData
-          onClosedialog={handleeditclose}
+          onClosedialog={() => {
+            setshoweditthought(false);
+          }}
           datamode={"thought"}
           datapassed={selectedthought}
           topicid={topicobj._id}
@@ -116,6 +110,13 @@ function Thoughts() {
           setThoughts={setThoughts}
           toast={showToast}
           logout={logout}
+        />
+      )}
+      {showinfo && (
+        <ReflectionInfo
+          onClosedialog={() => {
+            setshowinfo(false);
+          }}
         />
       )}
 
@@ -175,7 +176,7 @@ function Thoughts() {
                   }}
                 >
                   <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Analyse</div>
+                  <div>Analyse using AI</div>
                 </div>
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
@@ -184,9 +185,14 @@ function Thoughts() {
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Sort {sort}</div>
                 </div>
-                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer">
-                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Info.</div>
+
+                <div
+                  className="ml-2  flex items-center cursor-pointer"
+                  onClick={() => {
+                    setshowinfo(true);
+                  }}
+                >
+                  <img src="/info.png" className="h-7 w-auto mr-1" alt="" />
                 </div>
               </div>
             </div>
@@ -215,9 +221,10 @@ function Thoughts() {
                   </div>
                 </div>
                 <div className="text-center text-black text-base md:text-lg">
-                  {thought.collapse?(<div className="italic">** Reflection hidden **</div>):(
-                    <div>
-                    {thought.thought}</div>
+                  {thought.collapse ? (
+                    <div className="italic">** Reflection hidden **</div>
+                  ) : (
+                    <div>{thought.thought}</div>
                   )}
                 </div>
               </div>
@@ -226,7 +233,9 @@ function Thoughts() {
 
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
+            onClick={() => {
+              setshowaddthought(true);
+            }}
           >
             + Add Reflection
           </div>

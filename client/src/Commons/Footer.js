@@ -63,7 +63,7 @@ const Footer = () => {
             >
               Privacy Policy
             </a>
-            <Link to="/refund-and-cancellation">Refunds/Cancellations</Link>
+            <Link to="/refund-and-cancellation">Cancellation</Link>
           </div>
         </div>
 

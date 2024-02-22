@@ -6,7 +6,7 @@ import EditData from "./EditData";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
-import { FocusAreaInfo } from "./LearnMore";
+import { FocusAreaInfo } from "./FocusInfo";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -44,22 +44,6 @@ function Topics() {
     setTopics(pinTopics(reversedTopics));
     setSort(sort===" by latest"?" by oldest":" by latest");
   }
-
-  const handlecloseInfo = () =>{
-    setshowinfo(false);
-  }
-
-  const handleeditclose = () => {
-    setshowedittopic(false);
-  };
-
-  const handleopen = () => {
-    setshowaddtopic(true);
-  };
-
-  const handleclose = () => {
-    setshowaddtopic(false);
-  };
 
   const showToast = (message) => {
     setDialogMessage(message);
@@ -119,7 +103,7 @@ function Topics() {
     <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
         <AddTopic
-          onClosedialog={handleclose}
+          onClosedialog={()=>{setshowaddtopic(false);}}
           toast={showToast}
           pinTopics={pinTopics}
           setTopics={setTopics}
@@ -128,7 +112,7 @@ function Topics() {
       )}
       {showedittopic && (
         <EditData
-          onClosedialog={handleeditclose}
+          onClosedialog={()=>{setshowedittopic(false);}}
           datamode={"topic"}
           datapassed={selectedtopic}
           topicid={selectedtopic._id}
@@ -141,7 +125,7 @@ function Topics() {
       )}
       {showinfo&&(
         <FocusAreaInfo
-        onClosedialog={handlecloseInfo}
+        onClosedialog={()=>{setshowinfo(false);}}
         />
       )}
 
@@ -243,7 +227,7 @@ function Topics() {
 
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
+            onClick={()=>{setshowaddtopic(true);}}
           >
             + Add Focus Area
           </div>
