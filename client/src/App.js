@@ -7,7 +7,7 @@ import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
 import { UserProfile } from "./Account/UserProfile";
 import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
 import SubscriptionConfirmation from "./Payment Gateway/SubscriptionConfirmation";
-// import { SubscriptionInitiation } from "./Payment Gateway/SubscriptionInitiation";
+import { SubscriptionPlans } from "./Payment Gateway/SubscriptionPlans";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import {
   BrowserRouter as Router,
@@ -40,6 +40,7 @@ function RouteswithNavBar() {
         <Route path="/subscription" element={<CreateSubscription/>} />
         <Route path="/subscription-confirmation" element={<SubscriptionConfirmation/>} />
         <Route path="/subscription-status" element={<SubscriptionStatus/>} />
+        <Route path="/pricing" element={<SubscriptionPlans/>}/>
         <Route
           path="/refund-and-cancellation"
           element={<RefundsAndCancellations />}

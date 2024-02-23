@@ -8,26 +8,24 @@ export function ReflectionInfo({ onClosedialog }) {
   }, []);
 
   return (
-    <div className="fixed bottom-0 flex items-center justify-center font-sans">
+    <div className="fixed bottom-0 flex items-center justify-center font-sans w-full">
       <div
-        className={` text-center py-2 sm:py-4 px-4 sm:px-8 bg-gray-50 border shadow-xl rounded-3xl w-full transition-transform duration-500 ${
+        className={` text-center py-2 sm:py-4 px-4 sm:px-8 bg-bgc border shadow-inner rounded-3xl w-full transition-transform duration-500 ${
           isVisible ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div
-          className="flex justify-end p-2 cursor-pointer"
-          onClick={() => {
-            setIsVisible(false);
-            setTimeout(onClosedialog, 500);
-          }}
-        >
+        <div className="flex justify-end p-2 cursor-pointer">
           <img
             src="/cancel-solid.png"
             alt=""
             className="h-6 w-6 rounded-full mb-2"
+            onClick={() => {
+              setIsVisible(false);
+              setTimeout(onClosedialog, 500);
+            }}
           />
         </div>
-        <div className="text-sm md:text-lg">
+        {/* <div className="text-sm md:text-lg">
           Reflecting on your thoughts and experiences can be a powerful tool for
           personal growth and self-discovery. At Mind Cache AI, we recognize the
           importance of introspection in cultivating a deeper understanding of
@@ -53,6 +51,24 @@ export function ReflectionInfo({ onClosedialog }) {
           identify patterns, gain insights, and track your progress towards
           personal goals, fostering greater self-awareness and emotional
           well-being.
+        </div> */}
+        <div className="text-sm md:text-lg">
+          Mind Cache AI champions introspection for self-growth, offering a
+          platform for deep self-understanding.
+        </div>
+        <div className="font-semibold text-black my-4 text-md md:text-xl">
+          What are Reflections?
+        </div>
+        <div className="text-sm md:text-lg">
+          Reflections are personal insights recorded in Focus Areas, acting as a
+          digital journal for your emotional and cognitive journey.
+        </div>
+        <div className="font-semibold text-black my-4 text-md md:text-xl">
+          Why are Reflections Important?
+        </div>
+        <div className="text-sm md:text-lg mb-16">
+          They enable self-exploration, offering clarity and tracking personal
+          growth, thereby enhancing self-awareness and emotional health.
         </div>
       </div>
     </div>

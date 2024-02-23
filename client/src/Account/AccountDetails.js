@@ -11,7 +11,7 @@ export const AccountDetails = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <div>Your Account Details</div>
+      <div className="text-xl">Your Account Details</div>
       <div className="w-full md:w-3/4 mt-4">
         <TextField
           id="outlined-basic"

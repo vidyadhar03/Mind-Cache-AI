@@ -141,7 +141,7 @@ export function CreateSubscription() {
         key: process.env.REACT_APP_Payment_test_key_id, // Replace with your actual key ID
         subscription_id: subId,
         name: "Mind Cache AI",
-        description: "Monthly Test Plan",
+        description: `${plan} Plan`,
         image: "/mindcachelogo.png",
         handler: function (response) {
           // Handle success: you can use response.razorpay_payment_id, response.razorpay_subscription_id
@@ -168,10 +168,10 @@ export function CreateSubscription() {
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response) {
         console.error("Payment failed:", response);
-        alert("Payment Failed: " + response.error.description);
+        // alert("Payment Failed: " + response.error.description);
         const status = "failure";
         const errord= response.error.description;
-        navigate(`/subscription-status`, { state: { status },error: {errord} });
+        navigate(`/subscription-status`, { state: { status:status,error:errord } });
       });
       rzp.open();
     } catch (error) {

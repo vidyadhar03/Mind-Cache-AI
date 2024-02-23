@@ -24,7 +24,7 @@ export function SubscriptionStatus() {
             <div className="text-center text-2xl mt-8 text-green-600">
               Your Subscription is Active!
             </div>
-            <div className="text-center text-xl text-green mt-8">
+            <div className="text-center text-xl mt-8">
               Thanks a lot for subscribing !
             </div>
           </div>
@@ -37,10 +37,10 @@ export function SubscriptionStatus() {
                 alt=""
               />
             </div>
-            <div className="text-center text-2xl font-semibold mt-8 text-red-500">
+            <div className="text-center text-2xl mt-8 text-red-500">
               Your Subscription attempt has failed!
             </div>
-            <div className="text-center text-xl text-green ">
+            <div className="text-center text-xl mt-8 ">
               Error: {error}
             </div>
           </div>

@@ -10,18 +10,20 @@ export function FocusAreaInfo({ onClosedialog }) {
   return (
     <div className="fixed bottom-0 flex items-center justify-center font-sans">
       <div
-        className={` text-center py-2 sm:py-4 px-4 sm:px-8 bg-gray-50 border shadow-xl rounded-3xl w-full transition-transform duration-500 ${
+        className={` text-center py-2 sm:py-4 px-4 sm:px-8 bg-bgc border shadow-inner rounded-3xl w-full transition-transform duration-500 ${
           isVisible ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div
-          className="flex justify-end p-2 cursor-pointer"
-          onClick={() => {
-            setIsVisible(false);
-            setTimeout(onClosedialog, 500);
-          }}
-        >
-          <img src="/cancel-solid.png" alt="" className="h-6 w-6 rounded-full mb-2" />
+        <div className="flex justify-end p-2 cursor-pointer">
+          <img
+            src="/cancel-solid.png"
+            alt=""
+            className="h-6 w-6 rounded-full mb-2"
+            onClick={() => {
+              setIsVisible(false);
+              setTimeout(onClosedialog, 500);
+            }}
+          />
         </div>
         <div className="text-sm md:text-lg">
           At Mind Cache AI, we believe in the power of self-reflection and
@@ -47,7 +49,6 @@ export function FocusAreaInfo({ onClosedialog }) {
           well-being. Focus Areas help organize your thoughts, making your
           reflections more meaningful and insightful.
         </div>
-        
       </div>
     </div>
   );
