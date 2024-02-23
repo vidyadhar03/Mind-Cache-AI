@@ -167,36 +167,4 @@ export const SubscriptionDetails = () => {
     </div>
   );
 
-  return (
-    <div className="p-8 flex flex-col items-center justify-center bg-bgc font-sans">
-      {isLoading && <Loader />}
-      <div>Subscription Details</div>
-
-      {subDetails.isSubscribed ? (
-        <button
-          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-          onClick={() => {
-            cancelSub();
-          }}
-        >
-          Cancel Subscription
-        </button>
-      ) : (
-        <button
-          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-          onClick={() => {
-            const plan = "Monthly";
-            navigate(`/subscription`, { state: { plan } });
-          }}
-        >
-          Subscribe
-        </button>
-      )}
-      <Toast
-        message={dialogMessage}
-        show={showDialog}
-        onClose={() => setShowDialog(false)}
-      />
-    </div>
-  );
 };

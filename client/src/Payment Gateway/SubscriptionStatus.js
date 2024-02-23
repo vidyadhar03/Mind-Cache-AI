@@ -16,33 +16,32 @@ export function SubscriptionStatus() {
           <div className="flex flex-col justify-center items-center">
             <div>
               <img
-                src="/waiting.png"
+                src="/SubSuccess.png"
                 className="h-40 w-40 rounded-full"
                 alt=""
               />
             </div>
-            <div className="text-center text-2xl mt-8 text-green-600">
-              Your Subscription is Active!
+            <div className="text-center text-2xl mt-8">
+              Subscription successfully activated!
             </div>
             <div className="text-center text-xl mt-8">
-              Thanks a lot for subscribing !
+              Thank you for choosing Mind Cache AI! Embark on your journey of
+              self-discovery and personal enrichment.
             </div>
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center">
             <div>
               <img
-                src="/waiting.png"
+                src="/SubFailure.png"
                 className="h-40 w-40 rounded-full"
                 alt=""
               />
             </div>
-            <div className="text-center text-2xl mt-8 text-red-500">
+            <div className="text-center text-2xl mt-8">
               Your Subscription attempt has failed!
             </div>
-            <div className="text-center text-xl mt-8 ">
-              Error: {error}
-            </div>
+            <div className="text-center text-xl mt-8 ">Error: {error}</div>
           </div>
         )}
         <button
