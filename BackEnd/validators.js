@@ -43,9 +43,11 @@ function vaddtopic(obj) {
 function vupdatetopic(obj) {
   const schema = z.object({
     userid: z.string(),
+    topicid: z.string(),
     title: z.string(),
     edit: z.string(),
     del: z.string(),
+    pin: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;
@@ -76,6 +78,7 @@ function vupdatethought(obj) {
     thought: z.string(),
     edit: z.string(),
     del: z.string(),
+    collapse: z.string(),
   });
   const res = schema.safeParse(obj);
   return res;
@@ -86,6 +89,7 @@ function vupdatethought(obj) {
 //chat
 function vchat(obj) {
   const schema = z.object({
+    userid: z.string(),
     sessionid: z.string(),
     userinput: z.string(),
   });
@@ -130,6 +134,54 @@ function veditsession(obj) {
   return res;
 }
 
+//payment gateway
+function vsubscription(obj){
+  const schema = z.object({
+    plan: z.string(),
+    usermail: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
+function vcancelsub(obj) {
+  const schema = z.object({
+    usermail: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
+function vconfirmpay(obj){
+  const schema = z.object({
+    usermail: z.string(),
+    subid: z.string(),
+    payid: z.string(),
+    signature: z.string(),
+    plan:z.string()
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
+function vupdateDetails(obj){
+  const schema = z.object({
+    usermail: z.string(),
+    subid: z.string(),
+    planid: z.string(),
+    payid: z.string(),
+    currency: z.string(),
+    status: z.string(),
+    orderid: z.string(),
+    invoiceid: z.string(),
+    email: z.string(),
+    contact: z.string(),
+    amount: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 module.exports = {
   vsignup,
   vlogin,
@@ -144,4 +196,8 @@ module.exports = {
   vmessages,
   vstartsession,
   veditsession,
+  vsubscription,
+  vupdateDetails,
+  vcancelsub,
+  vconfirmpay
 };

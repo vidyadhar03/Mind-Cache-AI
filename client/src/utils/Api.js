@@ -1,7 +1,7 @@
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function AddTopicAPI(newTopic) {
-  let result = { success: false, data: [] };
+  let result = { success: false, data: [], logout: false };
   try {
     console.log("hitting api");
     const response = await fetch(base_url + "addtopic", {
@@ -17,6 +17,10 @@ export async function AddTopicAPI(newTopic) {
         time: new Date().toISOString(),
       }),
     });
+    if (response.status === 403) {
+      result.logout = true;
+      return result;
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -31,7 +35,7 @@ export async function AddTopicAPI(newTopic) {
 }
 
 export async function AddThoughtAPI(topicid, newThought) {
-  let result = { success: false, data: [] };
+  let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "addthought", {
       method: "POST",
@@ -45,6 +49,10 @@ export async function AddThoughtAPI(topicid, newThought) {
         time: new Date().toISOString(),
       }),
     });
+    if (response.status === 403) {
+      result.logout = true;
+      return result;
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

@@ -1,40 +1,63 @@
 import { useLocation } from "react-router-dom";
-import { DataContext } from "../utils/DataContext";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThoughtLanding } from "./ThoughtLanding";
 import AddThought from "./AddThought";
 import EditData from "./EditData";
+import { Toast } from "../Commons/Toast";
+import Loader from "../Commons/Loader";
+import { smoothifyDate } from "../utils/DateUtils";
+import { ReflectionInfo } from "./ReflectionInfo";
 const base_url = process.env.REACT_APP_API_URL;
-
 
 function Thoughts() {
   const location = useLocation();
   const topicobj = location.state?.data;
-  const { thoughts, setThoughts } = useContext(DataContext);
+  const [thoughts, setThoughts] = useState([]);
   const [showaddthought, setshowaddthought] = useState(false);
   const [showeditthought, setshoweditthought] = useState(false);
+  const [showinfo, setshowinfo] = useState(false);
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
-
+  const [sort, setSort] = useState(" by latest");
+  //dialog
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleeditclose = () => {
-    setshoweditthought(false);
+  function reverseThoughts() {
+    const reverseThoughts = [...thoughts].reverse();
+    setThoughts(reverseThoughts);
+    setSort(sort === " by latest" ? " by oldest" : " by latest");
+  }
+
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
   };
+
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
 
   useEffect(() => {
     const fetchThoughts = async () => {
       try {
-        const response = await fetch(
-          base_url+"thoughts/" + topicobj._id,
-          {
-            method: "GET",
-            headers: {
-              authorization: localStorage.getItem("usertoken"),
-            },
-          }
-        );
+        const response = await fetch(base_url + "thoughts/" + topicobj._id, {
+          method: "GET",
+          headers: {
+            authorization: localStorage.getItem("usertoken"),
+          },
+        });
+        if (response.status === 403) {
+          logout();
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -51,20 +74,13 @@ function Thoughts() {
     fetchThoughts();
   }, [topicobj]);
 
-  const handleopen = () => {
-    setshowaddthought(true);
-  };
-
-  const handleclose = () => {
-    setshowaddthought(false);
-  };
-
   if (emptythoughts === false && thoughts.length === 0) {
     return (
       <div>
-        <div className="text-3xl text-black flex justify-center p-16">
+        {/* <div className="text-3xl text-black flex justify-center p-16">
           Loading...
-        </div>
+        </div> */}
+        <Loader />
       </div>
     );
   }
@@ -72,51 +88,131 @@ function Thoughts() {
   return (
     <div className="font-sans">
       {showaddthought && (
-        <AddThought onClosedialog={handleclose} topic={topicobj} />
+        <AddThought
+          onClosedialog={() => {
+            setshowaddthought(false);
+          }}
+          topic={topicobj}
+          setThoughts={setThoughts}
+          toast={showToast}
+          logout={logout}
+        />
       )}
       {showeditthought && (
         <EditData
-          onClosedialog={handleeditclose}
+          onClosedialog={() => {
+            setshoweditthought(false);
+          }}
           datamode={"thought"}
           datapassed={selectedthought}
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
+          setThoughts={setThoughts}
+          toast={showToast}
+          logout={logout}
+        />
+      )}
+      {showinfo && (
+        <ReflectionInfo
+          onClosedialog={() => {
+            setshowinfo(false);
+          }}
         />
       )}
 
       {emptythoughts ? (
-        <ThoughtLanding topic={topicobj} emptydata={setEmptyThoughts} />
+        <ThoughtLanding
+          topic={topicobj}
+          emptydata={setEmptyThoughts}
+          setThoughts={setThoughts}
+          toast={showToast}
+        />
       ) : (
-        <div>
-          <div className="text-black text-2xl font-bold text-center my-8">
-            {topicobj.title}
-          </div>
+        <div className="bg-bgc min-h-screen">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
+            <div className="w-parent flex flex-row justify-between  ">
+              <div
+                className="flex cursor-pointer"
+                onClick={() => {
+                  if (localStorage.getItem("userid")) {
+                    navigate(`/`);
+                  } else {
+                    navigate(`/topics`);
+                  }
+                }}
+              >
+                <img
+                  src="/mindcachelogo.png"
+                  className="h-8 w-8 rounded-full mr-2"
+                  alt="logo"
+                />
+                <div className="my-auto text-black text-xl text-justify  ">
+                  Mind Cache AI
+                </div>
+              </div>
 
-          <div className="flex justify-end mr-4 font-medium">
-            <button
-              className="border-2 p-2 rounded-lg hover:bg-blue-100"
-              onClick={() => {
-                navigate("/analyse", {
-                  state: { data: topicobj.title, thoughts: thoughts },
-                });
-                localStorage.setItem("sessionLoaded", "");
-              }}
-            >
-              Analyse Thoughts
-            </button>
+              <button
+                className="flex items-center justify-center "
+                onClick={() => {
+                  navigate(`/account`);
+                }}
+              >
+                <img src="/user-profile-new.png" className="h-8 w-8 " alt="" />
+              </button>
+            </div>
+
+            <div className="w-full mt-6 flex flex-col">
+              <div className="flex  text-black text-2xl md:text-3xl">
+                {topicobj.title}
+              </div>
+              <div className="w-full flex mt-4 mb-2">
+                <div
+                  className="mr-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/analyse", {
+                      state: { data: topicobj.title, thoughts: thoughts },
+                    });
+                    localStorage.setItem("sessionLoaded", "");
+                  }}
+                >
+                  <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
+                  <div>Analyse</div>
+                </div>
+                <div
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={reverseThoughts}
+                >
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
+                  <div>Sort {sort}</div>
+                </div>
+
+                <div
+                  className="ml-2  flex items-center cursor-pointer"
+                  onClick={() => {
+                    setshowinfo(true);
+                  }}
+                >
+                  <img src="/info.png" className="h-7 w-auto mr-1" alt="" />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex-col items-center text-center">
             {thoughts.map((thought, index) => (
-              <div key={index} className="bg-blue-200 pb-6 m-4 rounded-lg">
+              <div
+                key={index}
+                className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
+              >
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">
-                    {thought.time}
+                    {smoothifyDate(thought.time.toString())}
                   </div>
-                  <div>
+                  <div className="flex items-center">
                     <img
                       className="h-4 w-4 m-2 mt-2 cursor-pointer"
-                      src="./editlogo.png"
+                      src="/threedots.svg"
+                      alt=""
                       onClick={() => {
                         setSelectedthought(thought);
                         setshoweditthought(true);
@@ -124,21 +220,33 @@ function Thoughts() {
                     />
                   </div>
                 </div>
-                <div className="text-center text-black text-lg">
-                  {thought.thought}
+                <div className="text-center text-black text-base md:text-lg">
+                  {thought.collapse ? (
+                    <div className="italic">** Reflection hidden **</div>
+                  ) : (
+                    <div>{thought.thought}</div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
           <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
+            className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
+            onClick={() => {
+              setshowaddthought(true);
+            }}
           >
-            + Add Thought
+            + Add Reflection
           </div>
         </div>
       )}
+
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 }

@@ -1,15 +1,27 @@
-import { useState, useContext } from "react";
-import { DataContext } from "../utils/DataContext";
+import { useState } from "react";
+import { TextField } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
-  const { setTopics, setThoughts } = useContext(DataContext);
-
+function EditData({
+  onClosedialog,
+  datamode,
+  datapassed,
+  topicid,
+  emptydata,
+  toast,
+  setThoughts,
+  setTopics,
+  pinTopics,
+  logout,
+}) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
+  let pin = "";
+  let collapse = "";
   let datagot = "";
-  const visibilityClass = (datamode==="topic") ? "h-10" : "h-40";
+  const rowsheight = datamode === "topic" ? 1 : 4;
+  const widthres = datamode === "topic" ? "w-96" : "w-1/3";
 
   if (datamode === "topic") {
     datagot = datapassed.title;
@@ -22,20 +34,23 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
       let api_url = "";
       let req_body = "";
       if (datamode === "topic") {
-        api_url = base_url+"updatetopic";
+        api_url = base_url + "updatetopic";
         req_body = JSON.stringify({
           userid: localStorage.getItem("userid"),
+          topicid: datapassed._id,
           title: datapassed.title,
           edit: edit,
           del: del,
+          pin: pin,
         });
       } else {
-        api_url = base_url+"updatethought";
+        api_url = base_url + "updatethought";
         req_body = JSON.stringify({
           topicid: topicid,
           thought: datapassed.thought,
           edit: edit,
           del: del,
+          collapse: collapse
         });
       }
       console.log(req_body);
@@ -47,98 +62,139 @@ function EditData({ onClosedialog, datamode, datapassed, topicid, emptydata }) {
           "Content-Type": "application/json",
         },
       });
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
-      if(json.data.length===0){emptydata(true);}
+      if (json.data.length === 0) {
+        emptydata(true);
+      }
       if (datamode === "topic") {
-        setTopics(json.data);
+        setTopics(pinTopics(json.data));
       } else {
         setThoughts(json.data);
       }
       del = "no";
+      pin = "";
       onClosedialog();
     } catch (e) {
       console.log(e);
+      toast("something went wrong, try again later!");
     }
   }
 
   function UpdateData() {
-    if (del === "yes") {
-        EditData()
+    if (del === "yes" || pin === "yes" || pin==="no"|| collapse === "yes" || collapse ==="no") {
+      EditData();
     } else {
       if (edit === "") {
-        console.log("no change in data");
-      }else{
-        EditData()
+        if (datamode === "topic") {
+          toast("Focus Area is not updated!");
+        } else {
+          toast("Reflection is not updated!");
+        }
+      } else {
+        EditData();
       }
     }
   }
 
   return (
-      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
-        <div className="  border shadow-xl rounded-lg bg-gray-50 w-96 sm:w-1/2">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans">
+      <div
+        className={` border shadow-xl rounded-lg bg-gray-50 w-11/12 sm:${widthres}`}
+      >
+        <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
+          <div className="text-black font-medium text-base text-center">
+            Edit your {datamode === "topic" ? "Focus Area" : "Reflection"}
+          </div>
 
-          <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
-            <div className="text-black font-medium text-xl text-center">
-              Edit your {datamode}
-            </div>
+          <div className=" mt-4 mb-2 flex justify-center">
+            <TextField
+              id="outlined-basic"
+              label="Update"
+              variant="outlined"
+              multiline
+              rows={rowsheight}
+              fullWidth
+              defaultValue={datagot}
+              InputLabelProps={{
+                style: { fontFamily: "poppins" },
+              }}
+              onChange={(e) => {
+                setEdit(e.target.value);
+              }}
+            />
+          </div>
 
-            <div className=" mt-4 mb-2 flex justify-center">
-              <textarea
-                placeholder="Topic"
-                className={`${visibilityClass} border-2 p-2 rounded-md w-full`}
-                defaultValue={datagot}
-                onChange={(e) => {
-                  setEdit(e.target.value);
-                }}
-              ></textarea>
-            </div>
+          <div className="flex justify-center ">
+            <button
+              className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
+              onClick={() => {
+                UpdateData();
+              }}
+            >
+              Update
+            </button>
 
-            <div className="flex justify-center ">
+            <button
+              className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
+              onClick={() => {
+                setdelconf(true);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+
+          <div className="flex flex-col mt-2">
+            {delconf && (
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 mr-1"
+                className="py-2 flex-1 bg-red-600 hover:bg-red-700 text-white border-2 text-base rounded-lg "
                 onClick={() => {
+                  setdelconf(false);
+                  del = "yes";
                   UpdateData();
                 }}
               >
-                Update
+                Delete for sure?
               </button>
-
+            )}
+            {datamode === "topic" ? (
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 ml-1"
+                className="py-2 flex-1 flex justify-center bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
                 onClick={() => {
-                  setdelconf(true);
+                  pin = (datapassed.pinned)?"no":"yes";
+                  UpdateData();
                 }}
               >
-                Delete
+                <img src="/pinned.png" className="h-6 w-6 mr-2" alt=""/>
+                <div>{(datapassed.pinned)?"Unpin":"Pin"}</div>
               </button>
-            </div>
-
-            <div className="flex flex-col mt-2">
-              {delconf && (
-                <button
-                  className="w-full bg-red-400 border-2 hover:bg-red-600 text-black font-bold py-2 px-4 rounded "
-                  onClick={() => {
-                    setdelconf(false);
-                    del = "yes";
-                    UpdateData();
-                  }}
-                >
-                  Delete {datamode} for sure?
-                </button>
-              )}
+            ) : (
               <button
-                className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
-                onClick={onClosedialog}
+                className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
+                onClick={()=>{
+                  collapse = (datapassed.collapse)?"no":"yes";
+                  UpdateData();
+                }}
               >
-                Cancel
+                <div>{(datapassed.collapse)?"Show Reflection":"Collapse"}</div>
               </button>
-            </div>
+            )}
+            <button
+              className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
+              onClick={onClosedialog}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 

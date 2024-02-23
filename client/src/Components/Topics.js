@@ -1,36 +1,70 @@
-import { DataContext } from "../utils/DataContext";
-import { useContext, useState, useEffect } from "react";
+import {  useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
 import EditData from "./EditData";
+import { Toast } from "../Commons/Toast";
+import Loader from "../Commons/Loader";
+import { smoothifyDate } from "../utils/DateUtils";
+import { FocusAreaInfo } from "./FocusInfo";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
-  const { topics, setTopics } = useContext(DataContext);
+  const [topics, setTopics] = useState([]);
   const [showaddtopic, setshowaddtopic] = useState(false);
   const [showedittopic, setshowedittopic] = useState(false);
+  const [showinfo, setshowinfo] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
+  const [sort,setSort] = useState(" by latest");
+  //dialog
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+  //grid dynamic style
+  const gridcolstyle =
+    topics.length > 4
+      ? "grid-cols-2  lg:grid-cols-4"
+      : "grid-cols-1  lg:grid-cols-2";
 
-  const handleeditclose = () => {
-    setshowedittopic(false);
+  function pinTopics(updatedTopics) {
+    const { pinned, unpinned } = updatedTopics.reduce(
+      (acc, topic) => {
+        topic.pinned ? acc.pinned.push(topic) : acc.unpinned.push(topic);
+        return acc;
+      },
+      { pinned: [], unpinned: [] }
+    );
+    const pinnedTopics = [...pinned, ...unpinned];
+    return pinnedTopics;
+  }
+
+  function reverseTopics() {
+    const reversedTopics = [...topics].reverse();
+    setTopics(pinTopics(reversedTopics));
+    setSort(sort===" by latest"?" by oldest":" by latest");
+  }
+
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
   };
 
-  const handleopen = () => {
-    setshowaddtopic(true);
-  };
-
-  const handleclose = () => {
-    setshowaddtopic(false);
-  };
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
 
   useEffect(() => {
     const fetchTopics = async () => {
       try {
         const response = await fetch(
-          base_url+"topics/" + localStorage.getItem("userid"),
+          base_url + "topics/" + localStorage.getItem("userid"),
           {
             method: "GET",
             headers: {
@@ -39,9 +73,7 @@ function Topics() {
           }
         );
         if (response.status === 403) {
-          localStorage.removeItem("userid");
-          localStorage.removeItem("usertoken");
-          navigate("/");
+          logout();
         }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -50,7 +82,8 @@ function Topics() {
         if (json.data.length === 0) {
           setEmptyTopics(true);
         }
-        setTopics(json.data);
+        console.log(json.data);
+        setTopics(pinTopics(json.data));
       } catch (e) {
         console.log(e);
       }
@@ -61,55 +94,126 @@ function Topics() {
   if (emptytopics === false && topics.length === 0) {
     return (
       <div>
-        <div className="text-3xl text-black flex justify-center p-16">
-          Loading...
-        </div>
+        <Loader />
       </div>
     );
   }
 
   return (
-    <div className="font-sans bg-gray-50 p-2">
-      {showaddtopic && <AddTopic onClosedialog={handleclose} />}
+    <div className="font-sans bg-bgc min-h-screen">
+      {showaddtopic && (
+        <AddTopic
+          onClosedialog={()=>{setshowaddtopic(false);}}
+          toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
+          logout={logout}
+        />
+      )}
       {showedittopic && (
         <EditData
-          onClosedialog={handleeditclose}
+          onClosedialog={()=>{setshowedittopic(false);}}
           datamode={"topic"}
           datapassed={selectedtopic}
           topicid={selectedtopic._id}
           emptydata={setEmptyTopics}
+          toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
+          logout={logout}
+        />
+      )}
+      {showinfo&&(
+        <FocusAreaInfo
+        onClosedialog={()=>{setshowinfo(false);}}
         />
       )}
 
       {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} />
+        <TopicLanding
+          emptydata={setEmptyTopics}
+          toast={showToast}
+          pinTopics={pinTopics}
+          setTopics={setTopics}
+        />
       ) : (
-        <div>
-          <div className="w-full h-20 flex justify-center items-center bg-blue-200">
-            TOPICS Intro section
+        <div className="">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
+            <div className="w-parent flex flex-row justify-between  ">
+              <div className="flex">
+                <img
+                  src="/mindcachelogo.png"
+                  className="h-8 w-8 rounded-full mr-2"
+                  alt="logo"
+                />
+                <div className="my-auto text-black text-xl text-justify  ">
+                  Mind Cache AI
+                </div>
+              </div>
+
+              <button
+                className="flex items-center justify-center "
+                onClick={() => {
+                  navigate(`/account`);
+                }}
+              >
+                <img src="/user-profile-new.png" className="h-8 w-8 " alt="" />
+              </button>
+            </div>
+
+            <div className="w-full mt-6 flex flex-col">
+              <div className="flex  text-black text-2xl md:text-3xl">
+                Explore Your Focus Areas
+              </div>
+              <div className="w-full flex mt-4 mb-2">
+                <div
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={reverseTopics}
+                >
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
+                  <div>Sort {sort}</div>
+                </div>
+                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                onClick={()=>{setshowinfo(true);}}>
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
+                  <div>Info.</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mt-2">
+
+          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
             {topics.map((topic, index) => (
               <div
                 key={index}
-                className=" bg-blue-300 h-48 md:h-56 rounded-lg shadow-md hover:shadow-lg "
+                className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
-                  className="px-4 py-8 h-5/6 font-medium text-gray text-base sm:text-lg md:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
                     navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
                       state: { data: topic },
                     });
                   }}
                 >
-                  {topic.title}
+                  {topic.pinned && (
+                    <div className="w-1/5 pl-2">
+                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt=""/>
+                    </div>
+                  )}
+                  <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>
+                    {topic.title}
+                  </div>
                 </div>
-                <div className="h-1/6 flex justify-between items-center px-2 border-t border-blue-400">
-                  <div className="text-xs">{topic.time}</div>
+                <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
+                  <div className="text-xs ml-2">
+                    {smoothifyDate(topic.time.toString())}
+                  </div>
                   <div>
                     <img
-                      src="/editlogo.png"
-                      className="h-4 w-4 cursor-pointer"
+                      src="/editpen.svg"
+                      className="h-4 w-4 cursor-pointer mr-2"
+                      alt=""
                       onClick={() => {
                         setSelectedtopic(topic);
                         setshowedittopic(true);
@@ -120,73 +224,21 @@ function Topics() {
               </div>
             ))}
           </div>
+
           <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
+            className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
+            onClick={()=>{setshowaddtopic(true);}}
           >
-            + Add Topic
+            + Add Focus Area
           </div>
         </div>
       )}
-    </div>
-  );
 
-  return (
-    <div className="font-sans">
-      {showaddtopic && <AddTopic onClosedialog={handleclose} />}
-      {showedittopic && (
-        <EditData
-          onClosedialog={handleeditclose}
-          datamode={"topic"}
-          datapassed={selectedtopic}
-          topicid={selectedtopic._id}
-          emptydata={setEmptyTopics}
-        />
-      )}
-
-      {emptytopics ? (
-        <TopicLanding emptydata={setEmptyTopics} />
-      ) : (
-        <div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {topics.map((topic, index) => (
-              <div
-                className="flex flex-col flex-wrap bg-blue-200 mt-8 mx-4  text-center rounded-md cursor-pointer shadow-lg hover:shadow-2xl"
-                key={index}
-              >
-                <div className="flex justify-end">
-                  <img
-                    className="h-4 w-4 m-2"
-                    src="./editlogo.png"
-                    onClick={() => {
-                      setSelectedtopic(topic);
-                      setshowedittopic(true);
-                    }}
-                  />
-                </div>
-
-                <div
-                  className="bg-pink-200 h-full flex flex-col justify-center items-center px-6 py-8 text-black text-2xl font-bold overflow-hidden whitespace-normal"
-                  onClick={() => {
-                    navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
-                      state: { data: topic },
-                    });
-                  }}
-                >
-                  <div className="flex flex-wrap">{topic.title}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div
-            className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg cursor-pointer"
-            onClick={handleopen}
-          >
-            + Add Topic
-          </div>
-        </div>
-      )}
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 }

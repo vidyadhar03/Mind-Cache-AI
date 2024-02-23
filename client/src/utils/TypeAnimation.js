@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const messages = [
-  "Introspect, Grow, and Evolve...",
   "Transform Your Thoughts into Clarity...",
+  "Introspect, Grow, and Evolve...",
   "Your Digital Therapist Companion...",
   "AI-Powered Insights for Self-Improvement...",
   "Track Your Mental Journey Over Time...",

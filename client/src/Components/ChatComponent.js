@@ -2,6 +2,12 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import EditSession from "./EditSession";
+import { Toast } from "../Commons/Toast";
+import {
+  setSubDetails,
+  getSubDetails,
+  isEligible,
+} from "../utils/SubscriptionDetails";
 
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -18,6 +24,9 @@ const ChatComponent = () => {
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  //dialog
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -67,6 +76,9 @@ const ChatComponent = () => {
           authorization: localStorage.getItem("usertoken"),
         },
       });
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -79,34 +91,60 @@ const ChatComponent = () => {
     }
   };
 
-  async function Chat(analyse, session) {
-    let input;
-    if (analyse) {
-      input = getPrompt();
-    } else {
-      input = userInput;
-    }
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
+  };
 
-    try {
-      setUserInput("");
-      const response = await fetch(base_url + "socketchat", {
-        method: "POST",
-        headers: {
-          authorization: localStorage.getItem("usertoken"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sessionid: session._id,
-          userinput: input,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  function logout() {
+    localStorage.removeItem("userid");
+    localStorage.removeItem("usertoken");
+    localStorage.removeItem("sessionLoaded");
+    localStorage.removeItem("email");
+    localStorage.removeItem("subscriptionDetails");
+    showToast("Authentication failed, Kindly Login again!");
+    navigate(`/`);
+  }
+
+  async function Chat(analyse, session) {
+    if (isEligible()) {
+      let input;
+      if (analyse) {
+        input = getPrompt();
+      } else {
+        input = userInput;
       }
-      // const json = await response.json();
-      // setMessages(json.messages);
-    } catch (e) {
-      console.log(e);
+
+      try {
+        setUserInput("");
+        const response = await fetch(base_url + "socketchat", {
+          method: "POST",
+          headers: {
+            authorization: localStorage.getItem("usertoken"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userid: localStorage.getItem("userid"),
+            sessionid: session._id,
+            userinput: input,
+          }),
+        });
+        if (response.status === 403) {
+          logout();
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        const subDetails = getSubDetails();
+        subDetails.aiInteractionCount = json.updatedAICount;
+        setSubDetails(subDetails);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      setDialogMessage("AI Limit reached , subscribe to keep using !");
+      setShowDialog(true);
     }
   }
 
@@ -125,6 +163,9 @@ const ChatComponent = () => {
             time: new Date().toISOString(),
           }),
         });
+        if (response.status === 403) {
+          logout();
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -205,6 +246,9 @@ const ChatComponent = () => {
           },
         }
       );
+      if (response.status === 403) {
+        logout();
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -292,6 +336,7 @@ const ChatComponent = () => {
           onClosedialog={handleeditclose}
           session={dotclickedsesh}
           updateSesh={updateSessions}
+          logout={logout}
         />
       )}
 
@@ -338,6 +383,7 @@ const ChatComponent = () => {
             <img
               src="/navbaricon.png"
               className="h-8 w-auto mr-4"
+              alt=""
               onClick={(e) => {
                 toggleSidebar();
                 e.stopPropagation();
@@ -381,6 +427,12 @@ const ChatComponent = () => {
           </form>
         </div>
       </div>
+
+      <Toast
+        message={dialogMessage}
+        show={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
     </div>
   );
 };
