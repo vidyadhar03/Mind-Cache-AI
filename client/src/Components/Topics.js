@@ -1,4 +1,4 @@
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
@@ -7,6 +7,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
+import { getSubDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -16,7 +17,8 @@ function Topics() {
   const [showinfo, setshowinfo] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
-  const [sort,setSort] = useState(" by latest");
+  const [sort, setSort] = useState(" by latest");
+  const subDetails = getSubDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -42,7 +44,7 @@ function Topics() {
   function reverseTopics() {
     const reversedTopics = [...topics].reverse();
     setTopics(pinTopics(reversedTopics));
-    setSort(sort===" by latest"?" by oldest":" by latest");
+    setSort(sort === " by latest" ? " by oldest" : " by latest");
   }
 
   const showToast = (message) => {
@@ -99,21 +101,22 @@ function Topics() {
     );
   }
 
-  function colorGradient (){
+  function colorGradient() {
     const colors = [
-      '#7F9BD1',
-      '#8CA5D6',
-      '#99AEDA',
-      '#A5B9DF',
-      '#B2C3E3',
-      '#BFCCE8',
-      '#CCD7EC',
-      '#D8E1F1',
-      '#E5EBF5',
-      '#F2F5FA',
+      "#7F9BD1",
+      "#8CA5D6",
+      "#99AEDA",
+      "#A5B9DF",
+      "#B2C3E3",
+      "#BFCCE8",
+      "#CCD7EC",
+      "#D8E1F1",
+      "#E5EBF5",
+      "#F2F5FA",
     ];
-    
-    const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
+
+    const getRandomColor = () =>
+      colors[Math.floor(Math.random() * colors.length)];
 
     const color1 = getRandomColor();
     const color2 = getRandomColor();
@@ -125,11 +128,28 @@ function Topics() {
     return gradientStyle;
   }
 
+  function TopicLimit() {
+    if (subDetails.isSubscribed) {
+      return true;
+    }else{
+      if (topics.length < 10) {
+        return true;
+      } else {
+        showToast(
+          "You've hit the limit for adding Focus Areas. Upgrade now for unlimited access and additional benefits!"
+        );
+        return false;
+      }
+    }
+  }
+
   return (
     <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
         <AddTopic
-          onClosedialog={()=>{setshowaddtopic(false);}}
+          onClosedialog={() => {
+            setshowaddtopic(false);
+          }}
           toast={showToast}
           pinTopics={pinTopics}
           setTopics={setTopics}
@@ -138,7 +158,9 @@ function Topics() {
       )}
       {showedittopic && (
         <EditData
-          onClosedialog={()=>{setshowedittopic(false);}}
+          onClosedialog={() => {
+            setshowedittopic(false);
+          }}
           datamode={"topic"}
           datapassed={selectedtopic}
           topicid={selectedtopic._id}
@@ -149,9 +171,11 @@ function Topics() {
           logout={logout}
         />
       )}
-      {showinfo&&(
+      {showinfo && (
         <FocusAreaInfo
-        onClosedialog={()=>{setshowinfo(false);}}
+          onClosedialog={() => {
+            setshowinfo(false);
+          }}
         />
       )}
 
@@ -199,8 +223,22 @@ function Topics() {
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Sort {sort}</div>
                 </div>
-                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
-                onClick={()=>{setshowinfo(true);}}>
+                {!subDetails.isSubscribed && (
+                  <div
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                    onClick={() => {
+                      navigate(`/pricing`);
+                    }}
+                  >
+                    <div>Subscribe</div>
+                  </div>
+                )}
+                <div
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    setshowinfo(true);
+                  }}
+                >
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
                   <div>Info.</div>
                 </div>
@@ -226,7 +264,7 @@ function Topics() {
                 >
                   {topic.pinned && (
                     <div className="w-1/5 pl-2">
-                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt=""/>
+                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt="" />
                     </div>
                   )}
                   <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>
@@ -255,7 +293,11 @@ function Topics() {
 
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
-            onClick={()=>{setshowaddtopic(true);}}
+            onClick={() => {
+              if (TopicLimit()) {
+                setshowaddtopic(true);
+              }
+            }}
           >
             + Add Focus Area
           </div>

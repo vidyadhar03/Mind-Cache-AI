@@ -8,6 +8,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
+import { getSubDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -20,6 +21,7 @@ function Thoughts() {
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
   const [sort, setSort] = useState(" by latest");
+  const subDetails = getSubDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -83,6 +85,21 @@ function Thoughts() {
         <Loader />
       </div>
     );
+  }
+
+  function ThoughtLimit() {
+    if (subDetails.isSubscribed) {
+      return true;
+    } else {
+      if (thoughts.length < 30) {
+        return true;
+      } else {
+        showToast(
+          "You've hit the limit for adding Reflections. Upgrade now for unlimited access and additional benefits!"
+        );
+        return false;
+      }
+    }
   }
 
   return (
@@ -234,7 +251,9 @@ function Thoughts() {
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={() => {
-              setshowaddthought(true);
+              if (ThoughtLimit()) {
+                setshowaddthought(true);
+              }
             }}
           >
             + Add Reflection
