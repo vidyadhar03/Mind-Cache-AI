@@ -102,6 +102,16 @@ function Thoughts() {
     }
   }
 
+  function TruncatedText({ text, maxLength }) {
+    const displayText = text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  
+    return (
+      <div title={text} className="truncate">
+        {displayText}
+      </div>
+    );
+  }
+
   return (
     <div className="font-sans">
       {showaddthought && (
@@ -180,7 +190,8 @@ function Thoughts() {
 
             <div className="w-full mt-6 flex flex-col">
               <div className="flex  text-black text-2xl md:text-3xl">
-                {topicobj.title}
+                {/* {topicobj.title} */}
+                <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
               <div className="w-full flex mt-4 mb-2">
                 <div
