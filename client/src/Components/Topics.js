@@ -99,6 +99,32 @@ function Topics() {
     );
   }
 
+  function colorGradient (){
+    const colors = [
+      '#7F9BD1',
+      '#8CA5D6',
+      '#99AEDA',
+      '#A5B9DF',
+      '#B2C3E3',
+      '#BFCCE8',
+      '#CCD7EC',
+      '#D8E1F1',
+      '#E5EBF5',
+      '#F2F5FA',
+    ];
+    
+    const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
+
+    const color1 = getRandomColor();
+    const color2 = getRandomColor();
+
+    const gradientStyle = {
+      background: `linear-gradient(to right, ${color1}, ${color2})`,
+    };
+
+    return gradientStyle;
+  }
+
   return (
     <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
@@ -186,7 +212,9 @@ function Topics() {
             {topics.map((topic, index) => (
               <div
                 key={index}
-                className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
+                // className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
+                style={colorGradient()}
+                className=" min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
                   className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
@@ -205,7 +233,7 @@ function Topics() {
                     {topic.title}
                   </div>
                 </div>
-                <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
+                <div className="h-1/6 flex justify-between items-center py-2 border-t border-gray-600">
                   <div className="text-xs ml-2">
                     {smoothifyDate(topic.time.toString())}
                   </div>
