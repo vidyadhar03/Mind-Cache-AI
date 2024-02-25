@@ -9,6 +9,7 @@ import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
 import { getSubDetails } from "../utils/SubscriptionDetails";
+import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -103,13 +104,27 @@ function Thoughts() {
   }
 
   function TruncatedText({ text, maxLength }) {
-    const displayText = text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-  
+    const displayText =
+      text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+
     return (
       <div title={text} className="truncate">
         {displayText}
       </div>
     );
+  }
+
+  function Analyse() {
+    if (thoughts.length < 3) {
+      showToast(
+        "Please contribute three or more reflections to enable AI analysis for optimal insights."
+      );
+    } else {
+      navigate("/analyse", {
+        state: { data: topicobj.title, thoughts: thoughts },
+      });
+      localStorage.setItem("sessionLoaded", "");
+    }
   }
 
   return (
@@ -156,8 +171,8 @@ function Thoughts() {
         />
       ) : (
         <div className="bg-bgc min-h-screen">
-          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
-            <div className="w-parent flex flex-row justify-between  ">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md py-2">
+            <div className="w-parent flex flex-row justify-between px-4 ">
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
@@ -189,44 +204,54 @@ function Thoughts() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl">
-                {/* {topicobj.title} */}
+              <div className="flex  text-black text-2xl md:text-3xl px-4">
                 <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
-              <div className="w-full flex mt-4 mb-2">
+              <div className="w-full flex mt-4 mb-2 whitespace-nowrap overflow-x-auto hide-scrollbar pl-4 py-2">
+
                 <div
-                  className="mr-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-sm flex items-center cursor-pointer  border-animation"
                   onClick={() => {
-                    navigate("/analyse", {
-                      state: { data: topicobj.title, thoughts: thoughts },
-                    });
-                    localStorage.setItem("sessionLoaded", "");
+                    Analyse();
                   }}
                 >
                   <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Analyse</div>
+                  <div className="mr-2 md:mr-0">Begin AI Analysis</div>
                 </div>
+
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={reverseThoughts}
                 >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort {sort}</div>
+                  <div className="mr-2 md:mr-0">Sort {sort}</div>
                 </div>
 
+                {!subDetails.isSubscribed && (
+                  <div
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                    onClick={() => {
+                      navigate(`/pricing`);
+                    }}
+                  >
+                    <div>Subscribe</div>
+                  </div>
+                )}
+
                 <div
-                  className="ml-2  flex items-center cursor-pointer"
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
                     setshowinfo(true);
                   }}
                 >
-                  <img src="/info.png" className="h-7 w-auto mr-1" alt="" />
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
+                  <div className="mr-2 md:mr-0">Info.</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex-col items-center text-center">
+          <div className="flex-col items-center text-center pb-16">
             {thoughts.map((thought, index) => (
               <div
                 key={index}

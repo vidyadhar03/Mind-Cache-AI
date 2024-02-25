@@ -1,0 +1,57 @@
+@keyframes slide {
+  from {
+    mask-position: 0% 0%;
+  }
+  to {
+    mask-position: 100% 0%;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 2px 0 rgba(30, 144, 255, 0.7); /* Lighter glow */
+  }
+  50% {
+    box-shadow: 0 0 6px 0 rgba(30, 144, 255, 1); /* Stronger glow */
+  }
+}
+
+.border-animation {
+  /* Apply glow animation */
+  position: relative;
+  animation: glow 4s infinite ease-in-out;
+}
+
+.border-animation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 0px solid transparent; /* Hide the border */
+  border-radius: 9999px; /* Fully rounded */
+  box-shadow: 0 0 0 0px gray; /* Simulate the existing border */
+  z-index: 0;
+}
+
+.border-animation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px; /* Adjust if you have a different border-radius */
+  z-index: 1;
+  border: 2px solid #7391CD; /* Adjust the border color to match your design */
+  mask: linear-gradient(90deg, transparent, blue 50%, transparent 100%);
+  mask-size: 200% 100%; /* Ensures the gradient covers the entire border */
+  animation: slide 4s linear infinite;
+}
+
+
+
+
+
+

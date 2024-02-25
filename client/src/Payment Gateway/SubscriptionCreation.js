@@ -206,18 +206,16 @@ export function CreateSubscription() {
             </ul>
           ))}
         </div>
-        <div className="text-base my-4">
-          <span className="text-red-600 font-semibold text-lg">Note: </span>By
-          pressing 'Proceed for Payment', you'll be directed to another tab to
-          complete your payment. Ensure you revisit this tab for your
-          subscription info.
+        <div className="text-sm my-4">By
+          pressing 'Proceed for Payment', you'll be directed to Razorpay payment tab to
+          complete your payment.
         </div>
         <button
           className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
           onClick={() => setupRazorpayCheckout(subId)}
           disabled={!subId}
         >
-          Proceed to payment.
+          Proceed to payment
         </button>
       </div>
       <div className="mt-40">

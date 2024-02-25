@@ -131,7 +131,7 @@ function Topics() {
   function TopicLimit() {
     if (subDetails.isSubscribed) {
       return true;
-    }else{
+    } else {
       if (topics.length < 10) {
         return true;
       } else {
@@ -188,8 +188,8 @@ function Topics() {
         />
       ) : (
         <div className="">
-          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
-            <div className="w-parent flex flex-row justify-between  ">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md   py-2">
+            <div className="w-parent flex flex-row justify-between  px-4">
               <div className="flex">
                 <img
                   src="/mindcachelogo.png"
@@ -212,17 +212,18 @@ function Topics() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl">
+              <div className="flex  text-black text-2xl md:text-3xl px-4">
                 Explore Your Focus Areas
               </div>
-              <div className="w-full flex mt-4 mb-2">
+              <div className="w-full flex mt-4 mb-2 pl-4 whitespace-nowrap overflow-x-auto hide-scrollbar">
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={reverseTopics}
                 >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort {sort}</div>
+                  <div className="mr-2 md:mr-0">Sort {sort}</div>
                 </div>
+
                 {!subDetails.isSubscribed && (
                   <div
                     className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
@@ -233,6 +234,16 @@ function Topics() {
                     <div>Subscribe</div>
                   </div>
                 )}
+
+                <div
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/analyse");
+                  }}
+                >
+                  <div>AI Analysis History</div>
+                </div>
+
                 <div
                   className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
@@ -240,13 +251,13 @@ function Topics() {
                   }}
                 >
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Info.</div>
+                  <div className="mr-2 md:mr-0">Info.</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
+          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle} pb-16`}>
             {topics.map((topic, index) => (
               <div
                 key={index}

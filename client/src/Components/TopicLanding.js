@@ -40,7 +40,7 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
 
         <div className="md:flex-1 flex justify-center  ">
           <div className="flex flex-col  justify-center">
-            <div className="mt-8 text-center font-semibold text-lg">
+            <div className="mt-8 text-center font-semibold md:text-lg">
               Create your first Focus Area now. It could be anything that
               resonates with you.
             </div>
