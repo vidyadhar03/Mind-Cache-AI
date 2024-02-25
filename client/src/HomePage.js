@@ -24,7 +24,7 @@ function HomePage() {
         </div>
         <div className="  flex flex-col items-center justify-center h-2/3 lg:h-full lg:w-2/5  p-2 slide-in-right ">
           <img
-            src="/introspectlogo.jpg"
+            src="/introspectlogo.png"
             className="h-1/2 lg-2/5 w-auto rounded-full mx-2"
             alt="introspect"
           />

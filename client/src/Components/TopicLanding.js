@@ -30,9 +30,9 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
     <div>
       <NavBar />
       <div className="flex flex-col  md:flex-row h-[calc(100vh-70px)] bg-gray-50 font-sans">
-        <div className="flex md:flex-1 justify-center items-center">
+        <div className="flex md:flex-1 justify-center items-center mt-8">
           <img
-            src="/meditationlogo.png"
+            src="/logointrospect.png"
             className="h-72 w-72 md:h-96 md:w-96 rounded-full"
             alt="logo"
           />
