@@ -62,6 +62,9 @@ function Thoughts() {
           logout();
         }
         if (!response.ok) {
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
@@ -255,7 +258,7 @@ function Thoughts() {
             {thoughts.map((thought, index) => (
               <div
                 key={index}
-                className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
+                className="bg-[#C1D0EF] pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
               >
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">

@@ -34,13 +34,13 @@ router.post("/signup", async (req, res) => {
   if (!response.success) {
     return res
       .status(400)
-      .json({ message: "Inputs are invalid", errors: response.error.issues });
+      .json({ message: "Please use a valid email and ensure your password is at least 6 characters long", errors: response.error.issues });
   }
   const { name, password, email } = req.body;
   try {
     let found = await User.findOne({ email: email });
     if (found) {
-      return res.status(400).json({ message: "user already exists" });
+      return res.status(400).json({ message: "This email is already registered. Please sign in" });
     }
     const date = Date.now();
     const hashedpassword = await bcrypt.hash(password, saltRounds);
@@ -56,14 +56,14 @@ router.post("/signup", async (req, res) => {
       expiresIn: "1h",
     });
     res.status(200).json({
-      message: "user signed up succesfully!",
+      message: "User signed up succesfully!",
       token: token,
       userid: foundUser._id.toString(),
       subscriptionDetails: foundUser.subscriptionDetails,
     });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "internal server" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
   if (!response.success) {
     return res
       .status(400)
-      .json({ message: "Inputs are invalid", errors: response.error.issues });
+      .json({ message: "Please use a valid email and ensure your password is at least 6 characters long", errors: response.error.issues });
   }
   const { email, password } = req.body;
   try {
@@ -89,14 +89,14 @@ router.post("/login", async (req, res) => {
           subscriptionDetails: found.subscriptionDetails,
         });
       } else {
-        res.status(401).json({ message: "wrong credentials!" });
+        res.status(401).json({ message: "Incorrect password. Please try again." });
       }
     } else {
-      res.status(400).json({ message: "User doesnt exist!" });
+      res.status(400).json({ message: "We couldn't find an account with that email. Please try again or create a new account." });
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error!" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -118,7 +118,7 @@ router.get("/topics/:userid", auth, async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -154,7 +154,7 @@ router.post("/addtopic", auth, async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -190,7 +190,7 @@ router.post("/updatetopic", auth, async (req, res) => {
     res.status(200).json({ message: "Topic Updated", data: found.topics });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal Server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -212,7 +212,7 @@ router.get("/thoughts/:topicid", auth, async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -245,7 +245,7 @@ router.post("/addthought", auth, async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -279,7 +279,7 @@ router.post("/updatethought", auth, async (req, res) => {
     res.status(200).json({ message: "Thought Updated", data: found.thoughts });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

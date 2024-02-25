@@ -26,6 +26,9 @@ function EditSession({ onClosedialog, session,updateSesh,logout }) {
         logout();
       }
       if (!response.ok) {
+        // const json = await response.json();
+        // setDialogMessage(json.message);
+        // setShowDialog(true);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();

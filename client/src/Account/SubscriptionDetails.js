@@ -44,10 +44,9 @@ export const SubscriptionDetails = () => {
         navigate(`/`);
       }
       if (!response.ok) {
-        const data = await response.json();
-
-        console.log(data);
-
+        const json = await response.json();
+        setDialogMessage(json.message);
+        setShowDialog(true);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();

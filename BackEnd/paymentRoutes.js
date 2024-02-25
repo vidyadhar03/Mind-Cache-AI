@@ -151,8 +151,8 @@ router.post("/subscription", auth, async (req, res) => {
 
     if (!response.ok) {
       const data = await response.json();
-      console.log(data);
-      res.status(500).json({ message: "Network response was not ok." });
+      // console.log(data);
+      return res.status(500).json({ message: "Error from payment gateway side. Please retry shortly." });
       // throw new Error("Network response was not ok.");
     }
 
@@ -165,7 +165,7 @@ router.post("/subscription", auth, async (req, res) => {
     res.status(200).json(data);
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -202,8 +202,9 @@ router.post("/cancelsubscription", auth, async (req, res) => {
 
     if (!response.ok) {
       const data = await response.json();
-      console.log(data);
-      throw new Error("Network response was not ok.");
+      // console.log(data);
+      return res.status(500).json({ message: "Error from payment gateway side. Please retry shortly." });
+      // throw new Error("Network response was not ok.");
     }
 
     const data = await response.json();
@@ -222,7 +223,7 @@ router.post("/cancelsubscription", auth, async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -275,11 +276,11 @@ router.post("/confirmpayment", auth, async (req, res) => {
     } else {
       res
         .status(400)
-        .json({ success: false, message: "Invalid payment signature" });
+        .json({ success: false, message: "Invalid payment signature." });
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

@@ -32,12 +32,6 @@ function SignIn() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
-  if (plan) {
-    console.log("exists");
-  } else {
-    console.log("doesnt exist");
-  }
-
   function checkForm() {
     console.log(email, password);
     if (email === "" || password === "") {
@@ -67,7 +61,9 @@ function SignIn() {
 
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          // console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         setDialogMessage("Sign Up successfull!");
@@ -85,8 +81,8 @@ function SignIn() {
         }
       } catch (e) {
         //todo - update UI to user
-        setDialogMessage("Sign Up Failed!");
-        setShowDialog(true);
+        // setDialogMessage("Sign Up Failed!");
+        // setShowDialog(true);
         disableLoader();
         console.error(e);
       }
@@ -111,7 +107,9 @@ function SignIn() {
 
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          // console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -129,8 +127,8 @@ function SignIn() {
           navigate(`/topics`);
         }
       } catch (e) {
-        setDialogMessage("Login In failed!");
-        setShowDialog(true);
+        // setDialogMessage("Login In failed!");
+        // setShowDialog(true);
         disableLoader();
         console.error(e);
       }

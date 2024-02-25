@@ -12,7 +12,7 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
     event.preventDefault();
     if (topic !== "") {
       console.log("called api");
-      const result = await AddTopicAPI(topic);
+      const result = await AddTopicAPI(topic,toast);
       if (result.success) {
         console.log("result success");
         setTopics(pinTopics(result.data));

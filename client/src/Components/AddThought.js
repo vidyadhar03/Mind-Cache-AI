@@ -6,7 +6,7 @@ function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
 
   async function handleCreate() {
     if (newThought !== "") {
-      const result = await AddThoughtAPI(topic._id, newThought);
+      const result = await AddThoughtAPI(topic._id, newThought,toast);
       console.log(result);
       if (result.success) {
         setThoughts(result.data);

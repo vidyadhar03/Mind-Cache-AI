@@ -9,7 +9,7 @@ export function ThoughtLanding({ topic, emptydata, setThoughts, toast }) {
   async function handleCreate(event) {
     event.preventDefault();
     if (thought !== "") {
-      const result = await AddThoughtAPI(topic._id, thought);
+      const result = await AddThoughtAPI(topic._id, thought,toast);
       if (result.success) {
         setThoughts(result.data);
         emptydata(false);

@@ -80,6 +80,9 @@ const ChatComponent = () => {
         logout();
       }
       if (!response.ok) {
+        const json = await response.json();
+        setDialogMessage(json.message);
+        setShowDialog(true);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
@@ -133,6 +136,9 @@ const ChatComponent = () => {
           logout();
         }
         if (!response.ok) {
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
@@ -167,6 +173,9 @@ const ChatComponent = () => {
           logout();
         }
         if (!response.ok) {
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
@@ -250,6 +259,9 @@ const ChatComponent = () => {
         logout();
       }
       if (!response.ok) {
+        const json = await response.json();
+        setDialogMessage(json.message);
+        setShowDialog(true);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();

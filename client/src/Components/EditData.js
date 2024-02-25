@@ -66,6 +66,8 @@ function EditData({
         logout();
       }
       if (!response.ok) {
+        const json = await response.json();
+        toast(json.message);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();

@@ -7,7 +7,7 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
   async function handleCreate(event) {
     event.preventDefault();
     if (newTopic !== "") {
-      const result = await AddTopicAPI(newTopic);
+      const result = await AddTopicAPI(newTopic,toast);
       console.log(result);
       if (result.success) {
         setTopics(pinTopics(result.data));

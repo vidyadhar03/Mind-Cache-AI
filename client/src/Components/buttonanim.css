@@ -45,7 +45,7 @@
   border-radius: 9999px; /* Adjust if you have a different border-radius */
   z-index: 1;
   border: 2px solid #7391CD; /* Adjust the border color to match your design */
-  mask: linear-gradient(90deg, transparent, blue 50%, transparent 100%);
+  mask: linear-gradient(90deg, transparent, #7391CD 50%, transparent 100%);
   mask-size: 200% 100%; /* Ensures the gradient covers the entire border */
   animation: slide 4s linear infinite;
 }

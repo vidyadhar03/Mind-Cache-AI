@@ -47,7 +47,8 @@ const SubscriptionConfirmation = () => {
         }
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         // disableLoader();
