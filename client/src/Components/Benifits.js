@@ -73,7 +73,7 @@ function BenefitsDropdown() {
           </AccordionSummary>
 
           <AccordionDetails>
-            <div className="font-sans text-sm md:text-lg">
+            <div className="font-sans text-sm md:text-base">
               {benefit.description}
             </div>
           </AccordionDetails>

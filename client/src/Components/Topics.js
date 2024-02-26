@@ -106,8 +106,8 @@ function Topics() {
 
   function colorGradient() {
     const colors = [
-      "#7F9BD1",
-      "#8CA5D6",
+      // "#7F9BD1",
+      // "#8CA5D6",
       "#99AEDA",
       "#A5B9DF",
       "#B2C3E3",
@@ -115,7 +115,7 @@ function Topics() {
       "#CCD7EC",
       "#D8E1F1",
       "#E5EBF5",
-      "#F2F5FA",
+      // "#F2F5FA",
     ];
 
     const getRandomColor = () =>
@@ -227,6 +227,15 @@ function Topics() {
                   <div className="mr-2 md:mr-0">Sort {sort}</div>
                 </div>
 
+                <div
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/analyse");
+                  }}
+                >
+                  <div>AI Analysis History</div>
+                </div>
+
                 {!subDetails.isSubscribed && (
                   <div
                     className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
@@ -238,19 +247,12 @@ function Topics() {
                   </div>
                 )}
 
-                <div
-                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
-                  onClick={() => {
-                    navigate("/analyse");
-                  }}
-                >
-                  <div>AI Analysis History</div>
-                </div>
+                
 
                 <div
                   className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
-                    setshowinfo(true);
+                      setshowinfo(true);
                   }}
                 >
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />

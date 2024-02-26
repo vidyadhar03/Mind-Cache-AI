@@ -52,21 +52,21 @@ export function ReflectionInfo({ onClosedialog }) {
           personal goals, fostering greater self-awareness and emotional
           well-being.
         </div> */}
-        <div className="text-sm md:text-lg">
+        <div className="text-sm md:text-base">
           Mind Cache AI champions introspection for self-growth, offering a
           platform for deep self-understanding.
         </div>
-        <div className="font-semibold text-black my-4 text-md md:text-xl">
+        <div className="font-semibold text-black my-4 text-md md:text-lg">
           What are Reflections?
         </div>
-        <div className="text-sm md:text-lg">
+        <div className="text-sm md:text-base">
           Reflections are personal insights recorded in Focus Areas, acting as a
           digital journal for your emotional and cognitive journey.
         </div>
-        <div className="font-semibold text-black my-4 text-md md:text-xl">
+        <div className="font-semibold text-black my-4 text-md md:text-lg">
           Why are Reflections Important?
         </div>
-        <div className="text-sm md:text-lg mb-16">
+        <div className="text-sm md:text-base mb-16">
           They enable self-exploration, offering clarity and tracking personal
           growth, thereby enhancing self-awareness and emotional health.
         </div>

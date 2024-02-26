@@ -52,12 +52,12 @@ function HomePage() {
         </div>
         <div className="bg-card text-center mt-8 flex flex-col items-center md:text-xl md:w-2/3 px-2 py-4 md:px-6 md:py-4 border shadow-lg rounded-lg">
           <div className="font-semibold text-lg md:text-2xl">Mind Caching</div>
-          <div className="mt-2 md:mt-4 text-sm md:text-lg  md:w-2/3">
+          <div className="mt-2 md:mt-4 text-sm md:text-base  md:w-2/3">
             A dynamic way to capture and explore the evolving landscape of your
             thoughts, uncovering the subtle patterns that shape your mental
             well-being.
           </div>
-          <div className="mt-2 text-sm md:text-lg  md:w-2/3">
+          <div className="mt-2 text-sm md:text-base  md:w-2/3">
             Mind Cache AI incorporates scientific principles related to the
             benefits of journaling and structured reflection for mental health.
             These principles are grounded in psychological research that shows
@@ -67,7 +67,7 @@ function HomePage() {
           <div className="font-semibold mt-4 text-lg md:text-2xl">
             Artificial Intelligence
           </div>
-          <div className="mt-2 md:mt-4 text-sm md:text-lg  md:w-2/3">
+          <div className="mt-2 md:mt-4 text-sm md:text-base  md:w-2/3">
             Mind Cache AI distinguishes itself by integrating AI technology with
             principles of cognitive behavioral therapy (CBT), enhancing
             traditional journaling approaches. This dynamic platform aids users
@@ -80,7 +80,7 @@ function HomePage() {
           <div className=" mt-4 font-semibold text-lg md:text-2xl">
             Transformative Benefits
           </div>
-          <div className="mt-2 md:mt-4 text-base md:text-lg text-center md:w-2/3">
+          <div className="mt-2 md:mt-4 text-base  text-center md:w-2/3">
             <BenefitsDropdown />
           </div>
         </div>
@@ -97,8 +97,8 @@ function HomePage() {
 
         <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3 bg-card">
           <div className=" text-center md:text-lg  text-black font-medium ">
-            I have been using your product and I like your idea. This helped
-            me show my psychiatrist that I am not okay, and with this, my Bpd
+            I have been using your product and I like your idea. This helped me
+            show my psychiatrist that I am not okay, and with this, my Bpd
             diagnosis came.
           </div>
           <div className="flex mt-4 justify-center items-center">
@@ -157,8 +157,9 @@ function HomePage() {
                     />
                   </div>
                   <div className="mt-0 text-sm md:text-base">
-                    Define personal goals in chosen areas of life to focus your
-                    journey.
+                    Choose areas of life you're curious about or wish to
+                    improve, setting the stage for targeted reflection and
+                    analysis.
                   </div>
                 </div>
               </FadeInDiv>
@@ -171,7 +172,7 @@ function HomePage() {
                     Step 2
                   </div>
                   <div className=" text-lg font-medium mt-2">
-                    Capture Your Journey
+                    Record Your Thoughts
                   </div>
                   <div className="flex justify-center my-2">
                     <img
@@ -181,8 +182,8 @@ function HomePage() {
                     />
                   </div>
                   <div className="mt-0 text-sm md:text-base">
-                    Log thoughts and experiences related to your goals,
-                    effortlessly.
+                    Regularly journal your reflections to build a comprehensive
+                    record of your thoughts and emotional journey over time.
                   </div>
                 </div>
               </FadeInDiv>
@@ -197,7 +198,7 @@ function HomePage() {
                     Step 3
                   </div>
                   <div className=" text-lg font-medium mt-2">
-                    Discover Insights with AI
+                    Reveal Insights with AI Analysis
                   </div>
                   <div className="flex justify-center my-2">
                     <img
@@ -207,8 +208,8 @@ function HomePage() {
                     />
                   </div>
                   <div className="mt-0 text-sm md:text-base">
-                    Gain personalized insights through AI analysis of your
-                    reflections.
+                    Leverage AI to analyze your reflections, uncovering patterns
+                    and insights that may not be immediately apparent.
                   </div>
                 </div>
               </FadeInDiv>
@@ -221,7 +222,7 @@ function HomePage() {
                     Step 4
                   </div>
                   <div className=" text-lg font-medium mt-2">
-                    Measure Growth and Evolve
+                    Evaluate Your Transformation Journey
                   </div>
                   <div className="flex justify-center my-2">
                     <img
@@ -231,7 +232,9 @@ function HomePage() {
                     />
                   </div>
                   <div className="mt-2 text-sm md:text-base">
-                    Track progress over time and adapt goals as you grow.
+                    Track your personal growth over time, assessing how your
+                    thoughts and perspectives have evolved through your
+                    reflections.
                   </div>
                 </div>
               </FadeInDiv>
@@ -258,7 +261,6 @@ function HomePage() {
         </div>
 
         <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 ">
-
           <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg  md:mx-4 sm:w-96 text-center bg-card">
             <div className="text-xl md:text-4xl font-medium">Free Plan</div>
             <div className="text-sm mt-2">Explorer</div>

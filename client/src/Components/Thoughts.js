@@ -276,7 +276,7 @@ function Thoughts() {
                     />
                   </div>
                 </div>
-                <div className="text-center text-black text-base md:text-lg">
+                <div className="text-center text-black text-sm md:text-base">
                   {thought.collapse ? (
                     <div className="italic">** Reflection hidden **</div>
                   ) : (
