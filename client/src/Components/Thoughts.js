@@ -174,7 +174,7 @@ function Thoughts() {
         />
       ) : (
         <div className="bg-bgc min-h-screen">
-          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md py-2">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md pt-2">
             <div className="w-parent flex flex-row justify-between px-4 ">
               <div
                 className="flex cursor-pointer"
@@ -207,10 +207,12 @@ function Thoughts() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
+
               <div className="flex  text-black text-2xl md:text-3xl px-4">
                 <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
-              <div className="w-full flex mt-4 mb-2 whitespace-nowrap overflow-x-auto hide-scrollbar pl-4 py-2">
+
+              <div className="w-full flex mt-2 pl-4 py-2 whitespace-nowrap overflow-x-auto hide-scrollbar ">
 
                 <div
                   className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-sm flex items-center cursor-pointer  border-animation"

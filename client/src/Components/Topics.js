@@ -215,10 +215,13 @@ function Topics() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
+
               <div className="flex  text-black text-2xl md:text-3xl px-4">
                 Explore Your Focus Areas
               </div>
-              <div className="w-full flex mt-4 mb-2 pl-4 py-1 whitespace-nowrap overflow-x-auto hide-scrollbar">
+
+              <div className="w-full flex mt-2  pl-4 py-1  whitespace-nowrap overflow-x-auto hide-scrollbar">
+
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={reverseTopics}
