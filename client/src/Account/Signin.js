@@ -75,9 +75,9 @@ function SignIn() {
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
-          navigate(`/subscription`, { state: { plan } });
+          navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
-          navigate(`/topics`);
+          navigate(`/topics`, { replace: true });
         }
       } catch (e) {
         //todo - update UI to user
@@ -122,9 +122,9 @@ function SignIn() {
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
-          navigate(`/subscription`, { state: { plan } });
+          navigate(`/subscription`, { state: { plan }, replace: true  });
         } else {
-          navigate(`/topics`);
+          navigate(`/topics`, { replace: true });
         }
       } catch (e) {
         // setDialogMessage("Login In failed!");
@@ -156,7 +156,7 @@ function SignIn() {
 
       {plan ? (
         <div className="text-center font-semibold my-10 mx-2">
-          Kindly create your account before we proceed for subscription.
+          Please set up your account to continue with the subscription process.
         </div>
       ) : (
         <div className="text-center my-10 font-semibold mx-2">

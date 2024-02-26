@@ -13,13 +13,19 @@ export const SubscriptionPlans = () => {
     <div>
       <NavBar />
 
-      <div className=" flex flex-col px-6 py-8 bg-bgc font-sans">
+      <div className=" flex flex-col px-6 pt-8 pb-20 bg-bgc font-sans items-center">
         <div className="text-black text-center font-bold text-xl md:text-4xl">
-          Pricing
+          Subscription Plans
+        </div>
+
+        <div className="text-sm text-center md:w-2/3 mt-4">
+          Upgrade your reflective writing with our AI powered by GPT, providing
+          you with up to 200 insightful exchanges monthly. This AI feature
+          deepens your journey of self-reflection, offering profound insights
+          for an enriched personal exploration.
         </div>
 
         <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 ">
-
           <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg  md:mx-4 sm:w-96 text-center bg-card">
             <div className="text-xl md:text-4xl font-medium">Free Plan</div>
             <div className="text-sm mt-2">Explorer</div>

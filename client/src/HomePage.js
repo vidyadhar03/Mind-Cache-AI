@@ -19,7 +19,7 @@ function HomePage() {
   function Intro() {
     return (
       <div className="flex flex-col lg:flex-row h-[calc(100vh-52px)]  bg-bgc">
-        <div className="px-8 text-white text-4xl lg:text-6xl font-bold flex justify-center items-center h-1/3 lg:h-full lg:w-3/5 bg-third-blue">
+        <div className="px-8 text-white text-3xl lg:text-5xl font-bold flex justify-center items-center h-1/3 lg:h-full lg:w-3/5 bg-third-blue">
           <TypingAnimation />
         </div>
         <div className="  flex flex-col items-center justify-center h-2/3 lg:h-full lg:w-2/5  p-2 slide-in-right ">
@@ -97,9 +97,9 @@ function HomePage() {
 
         <div className="border-2 px-8 py-4 rounded-lg shadow-lg mt-8 md:w-1/2 lg:w-1/3 bg-card">
           <div className=" text-center md:text-lg  text-black font-medium ">
-            " I have been using your product and I like your idea. This helped
+            I have been using your product and I like your idea. This helped
             me show my psychiatrist that I am not okay, and with this, my Bpd
-            diagnosis came. "
+            diagnosis came.
           </div>
           <div className="flex mt-4 justify-center items-center">
             <img
