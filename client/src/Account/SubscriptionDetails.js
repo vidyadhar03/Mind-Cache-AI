@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { getSubDetails, setSubDetails } from "../utils/SubscriptionDetails";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
 const base_url = process.env.REACT_APP_API_URL;
 
-export const SubscriptionDetails = () => {
+export const SubscriptionDetails = ({
+  showConfirm,
+  setText,
+  triggercancel,
+  setTriggercancel,
+}) => {
   const navigate = useNavigate();
   const subDetails = getSubDetails();
   //loader
@@ -19,6 +24,15 @@ export const SubscriptionDetails = () => {
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (triggercancel) {
+      cancelSub();
+    }
+    return () => {
+      setTriggercancel(false);
+    };
+  }, [triggercancel]);
 
   async function cancelSub() {
     enableLoader();
@@ -50,6 +64,7 @@ export const SubscriptionDetails = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      setTriggercancel(false);
       disableLoader();
       setSubDetails(data.subscriptionDetails);
       window.open(data.short_url, "_blank");
@@ -65,12 +80,12 @@ export const SubscriptionDetails = () => {
     return (
       <div>
         <div>
-          <div className="text-lg mt-8 text-center md:text-left">
+          <div className="md:text-lg mt-8 text-center md:text-left">
             {" "}
             You are Subscribed to the {subDetails.plan} Plan with below
             Features:
           </div>
-          <div className="mt-4 text-center md:text-left">
+          <div className="mt-4 text-center md:text-left md:text-lg">
             {subDetails.plan === "Monthly" ? (
               <ul className=" pl-6 mt-4  text-center md:text-left">
                 <li className="mt-2 flex items-center">
@@ -104,18 +119,20 @@ export const SubscriptionDetails = () => {
             )}
           </div>
           <div className="mt-4">
-            <span className="font-medium">Last Billing Date:</span>{" "}
+            <span className="">Last Billing Date:</span>{" "}
             {subDetails.billingCycleStartDate.substring(0, 10)}
           </div>
           <div className="mt-1">
-            <span className="font-medium">AI Interactions Used:</span>{" "}
+            <span className="">AI Interactions Used:</span>{" "}
             {subDetails.aiInteractionCount}
           </div>
 
           <button
-            className="w-full md:w-96 py-2 mt-8 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+            className="w-full md:w-96 py-2 mt-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
             onClick={() => {
-              cancelSub();
+              // cancelSub();
+              setText("You are about to cancel subscription!");
+              showConfirm();
             }}
           >
             Cancel Subscription
@@ -165,5 +182,4 @@ export const SubscriptionDetails = () => {
       />
     </div>
   );
-
 };

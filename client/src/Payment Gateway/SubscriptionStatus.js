@@ -24,7 +24,7 @@ export function SubscriptionStatus() {
             <div className="text-center text-2xl mt-8">
               Subscription successfully activated!
             </div>
-            <div className="text-center md:text-lg mt-8">
+            <div className="text-center mt-8">
               Thank you for choosing Mind Cache AI! Embark on your journey of
               self-discovery and personal enrichment.
             </div>

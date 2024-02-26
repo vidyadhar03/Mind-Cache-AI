@@ -1,15 +1,9 @@
-import { useNavigate } from "react-router-dom";
 
-export const SideBar = ({ modifyActiveTab }) => {
-  const navigate = useNavigate();
+export const SideBar = ({ modifyActiveTab,showConfirm,setText }) => {
   
   const Logout = () => {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
-    localStorage.removeItem("subscriptionDetails");
-    navigate(`/`);
+    setText("Confirm Log Out?")
+    showConfirm();
   };
 
   return (

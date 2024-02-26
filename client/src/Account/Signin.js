@@ -66,8 +66,6 @@ function SignIn() {
           setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        setDialogMessage("Sign Up successfull!");
-        setShowDialog(true);
         disableLoader();
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
@@ -112,9 +110,6 @@ function SignIn() {
           setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        setDialogMessage("Log In successfull!");
-        setShowDialog(true);
         disableLoader();
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
