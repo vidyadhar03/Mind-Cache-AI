@@ -16,10 +16,25 @@ export const usePageTracking = () => {
 };
 
 export const trackEvent = (action, category, label, value) => {
-  window.gtag("event", action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-    user_id: localStorage.getItem("userid"), 
-  });
+  try{
+    if(localStorage.getItem("userid")){
+      window.gtag("event", action, {
+        event_category: category,
+        event_label: label,
+        value: value,
+        user_id: localStorage.getItem("userid"),
+      });
+    }else{
+      window.gtag("event", action, {
+        event_category: category,
+        event_label: label,
+        value: value,
+        user_id: "",
+      });
+    }
+
+  }catch(e){
+    console.log(e);
+  }
+
 };
