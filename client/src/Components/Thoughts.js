@@ -50,6 +50,7 @@ function Thoughts() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchThoughts = async () => {
       try {
         const response = await fetch(base_url + "thoughts/" + topicobj._id, {
@@ -175,7 +176,7 @@ function Thoughts() {
       ) : (
         <div className="bg-bgc min-h-screen">
           <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md pt-2">
-            <div className="w-parent flex flex-row justify-between px-4 ">
+            <div className="w-parent flex flex-row justify-between items-center px-4 ">
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
@@ -188,7 +189,7 @@ function Thoughts() {
               >
                 <img
                   src="/mindcachelogo.png"
-                  className="h-8 w-8 rounded-full mr-2"
+                  className="h-9 w-9 rounded-full mr-2"
                   alt="logo"
                 />
                 <div className="my-auto text-black text-xl text-justify  ">

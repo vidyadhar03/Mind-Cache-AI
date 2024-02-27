@@ -8,6 +8,10 @@ export function SubscriptionStatus() {
   const status = location.state?.status;
   const error = location.state?.error;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="bg-bgc font-sans">
       <NavBar />

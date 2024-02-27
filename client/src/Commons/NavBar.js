@@ -15,7 +15,7 @@ function NavBar() {
   return (
     <div
       id="navbar"
-      className="w-parent flex flex-row justify-between shadow-md px-4 py-2 sticky top-0 z-[100] bg-bgc font-sans"
+      className="w-parent flex flex-row justify-between items-center shadow-md px-4 py-2 sticky top-0 z-[100] bg-bgc font-sans"
     >
       <div
         className="flex cursor-pointer"
@@ -27,7 +27,7 @@ function NavBar() {
       >
         <img
           src="/mindcachelogo.png"
-          className="h-8 w-8 rounded-full mr-2"
+          className="h-9 w-9 rounded-full mr-2"
           alt="logo"
         />
         <div className="my-auto text-black text-xl text-justify">
@@ -42,7 +42,7 @@ function NavBar() {
         {/* <div className="flex-col items-end">Account</div> */}
       </button>:<div>
       <button
-        className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm"
+        className="px-6 md:px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm"
         onClick={()=>{navigate(`/signin`)}}
       >
         Sign In

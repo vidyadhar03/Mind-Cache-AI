@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { SideBar } from "./SideBar";
 import { ContentDisplay } from "./ContentDisplay";
 import Footer from "../Commons/Footer";
@@ -10,6 +10,10 @@ export function UserProfile() {
   const [showconfirm, setshowconfirm] = useState(false);
   const [confirmtext, setConfirmtext] = useState("");
   const [triggercancel,setTriggercancel] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="font-sans bg-bgc">

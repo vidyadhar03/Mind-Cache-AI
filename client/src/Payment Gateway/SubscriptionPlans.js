@@ -1,5 +1,6 @@
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const SubscriptionPlans = () => {
@@ -8,6 +9,10 @@ export const SubscriptionPlans = () => {
   function Subscribe(plan) {
     navigate(`/subscription`, { state: { plan } });
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div>
