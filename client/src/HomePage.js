@@ -5,6 +5,7 @@ import BenefitsDropdown from "./Components/Benifits";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NavBar from "./Commons/NavBar";
+import { trackEvent } from "./utils/PageTracking";
 import "./App.css";
 
 function HomePage() {
@@ -34,6 +35,7 @@ function HomePage() {
           <button
             className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-6"
             onClick={() => {
+              trackEvent("click", "Buttons", "Get Started", "Get started from Landing Page");
               navigate(`/signin`);
             }}
           >
@@ -247,6 +249,7 @@ function HomePage() {
 
   function PricingPlans() {
     function Subscribe(plan) {
+      trackEvent("click", "Buttons", "Subscribe", `${plan} subscribe from Landing Page`);
       if (localStorage.getItem("usertoken")) {
         navigate(`/subscription`, { state: { plan } });
       } else {

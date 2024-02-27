@@ -9,6 +9,7 @@ import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
 import { getSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
 import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -29,6 +30,12 @@ function Thoughts() {
   const navigate = useNavigate();
 
   function reverseThoughts() {
+    trackEvent(
+      "click",
+      "Buttons",
+      "sort Thoughts",
+      "Sort Thoughts from thoughts page"
+    );
     const reverseThoughts = [...thoughts].reverse();
     setThoughts(reverseThoughts);
     setSort(sort === " by latest" ? " by oldest" : " by latest");
@@ -208,16 +215,20 @@ function Thoughts() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-
               <div className="flex  text-black text-2xl md:text-3xl px-4">
                 <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
 
               <div className="w-full flex mt-2 pl-4 py-2 whitespace-nowrap overflow-x-auto hide-scrollbar ">
-
                 <div
                   className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-sm flex items-center cursor-pointer  border-animation"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Begin AI Analysis",
+                      "Begin AI Analysis from thoughts page"
+                    );
                     Analyse();
                   }}
                 >
@@ -237,6 +248,12 @@ function Thoughts() {
                   <div
                     className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                     onClick={() => {
+                      trackEvent(
+                        "click",
+                        "Buttons",
+                        "Subscribe",
+                        "Subscribe from thoughts page"
+                      );
                       navigate(`/pricing`);
                     }}
                   >
@@ -247,6 +264,12 @@ function Thoughts() {
                 <div
                   className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Info",
+                      "Info from thoughts page"
+                    );
                     setshowinfo(true);
                   }}
                 >
@@ -273,6 +296,12 @@ function Thoughts() {
                       src="/threedots.svg"
                       alt=""
                       onClick={() => {
+                        trackEvent(
+                          "click",
+                          "Buttons",
+                          "Edit Reflection",
+                          "Edit Reflection from thoughts page"
+                        );
                         setSelectedthought(thought);
                         setshoweditthought(true);
                       }}
@@ -293,6 +322,12 @@ function Thoughts() {
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={() => {
+              trackEvent(
+                "click",
+                "Buttons",
+                "Add Reflection",
+                "Add Reflection from thoughts page"
+              );
               if (ThoughtLimit()) {
                 setshowaddthought(true);
               }

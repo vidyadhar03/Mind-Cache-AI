@@ -9,6 +9,7 @@ import { CreateSubscription } from "./Payment Gateway/SubscriptionCreation";
 import SubscriptionConfirmation from "./Payment Gateway/SubscriptionConfirmation";
 import { SubscriptionPlans } from "./Payment Gateway/SubscriptionPlans";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
+import { usePageTracking } from "./utils/PageTracking";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,6 +18,7 @@ import {
 import { DataProvider } from "./utils/DataContext";
 
 function App() {
+  usePageTracking();
   return (
     <DataProvider>
       <Router>

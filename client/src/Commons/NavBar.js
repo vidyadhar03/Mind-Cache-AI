@@ -1,14 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import { trackEvent } from "../utils/PageTracking";
 
 function NavBar() {
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const navbar = document.getElementById("navbar");
-  //   const height = navbar.getBoundingClientRect().height;
-  //   console.log(height);
-  // }, []);
 
   const userid = localStorage.getItem("userid");
 
@@ -20,7 +14,9 @@ function NavBar() {
       <div
         className="flex cursor-pointer"
         onClick={() => {
-          if(userid){navigate(`/topics`);}else{
+          if (userid) {
+            navigate(`/topics`);
+          } else {
             navigate(`/`);
           }
         }}
@@ -35,21 +31,29 @@ function NavBar() {
         </div>
       </div>
 
-      {userid? <button className="flex items-center justify-center " onClick={()=>{
-        navigate(`/account`);
-      }}>
-        <img src="/user-profile-new.png" className="h-8 w-8 " alt=""/>
-        {/* <div className="flex-col items-end">Account</div> */}
-      </button>:<div>
-      <button
-        className="px-6 md:px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm"
-        onClick={()=>{navigate(`/signin`)}}
-      >
-        Sign In
-      </button>
-      </div>
-      }
-
+      {userid ? (
+        <button
+          className="flex items-center justify-center "
+          onClick={() => {
+            trackEvent("click", "Buttons", "My Account", "My Account from Nav Bar");
+            navigate(`/account`);
+          }}
+        >
+          <img src="/user-profile-new.png" className="h-8 w-8 " alt="" />
+        </button>
+      ) : (
+        <div>
+          <button
+            className="px-6 md:px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm"
+            onClick={() => {
+              trackEvent("click", "Buttons", "Sign In", "Sign In from Nav Bar");
+              navigate(`/signin`);
+            }}
+          >
+            Sign In
+          </button>
+        </div>
+      )}
     </div>
   );
 }

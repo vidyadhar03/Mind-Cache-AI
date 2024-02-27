@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import NavBar from "../Commons/NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
-import Loader from "../Commons/Loader";
 import Footer from "../Commons/Footer";
 import { CircularProgress } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 export function CreateSubscription() {
@@ -13,14 +13,7 @@ export function CreateSubscription() {
   const plan = location.state?.plan;
   const [subId, setSubId] = useState("");
   const [gotSubLink, setGotSubLink] = useState(false);
-  //loader
-  const [isLoading, setIsLoading] = useState(false);
-  const enableLoader = () => {
-    setIsLoading(true);
-  };
-  const disableLoader = () => {
-    setIsLoading(false);
-  };
+
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -185,7 +178,6 @@ export function CreateSubscription() {
 
   return (
     <div className="bg-bgc font-sans">
-      {isLoading && <Loader />}
       <NavBar />
       <div className="p-6 flex flex-col justify-center items-center ">
         <div>
@@ -222,7 +214,10 @@ export function CreateSubscription() {
             </div>
             <button
               className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-              onClick={() => setupRazorpayCheckout(subId)}
+              onClick={() => {
+              trackEvent("click", "Buttons", "Proceed to payment", "Proceed to payment from Subscription creation page");
+                setupRazorpayCheckout(subId);
+              }}
               disabled={!subId}
             >
               Proceed to payment

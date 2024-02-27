@@ -1,5 +1,6 @@
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export function SubscriptionStatus() {

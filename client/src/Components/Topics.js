@@ -8,6 +8,7 @@ import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
 import { getSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -42,6 +43,7 @@ function Topics() {
   }
 
   function reverseTopics() {
+    trackEvent("click", "Buttons", "Sort Topics", "Sort from topics page");
     const reversedTopics = [...topics].reverse();
     setTopics(pinTopics(reversedTopics));
     setSort(sort === " by latest" ? " by oldest" : " by latest");
@@ -215,13 +217,11 @@ function Topics() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-
               <div className="flex  text-black text-2xl md:text-3xl px-4">
                 Explore Your Focus Areas
               </div>
 
               <div className="w-full flex mt-2  pl-4 py-1  whitespace-nowrap overflow-x-auto hide-scrollbar">
-
                 <div
                   className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={reverseTopics}
@@ -233,6 +233,12 @@ function Topics() {
                 <div
                   className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "AI Analysis History",
+                      "AI Analysis History from topics page"
+                    );
                     navigate("/analyse");
                   }}
                 >
@@ -243,6 +249,13 @@ function Topics() {
                   <div
                     className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                     onClick={() => {
+                      trackEvent(
+                        "click",
+                        "Buttons",
+                        "Subscribe",
+                        "Subscribe from topics page"
+                      );
+
                       navigate(`/pricing`);
                     }}
                   >
@@ -250,12 +263,17 @@ function Topics() {
                   </div>
                 )}
 
-                
-
                 <div
                   className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
                   onClick={() => {
-                      setshowinfo(true);
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Info",
+                      "Info from topics page"
+                    );
+
+                    setshowinfo(true);
                   }}
                 >
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
@@ -276,6 +294,13 @@ function Topics() {
                 <div
                   className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Focus Area Click",
+                      "Focus Area Click from topics page"
+                    );
+
                     navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
                       state: { data: topic },
                     });
@@ -300,6 +325,12 @@ function Topics() {
                       className="h-4 w-4 cursor-pointer mr-2"
                       alt=""
                       onClick={() => {
+                        trackEvent(
+                          "click",
+                          "Buttons",
+                          "Edit Focus Area",
+                          "Edit Focus Area from topics page"
+                        );
                         setSelectedtopic(topic);
                         setshowedittopic(true);
                       }}
@@ -313,6 +344,13 @@ function Topics() {
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={() => {
+              trackEvent(
+                "click",
+                "Buttons",
+                "Add Focus Area",
+                "Add Focus Area from topics page"
+              );
+
               if (TopicLimit()) {
                 setshowaddtopic(true);
               }

@@ -1,23 +1,37 @@
 import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
-export function ConfirmLayout({ onClosedialog, text,setTriggercancel}) {
+export function ConfirmLayout({ onClosedialog, text, setTriggercancel }) {
   const navigate = useNavigate();
 
   const Confirm = () => {
-    if(text==="Confirm Log Out?"){
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
-    localStorage.removeItem("subscriptionDetails");
-    onClosedialog();
-    navigate(`/`);
-    }else{
+    if (text === "Confirm Log Out?") {
+      trackEvent(
+        "click",
+        "Buttons",
+        "Confirm Log Out",
+        "Confirm Log Out from account details page"
+      );
+
+      localStorage.removeItem("userid");
+      localStorage.removeItem("usertoken");
+      localStorage.removeItem("sessionLoaded");
+      localStorage.removeItem("email");
+      localStorage.removeItem("subscriptionDetails");
+      onClosedialog();
+      navigate(`/`);
+    } else {
+      trackEvent(
+        "click",
+        "Buttons",
+        "Confirm cancel subscription",
+        "Confirm cancel subscription from account details page"
+      );
+
       setTriggercancel(true);
       onClosedialog();
     }
   };
-
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm font-sans z-[100]">

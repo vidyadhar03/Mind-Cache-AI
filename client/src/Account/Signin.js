@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { setSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -44,6 +45,7 @@ function SignIn() {
 
   const SignUp = async (e) => {
     e.preventDefault();
+    trackEvent("click", "Buttons", "SignUp", "SignUP from SignIn page");
     if (checkForm()) {
       enableLoader();
       try {
@@ -89,6 +91,7 @@ function SignIn() {
 
   const LogIn = async (e) => {
     e.preventDefault();
+    trackEvent("click", "Buttons", "LogIn", "LogIn from SignIn page");
     if (checkForm()) {
       enableLoader();
       try {
