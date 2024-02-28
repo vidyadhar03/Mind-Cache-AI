@@ -23,6 +23,7 @@ export async function AddTopicAPI(newTopic,toast) {
     }
     if (!response.ok) {
       const json = await response.json();
+      console.log("printed:",json.message);
       toast(json.message);
       throw new Error(`HTTP error! status: ${response.status}`);
     }

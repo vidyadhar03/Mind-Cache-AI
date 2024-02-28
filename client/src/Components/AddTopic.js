@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 
 function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
-  let newTopic = "";
+  const [newTopic,setNewTopic] = useState("");
 
   async function handleCreate(event) {
     event.preventDefault();
@@ -10,14 +11,13 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
       const result = await AddTopicAPI(newTopic,toast);
       console.log(result);
       if (result.success) {
+        setNewTopic("");
         setTopics(pinTopics(result.data));
         onClosedialog();
       } else {
         if (result.logout) {
           logout();
-        } else {
-          toast("something went wrong, try again later!");
-        }
+        } 
       }
     } else {
       toast("Focus Area is empty!");
@@ -40,8 +40,9 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
               InputLabelProps={{
                 style: { fontFamily: "poppins", width: "100%" },
               }}
+              value={newTopic}
               fullWidth
-              onChange={(e) => (newTopic = e.target.value)}
+              onChange={(e) => (setNewTopic(e.target.value))}
             />
           </div>
 

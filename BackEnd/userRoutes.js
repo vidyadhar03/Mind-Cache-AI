@@ -137,7 +137,7 @@ router.post("/addtopic", auth, async (req, res) => {
       let local_topics = found.topics;
       const topic_found = local_topics.find((topic) => topic.title === title);
       if (topic_found) {
-        res.status(400).json({ message: "Topic already exists" });
+        res.status(400).json({ message: "The Focus Area specified already exists. Try adding a new one." });
       } else {
         local_topics.push({ title, time: timeAsDate });
         found.topics = local_topics;

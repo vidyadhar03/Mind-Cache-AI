@@ -239,7 +239,8 @@ function Topics() {
                       "AI Analysis History",
                       "AI Analysis History from topics page"
                     );
-                    navigate("/aihistory", {
+                    console.log(topics);
+                    navigate("/AIhistory", {
                       state: { data: topics },
                     });
                   }}

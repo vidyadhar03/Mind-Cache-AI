@@ -11,6 +11,7 @@ import { SubscriptionPlans } from "./Payment Gateway/SubscriptionPlans";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import { usePageTracking } from "./utils/PageTracking";
 import { Entrance } from "./AI Analysis/Entrance";
+import { Chat } from "./AI Analysis/Chat";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./utils/DataContext";
 
@@ -51,7 +52,8 @@ function RouteswithNavBar() {
           path="/refund-and-cancellation"
           element={<RefundsAndCancellations />}
         />
-        <Route path="/aihistory" element={<Entrance/>}/>
+        <Route path="/AIhistory" element={<Entrance/>}/>
+        <Route path="/AIanalysis" element={<Chat/>}/>
       </Routes>
     </>
   );
