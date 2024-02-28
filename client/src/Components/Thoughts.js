@@ -131,7 +131,10 @@ function Thoughts() {
         "Please contribute three or more reflections to enable AI analysis for optimal insights."
       );
     } else {
-      navigate("/analyse", {
+      // navigate("/analyse", {
+      //   state: { data: topicobj.title, thoughts: thoughts },
+      // });
+      navigate("/AIanalysis", {
         state: { data: topicobj.title, thoughts: thoughts },
       });
       localStorage.setItem("sessionLoaded", "");

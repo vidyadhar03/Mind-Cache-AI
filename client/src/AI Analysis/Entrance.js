@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { trackEvent } from "../utils/PageTracking";
 import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
-import { getSessions } from "./APIUtils";
+import { getSessions } from "./ChatAPI";
 
 export function Entrance() {
   const navigate = useNavigate();
@@ -24,13 +24,18 @@ export function Entrance() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
+  const showToast = (message) => {
+    setDialogMessage(message);
+    setShowDialog(true);
+  };
+
   useEffect(() => {
     async function FetchSessions() {
       enableLoader();
-      const result = await getSessions();
+      const result = await getSessions(showToast);
       disableLoader();
       if (result.success) {
-        if (!result.data.length === 0) {
+        if (result.data.length !== 0) {
           navigate("/AIanalysis", {
             state: { sessions: result.data },
           });
@@ -42,12 +47,8 @@ export function Entrance() {
           localStorage.removeItem("sessionLoaded");
           localStorage.removeItem("email");
           localStorage.removeItem("subscriptionDetails");
-          setDialogMessage("Authentication failed, Kindly Login again!");
-          setShowDialog(true);
+          showToast("Authentication failed, Kindly Login again!");
           navigate(`/`);
-        } else {
-          setDialogMessage("Error on our side. Please retry shortly.");
-          setShowDialog(true);
         }
       }
     }
@@ -65,7 +66,8 @@ export function Entrance() {
         </div>
         <div className="mt-4 mb-8 text-center text-lg">
           No AI Insight Sessions Detected. Choose a Focus Area and initiate
-          <span className="underline mx-2">Begin AI Analysis</span> for personalized insights.
+          <span className="underline mx-2">Begin AI Analysis</span> for
+          personalized insights.
         </div>
         <div className="flex flex-col items-center mt-2 pb-16">
           {topics.map((topic, index) => (
