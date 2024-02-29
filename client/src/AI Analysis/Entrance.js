@@ -30,7 +30,7 @@ export function Entrance() {
       if (result.success) {
         if (result.data.length !== 0) {
           navigate("/AIanalysis", {
-            state: { sessions: result.data },
+            state: { sessions: result.data, }, replace:true
           });
         }
       } else {
@@ -87,11 +87,11 @@ export function Entrance() {
             </div>
           </div>
         ) : (
-          <div className="">
+          <div className="flex flex-col justify-center items-center">
             <div className="mt-4 mb-8 text-center text-lg">
               Fetching your AI Insight History.
             </div>
-            <CircularProgress />
+            <CircularProgress className="mt-8"/>
           </div>
         )}
       </div>

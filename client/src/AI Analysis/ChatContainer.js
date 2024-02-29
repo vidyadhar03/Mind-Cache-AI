@@ -115,7 +115,7 @@ export function Chat() {
 
     async function init(){
       const sessionLoaded = localStorage.getItem("sessionLoaded");
-      if (sessionLoaded === "") {
+      if (sessionLoaded === "" | sessionLoaded===null) {
         if (topicTitle) {
           StartSession();
         } else {
