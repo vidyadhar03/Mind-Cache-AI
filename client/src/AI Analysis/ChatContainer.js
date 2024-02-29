@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useRef } from "react";
 import { Toast } from "../Commons/Toast";
 import { getSessions, startSession, LoadSession, aiChat } from "./ChatAPI";
+import { ChatBar } from "./ChatBar";
+import { ChatSessions } from "./ChatSessions";
+import { MessageInput, MessageSection } from "./ChatMessages";
+import EditSession from "./EditSession";
 
 export function Chat() {
   const location = useLocation();
@@ -10,14 +15,20 @@ export function Chat() {
   const thoughts = location.state?.thoughts;
   const sessionsr = location.state?.sessions;
   const navigate = useNavigate();
-  const userid = localStorage.getItem("userid");
 
   //required state
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
   const [userInput, setUserInput] = useState("");
+  const messagesEndRef = useRef(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [editSessionlayout, setEditSessionLayout] = useState(false);
+  const [dotclickedsesh, setDotClickedSesh] = useState(null);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   //dialog
   const [showDialog, setShowDialog] = useState(false);
@@ -69,14 +80,12 @@ export function Chat() {
   }
 
   useEffect(() => {
-    // Establish WebSocket connection
     const newWs = new WebSocket(process.env.REACT_APP_WS_URL);
 
     newWs.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         if (data.messages) {
-          // Update messages state with new data
           data.messages.splice(0, 1);
           setMessages(data.messages);
         }
@@ -97,42 +106,59 @@ export function Chat() {
       console.log("WebSocket disconnected");
     };
 
-    // Cleanup function to close WebSocket connection when component unmounts
     return () => {
       newWs.close();
     };
   }, []);
 
-  useEffect(() => {
-    if (topicTitle) {
+  useEffect( () => {
+
+    async function init(){
       const sessionLoaded = localStorage.getItem("sessionLoaded");
       if (sessionLoaded === "") {
-        StartSession();
+        if (topicTitle) {
+          StartSession();
+        } else {
+          if (sessionsr && sessionsr.length > 0) {
+            loadSession(sessionsr[0]);
+            setSessions(sessionsr);
+          } else {
+            await fetchSessions();
+            loadSession(sessions[0]);
+          }
+        }
       } else {
-        LoadSession(JSON.parse(sessionLoaded));
-        fetchSessions();
+        await fetchSessions();
+        loadSession(JSON.parse(sessionLoaded));
       }
-    } else {
-      loadSession(sessionsr[0]);
-      setSessions(sessionsr);
     }
+
+    init();
   }, []);
 
-  async function fetchSessions(){
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function fetchSessions() {
+    console.log("called fetch sessions");
     const result = await getSessions(showToast);
-    if(result.success){
+    if (result.success) {
       setSessions(result.data);
-    }else{
-      if(result.logout) logout();
+    } else {
+      if (result.logout) logout();
     }
   }
 
   async function StartSession() {
+    console.log("called start session");
     const result = await startSession(topicTitle, showToast);
     if (result.success) {
       const sessions = result.data;
       setSessions(sessions);
-      sendChat(true,sessions[0]);
+      setSelectedSession(sessions[0]);
+      await sendChat(true, sessions[0]);
+      loadSession(sessions[0]);
       localStorage.setItem("sessionLoaded", JSON.stringify(sessions[0]));
     } else {
       if (result.logout) logout();
@@ -140,30 +166,100 @@ export function Chat() {
   }
 
   async function loadSession(session) {
-    //make this session selected
+    console.log("called load session");
     setSelectedSession(session);
-    //fetch the session messages and load
     const result = await LoadSession(session, showToast);
     if (result.success) {
       setMessages(result.data);
-      console.log(result.data);
     } else {
       if (result.logout) logout();
     }
   }
 
-  async function sendChat(analyse,session){
-    const result = await aiChat(analyse,session,getPrompt,userInput, setUserInput,showToast);
-    if(!result.success){
-      if(result.logout) logout();
+  async function sendChat(analyse, session) {
+    console.log("called send chat");
+    const result = await aiChat(
+      analyse,
+      session,
+      getPrompt,
+      userInput,
+      setUserInput,
+      showToast
+    );
+    if (!result.success) {
+      if (result.logout) logout();
     }
   }
 
+  function UserSessionsDiv({ isVisible }) {
+    const visibilityClass = isVisible ? "" : "hidden";
+    return (
+      <div
+        id="sessions"
+        className={`${visibilityClass} h-full md:hide-scrollbar md:block md:w-64 min-w-64 flex-shrink-0 bg-gray-200 overflow-y-auto`}
+      >
+        <ChatSessions
+          sessions={sessions}
+          selectedSession={selectedSession}
+          onSelectSession={loadSession}
+          toggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+          setDotClickedSesh={setDotClickedSesh}
+          showedit={() => {
+            setEditSessionLayout(true);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen bg-bgc font-sans">
+    <div className="min-h-screen bg-bgc font-sans">
+      {editSessionlayout && (
+        <EditSession
+          onClosedialog={() => {
+            setEditSessionLayout(false);
+          }}
+          session={dotclickedsesh}
+          updateSesh={setSessions}
+          logout={logout}
+        />
+      )}
+      <div
+        className={`fixed inset-0 z-30 transition-opacity ${
+          isSidebarOpen ? "bg-black bg-opacity-50 backdrop-blur-sm" : "hidden"
+        }`}
+        onClick={() => setSidebarOpen(false)}
+      ></div>
 
+      <ChatBar toggleSidebar={toggleSidebar} />
+      <div className="flex h-[calc(100vh-52px)]">
+        <div
+          className={`fixed z-40 inset-y-0 left-0 w-64 transition duration-300 transform ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } bg-gray-200 overflow-y-auto`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <UserSessionsDiv isVisible={true} />
+        </div>
 
-      <div></div>
+        <UserSessionsDiv isVisible={false} />
+
+        <div className=" h-parent flex-grow">
+          <div className="h-90">
+            <MessageSection
+              messages={messages}
+              messagesEndRef={messagesEndRef}
+            />
+          </div>
+          <MessageInput
+            onSendMessage={sendChat}
+            selectedSession={selectedSession}
+            userInput={userInput}
+            setUserInput={setUserInput}
+          />
+        </div>
+      </div>
 
       <Toast
         message={dialogMessage}

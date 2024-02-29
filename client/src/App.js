@@ -11,7 +11,7 @@ import { SubscriptionPlans } from "./Payment Gateway/SubscriptionPlans";
 import { SubscriptionStatus } from "./Payment Gateway/SubscriptionStatus";
 import { usePageTracking } from "./utils/PageTracking";
 import { Entrance } from "./AI Analysis/Entrance";
-import { Chat } from "./AI Analysis/Chat";
+import { Chat } from "./AI Analysis/ChatContainer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./utils/DataContext";
 

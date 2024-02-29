@@ -1,8 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../utils/PageTracking";
+import { useEffect } from "react";
 
 function NavBar() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const navbar = document.getElementById("navbar");
+    const height = navbar.getBoundingClientRect().height;
+    console.log(height);
+  }, []);
 
   const userid = localStorage.getItem("userid");
 

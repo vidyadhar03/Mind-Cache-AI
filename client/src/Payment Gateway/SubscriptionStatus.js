@@ -50,7 +50,7 @@ export function SubscriptionStatus() {
           </div>
         )}
         <button
-          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium mt-8 mb-60"
+          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium mt-8 mb-60"
           onClick={() => {
             navigate(`/`);
           }}

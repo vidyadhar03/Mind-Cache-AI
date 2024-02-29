@@ -139,6 +139,8 @@ export async function aiChat(analyse, session, getPrompt, userInput, setUserInpu
       const subDetails = getSubDetails();
       subDetails.aiInteractionCount = json.updatedAICount;
       setSubDetails(subDetails);
+      result.success = true;
+      return result;
     } catch (e) {
       console.log(e);
       return result;
@@ -147,5 +149,6 @@ export async function aiChat(analyse, session, getPrompt, userInput, setUserInpu
     toast(
       "You've hit your AI interaction limit! Keep the conversation going by subscribing."
     );
+    return result;
   }
 }

@@ -1,8 +1,9 @@
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
+import { useState } from "react";
 
 function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
-  let newThought = "";
+  const [newThought,setNewThought] = useState("");
 
   async function handleCreate() {
     if (newThought !== "") {
@@ -24,7 +25,7 @@ function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
   }
 
   const addNewThought = (event) => {
-    newThought = event.target.value;
+    setNewThought(event.target.value);
   };
 
   return (

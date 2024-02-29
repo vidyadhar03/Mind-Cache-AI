@@ -18,7 +18,9 @@ export const SubscriptionPlans = () => {
     <div>
       <NavBar />
 
-      <div className=" flex flex-col px-6 pt-8 pb-20 bg-bgc font-sans items-center">
+      <div className=" flex flex-col px-6 pt-8 pb-20 bg-bgc font-sans ">
+
+        <div className="w-full flex flex-col items-center">
         <div className="text-black text-center font-bold text-xl md:text-4xl">
           Subscription Plans
         </div>
@@ -29,6 +31,8 @@ export const SubscriptionPlans = () => {
           deepens your journey of self-reflection, offering profound insights
           for an enriched personal exploration.
         </div>
+        </div>
+
 
         <div className="flex flex-col items-center md:flex-row md:justify-center mt-8 ">
           <div className="px-4 py-8 flex-col border-2 rounded-xl shadow-lg  md:mx-4 sm:w-96 text-center bg-card">
@@ -101,6 +105,7 @@ export const SubscriptionPlans = () => {
             </button>
           </div>
         </div>
+
       </div>
       <Footer />
     </div>

@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { TextField } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditSession({ onClosedialog, session,updateSesh,logout }) {
+function EditSession({ onClosedialog, session, updateSesh, logout }) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
 
-
   async function UpdateData() {
     try {
-      const response = await fetch(base_url+"editchatsession", {
+      const response = await fetch(base_url + "editchatsession", {
         method: "POST",
         headers: {
           authorization: localStorage.getItem("usertoken"),
@@ -32,57 +32,65 @@ function EditSession({ onClosedialog, session,updateSesh,logout }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
-      console.log(json)
-      updateSesh(json.data.reverse())
-      onClosedialog()
+      console.log(json);
+      updateSesh(json.data.reverse());
+      onClosedialog();
     } catch (e) {
       console.log(e);
     }
   }
 
-  function EditData(){
+  function EditData() {
     if (del === "yes") {
-        UpdateData()
+      UpdateData();
     } else {
       if (edit === "") {
         console.log("no change in data");
-      }else{
-        UpdateData()
+      } else {
+        UpdateData();
       }
     }
   }
 
   return (
     <div>
-      <div className="fixed z-50 inset-0 flex items-center justify-center backdrop-blur-sm">
-        <div className="py-4 px-16 bg-white border shadow-xl rounded-lg">
-          <div className="flex-col  items-center">
-            <div className="text-black font-medium text-xl text-center">
+      <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm font-sans">
+        <div className="border shadow-xl rounded-lg bg-gray-50 w-11/12 sm:w-96">
+          <div className="flex-col  items-center   py-2 sm:py-4 px-4 sm:px-8">
+            <div className="text-black font-medium text-base text-center">
               Edit your Session
             </div>
 
             <div className=" mt-4 mb-2 flex justify-center">
-              <textarea
-                className="border-2 p-2 w-parent rounded-md w-96"
+              <TextField
+                id="outlined-basic"
+                label="Update"
+                variant="outlined"
+                multiline
+                rows={2}
+                fullWidth
                 defaultValue={session.sessionTitle}
+                InputLabelProps={{
+                  style: { fontFamily: "poppins" },
+                }}
                 onChange={(e) => {
                   setEdit(e.target.value);
                 }}
-              ></textarea>
+              />
             </div>
 
             <div className="flex justify-center ">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 mr-1"
+                className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
                 onClick={() => {
-                    EditData();
+                  EditData();
                 }}
               >
                 Update
               </button>
 
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex-1 ml-1"
+                className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
                 onClick={() => {
                   setdelconf(true);
                 }}
@@ -94,7 +102,7 @@ function EditSession({ onClosedialog, session,updateSesh,logout }) {
             <div className="flex flex-col mt-2">
               {delconf && (
                 <button
-                  className="w-full bg-red-400 border-2 hover:bg-red-600 text-black font-bold py-2 px-4 rounded "
+                  className="py-2 flex-1 bg-red-600 hover:bg-red-700 text-white border-2 text-base rounded-lg "
                   onClick={() => {
                     setdelconf(false);
                     del = "yes";
@@ -104,8 +112,9 @@ function EditSession({ onClosedialog, session,updateSesh,logout }) {
                   Delete chat session for sure?
                 </button>
               )}
+
               <button
-                className="w-full bg-white border-2 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded mt-2"
+                className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
                 onClick={() => {
                   onClosedialog();
                 }}

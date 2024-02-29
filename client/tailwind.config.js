@@ -8,6 +8,11 @@ module.exports = {
         90: "93%",
         10: "7%",
       },
+      width: {
+        80: "86%",
+        90: "93%",
+        10: "7%",
+      },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
         honk: ["'Honk'", "system-ui"],
