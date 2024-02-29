@@ -36,8 +36,8 @@ router.post("/webhook", async (req, res) => {
 
       if (sig === expectedSig) {
         // console.log("Valid signature. Processing event...");
-        // console.log("subscription object", body.payload.subscription.entity);
-        // console.log("payment object:", body.payload.payment.entity);
+        console.log("subscription object of charged", body.payload.subscription.entity);
+        console.log("payment object of charged:", body.payload.payment.entity);
 
         const subscription = body.payload.subscription.entity;
         const payment = body.payload.payment.entity;
@@ -90,7 +90,7 @@ router.post("/webhook", async (req, res) => {
       if (sig === expectedSigc) {
         // console.log("Valid signature. Processing event...");
         // Process the event here (e.g., update subscription status)
-        // console.log("subscription object", body.payload.subscription.entity);
+        console.log("subscription object of cancellation", body.payload.subscription.entity);
 
         const subscription = body.payload.subscription.entity;
 

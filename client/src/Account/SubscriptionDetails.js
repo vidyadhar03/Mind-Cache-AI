@@ -92,7 +92,7 @@ export const SubscriptionDetails = ({
               <ul className=" pl-6 mt-4  text-center md:text-left">
                 <li className="mt-2 flex items-center">
                   <img src="/check.png" className="h-3 w-auto mr-2" alt="" />
-                  150 AI Interactions per month.
+                  300 AI Interactions per month.
                 </li>
                 <li className="mt-2 flex items-center">
                   <img src="/check.png" className="h-3 w-auto mr-2" alt="" />
@@ -107,7 +107,7 @@ export const SubscriptionDetails = ({
               <ul className=" pl-6 mt-4 text-sm md:text-base  text-center md:text-left">
                 <li className="mt-2 flex items-center">
                   <img src="/check.png" className="h-3 w-auto mr-2" alt="" />
-                  200 AI Interactions per month.
+                  400 AI Interactions per month.
                 </li>
                 <li className="mt-2 flex items-center">
                   <img src="/check.png" className="h-3 w-auto mr-2" alt="" />
