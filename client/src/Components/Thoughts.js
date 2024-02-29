@@ -49,6 +49,7 @@ function Thoughts() {
   function logout() {
     localStorage.removeItem("userid");
     localStorage.removeItem("usertoken");
+    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
     localStorage.removeItem("subscriptionDetails");
@@ -57,7 +58,7 @@ function Thoughts() {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     const fetchThoughts = async () => {
       try {
         const response = await fetch(base_url + "thoughts/" + topicobj._id, {

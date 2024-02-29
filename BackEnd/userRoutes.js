@@ -8,6 +8,7 @@ const { User, Topic, Thought } = require("./models/schemas");
 const {
   vsignup,
   vlogin,
+  vupdateuser,
   vtopics,
   vaddtopic,
   vupdatetopic,
@@ -59,6 +60,7 @@ router.post("/signup", async (req, res) => {
       message: "User signed up succesfully!",
       token: token,
       userid: foundUser._id.toString(),
+      name : foundUser.name,
       subscriptionDetails: foundUser.subscriptionDetails,
     });
   } catch (e) {
@@ -86,6 +88,7 @@ router.post("/login", async (req, res) => {
           message: "Logged in!",
           token: token,
           userid: found._id.toString(),
+          name : found.name,
           subscriptionDetails: found.subscriptionDetails,
         });
       } else {
@@ -99,6 +102,28 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
+
+router.post("/updateuser", auth, async (req,res)=>{
+  const response = vupdateuser(req.body);
+  if (!response.success) {
+    return res
+      .status(400)
+      .json({ message: "Inputs are invalid", errors: response.error.issues });
+  }
+  const { usermail,name } = req.body;
+  try{
+    const found = await User.findOne({email:usermail});
+    if(!found){
+      return res.status(400).json({message:"User does not exist!"});
+    }
+    found.name = name;
+    await found.save();
+    res.status(200).json({message:"Username updated!"});
+  }catch(e){
+    console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+  }
+})
 
 //TOPICS CRUD
 router.get("/topics/:userid", auth, async (req, res) => {

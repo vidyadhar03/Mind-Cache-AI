@@ -21,6 +21,16 @@ function vlogin(obj) {
   return res;
 }
 
+//update user
+function vupdateuser(obj) {
+  const schema = z.object({
+    usermail: z.string(),
+    name: z.string(),
+  });
+  const res = schema.safeParse(obj);
+  return res;
+}
+
 //topics
 function vtopics(userid) {
   const schema = z.string().min(1);
@@ -185,6 +195,7 @@ function vupdateDetails(obj){
 module.exports = {
   vsignup,
   vlogin,
+  vupdateuser,
   vtopics,
   vaddtopic,
   vupdatetopic,

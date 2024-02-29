@@ -42,6 +42,7 @@ export function Chat() {
   function logout() {
     localStorage.removeItem("userid");
     localStorage.removeItem("usertoken");
+    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
     localStorage.removeItem("subscriptionDetails");

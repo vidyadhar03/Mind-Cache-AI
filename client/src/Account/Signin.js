@@ -72,6 +72,7 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
+        localStorage.setItem("username", json.name);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
@@ -117,6 +118,7 @@ function SignIn() {
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
+        localStorage.setItem("username", json.name);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {

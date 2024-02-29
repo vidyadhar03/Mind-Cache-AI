@@ -51,6 +51,7 @@ export const SubscriptionDetails = ({
       if (response.status === 403) {
         localStorage.removeItem("userid");
         localStorage.removeItem("usertoken");
+        localStorage.removeItem("username");
         localStorage.removeItem("sessionLoaded");
         localStorage.removeItem("email");
         localStorage.removeItem("subscriptionDetails");
