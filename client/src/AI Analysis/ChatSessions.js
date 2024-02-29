@@ -1,3 +1,5 @@
+import { trackEvent } from "../utils/PageTracking";
+
 export const ChatSessions = ({
   sessions,
   selectedSession,
@@ -19,6 +21,12 @@ export const ChatSessions = ({
         : "bg-first-blue"
     }`}
           onClick={(e) => {
+            trackEvent(
+              "click",
+              "Buttons",
+              "Chat Session",
+              "Chat session from chat page"
+            );
             onSelectSession(session);
             if (isSidebarOpen) toggleSidebar();
             e.stopPropagation();
@@ -27,18 +35,22 @@ export const ChatSessions = ({
         >
           <div className="w-80 overflow-hidden">{session.sessionTitle}</div>
           <div className="min-w-10">
-          <img
-            src="./3dotlogo.png"
-            className="w-8 h-8 cursor-pointer"
-            onClick={() => {
-              setDotClickedSesh(session);
-              showedit();
-            }}
-            alt="Edit"
-          />
+            <img
+              src="./3dotlogo.png"
+              className="w-8 h-8 cursor-pointer"
+              onClick={() => {
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Edit Chat Session",
+                  "Edit Chat session from chat page"
+                );
+                setDotClickedSesh(session);
+                showedit();
+              }}
+              alt="Edit"
+            />
           </div>
-
-
         </div>
       ))}
     </div>

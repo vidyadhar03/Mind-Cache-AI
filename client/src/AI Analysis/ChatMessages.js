@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { trackEvent } from "../utils/PageTracking";
 
 // MessageSection.js
 export const MessageSection = ({ messages, messagesEndRef }) => {
@@ -44,6 +45,7 @@ export const MessageInput = ({
   setUserInput,
 }) => {
   const handleSubmit = (e) => {
+    trackEvent("click", "Buttons", "Send Chat", "Send Message from chat page");
     e.preventDefault(); // This prevents the default form submission behavior
     onSendMessage(false, selectedSession);
   };

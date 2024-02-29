@@ -278,7 +278,7 @@ function HomePage() {
             <div className="text-xl md:text-4xl font-medium">Free Plan</div>
             <div className="text-sm mt-2">Explorer</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">10 AI Interactions per month.</li>
+              <li className="mt-2">15 AI Interactions per month.</li>
               <li className="mt-2">10 Focus area creation limit.</li>
               <li className="mt-2">30 Reflections per Focus area.</li>
             </ul>
@@ -302,7 +302,7 @@ function HomePage() {
             <div className="text-xl md:text-4xl font-medium">Monthly Plan</div>
             <div className="text-sm mt-2">Enhancer</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">150 AI Interactions per month.</li>
+              <li className="mt-2">300 AI Interactions per month.</li>
               <li className="mt-2">Unlimited Focus area creation.</li>
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
@@ -329,7 +329,7 @@ function HomePage() {
             <div className="text-xl md:text-4xl font-medium">Annual Plan</div>
             <div className="text-sm mt-2">Visionary</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">200 AI Interactions per month.</li>
+              <li className="mt-2">400 AI Interactions per month.</li>
               <li className="mt-2">Unlimited Focus area creation.</li>
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>

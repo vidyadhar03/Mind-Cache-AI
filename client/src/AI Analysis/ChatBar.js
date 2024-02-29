@@ -16,6 +16,7 @@ export const ChatBar = ({ onMenuClick,toggleSidebar }) => {
           alt=""
         //   onClick={onMenuClick}
           onClick={(e) => {
+            trackEvent("click", "Buttons", "Menu Icon", "Menu Icon from chat page");
             toggleSidebar();
             e.stopPropagation();
           }}

@@ -215,6 +215,7 @@ function SignIn() {
         className="mt-4 cursor-pointer underline text-center text-base hover:text-blue-800 "
         onClick={() => {
           showsignup ? setShowsignup(false) : setShowsignup(true);
+          trackEvent("click", "Buttons", "Create a new account", "Create a new account from sign page");
         }}
       >
         {showsignup ? "Already an user? LogIn" : "Create a new Account"}

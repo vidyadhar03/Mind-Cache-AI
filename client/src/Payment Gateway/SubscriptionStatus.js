@@ -2,6 +2,7 @@ import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
 export function SubscriptionStatus() {
   const navigate = useNavigate();
@@ -52,6 +53,12 @@ export function SubscriptionStatus() {
         <button
           className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium mt-8 mb-60"
           onClick={() => {
+            trackEvent(
+              "click",
+              "Buttons",
+              "Go to Dashboard",
+              "Go to Dashboard clicked from subscription status"
+            );
             navigate(`/`);
           }}
         >

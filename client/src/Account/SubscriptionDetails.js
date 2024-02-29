@@ -155,7 +155,7 @@ export const SubscriptionDetails = ({
           You are on Free Plan
         </div>
         <div className="w-full mt-4 text-sm text-center md:text-left">
-          Elevate your journaling with our GPT-powered AI, offering up to 200
+          Elevate your journaling with our GPT-powered AI, offering up to 400
           insightful interactions monthly. This AI enhancement enriches your
           self-reflection journey, providing deeper insights for a more profound
           introspective experience. Subscribe now to unlock the full potential

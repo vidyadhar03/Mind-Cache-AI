@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
 
 function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
   const [newTopic,setNewTopic] = useState("");
 
   async function handleCreate(event) {
+    trackEvent(
+      "click",
+      "Buttons",
+      "Add",
+      "Add from add topic layout"
+    );
     event.preventDefault();
     if (newTopic !== "") {
       const result = await AddTopicAPI(newTopic,toast);
@@ -56,7 +63,15 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
 
             <button
               className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg ml-2"
-              onClick={onClosedialog}
+              onClick={()=>{
+                onClosedialog();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Cancel",
+                  "Cancel clicked from add topic layout"
+                );
+              }}
             >
               Cancel
             </button>

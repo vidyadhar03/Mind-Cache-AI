@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { TextField } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
+
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditSession({ onClosedialog, session, updateSesh, logout }) {
@@ -83,6 +85,12 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
               <button
                 className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
                 onClick={() => {
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Edit Session",
+                    "Edit Session from chat page"
+                  );
                   EditData();
                 }}
               >
@@ -92,6 +100,12 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
               <button
                 className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
                 onClick={() => {
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Delete",
+                    "Delete Session from chat page"
+                  );
                   setdelconf(true);
                 }}
               >
@@ -104,6 +118,12 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
                 <button
                   className="py-2 flex-1 bg-red-600 hover:bg-red-700 text-white border-2 text-base rounded-lg "
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Confirm Delete",
+                      "Confirm Delete from chat page"
+                    );
                     setdelconf(false);
                     del = "yes";
                     UpdateData();
@@ -116,6 +136,12 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
               <button
                 className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
                 onClick={() => {
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Cancel",
+                    "Cancel from chat page"
+                  );
                   onClosedialog();
                 }}
               >

@@ -2,11 +2,18 @@ import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
 export const SubscriptionPlans = () => {
   const navigate = useNavigate();
 
   function Subscribe(plan) {
+    trackEvent(
+      "click",
+      "Buttons",
+      "Subscribe",
+      `${plan} subscribe from Landing Page`
+    );
     navigate(`/subscription`, { state: { plan } });
   }
 
@@ -27,7 +34,7 @@ export const SubscriptionPlans = () => {
 
         <div className="text-sm text-center md:w-2/3 mt-4">
           Upgrade your reflective writing with our AI powered by GPT, providing
-          you with up to 200 insightful exchanges monthly. This AI feature
+          you with up to 400 insightful exchanges monthly. This AI feature
           deepens your journey of self-reflection, offering profound insights
           for an enriched personal exploration.
         </div>
@@ -39,7 +46,7 @@ export const SubscriptionPlans = () => {
             <div className="text-xl md:text-4xl font-medium">Free Plan</div>
             <div className="text-sm mt-2">Explorer</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">10 AI Interactions per month.</li>
+              <li className="mt-2">15 AI Interactions per month.</li>
               <li className="mt-2">10 Focus area creation limit.</li>
               <li className="mt-2">30 Reflections per Focus area.</li>
             </ul>
@@ -63,7 +70,7 @@ export const SubscriptionPlans = () => {
             <div className="text-xl md:text-4xl font-medium">Monthly Plan</div>
             <div className="text-sm mt-2">Enhancer</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">150 AI Interactions per month.</li>
+              <li className="mt-2">300 AI Interactions per month.</li>
               <li className="mt-2">Unlimited Focus area creation.</li>
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
@@ -90,7 +97,7 @@ export const SubscriptionPlans = () => {
             <div className="text-xl md:text-4xl font-medium">Annual Plan</div>
             <div className="text-sm mt-2">Visionary</div>
             <ul className="list-disc pl-6 mt-4 md:text-lg text-left">
-              <li className="mt-2">200 AI Interactions per month.</li>
+              <li className="mt-2">400 AI Interactions per month.</li>
               <li className="mt-2">Unlimited Focus area creation.</li>
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>

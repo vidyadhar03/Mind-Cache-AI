@@ -13,15 +13,15 @@ export function setSubDetails(subscriptionDetails) {
 export function isEligible() {
   const subscriptionDetails = getSubDetails();
   const currentCount = subscriptionDetails.aiInteractionCount;
-  const planLimit = subscriptionDetails.isSubscribed? getPlanLimit(subscriptionDetails.plan):10;
+  const planLimit = subscriptionDetails.isSubscribed? getPlanLimit(subscriptionDetails.plan):15;
   return planLimit-currentCount>0?true:false;
 }
 
 export function getPlanLimit(plan) {
   if (plan === "Monthly") {
-    return 150;
+    return 300;
   } else {
-    return 200;
+    return 400;
   }
 }
 

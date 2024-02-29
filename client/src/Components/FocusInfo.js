@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackEvent } from "../utils/PageTracking";
 
 export function FocusAreaInfo({ onClosedialog }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -20,6 +21,7 @@ export function FocusAreaInfo({ onClosedialog }) {
             alt=""
             className="h-6 w-6 rounded-full mb-2"
             onClick={() => {
+              trackEvent("click", "Buttons", "Cancel", "Cancel from topics info");
               setIsVisible(false);
               setTimeout(onClosedialog, 500);
             }}

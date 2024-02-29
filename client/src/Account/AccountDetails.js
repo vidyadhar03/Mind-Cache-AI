@@ -3,6 +3,7 @@ import { TextField } from "@mui/material";
 import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
 import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 export const AccountDetails = () => {
@@ -109,7 +110,10 @@ export const AccountDetails = () => {
       {/* <div className="mt-4 text-base font-medium underline">Reset Password</div> */}
       <div
         className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm md:text-base mt-8 cursor-pointer"
-        onClick={AddUserName}
+        onClick={()=>{
+          trackEvent("click", "Buttons", "Update User Details", "Update from Account details page");
+          AddUserName();
+        }}
       >
         Update Details
       </div>

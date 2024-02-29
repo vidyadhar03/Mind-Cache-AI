@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TextField } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -137,6 +138,12 @@ function EditData({
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
               onClick={() => {
                 UpdateData();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Update",
+                  "Update clicked from edit data page"
+                );
               }}
             >
               Update
@@ -146,6 +153,12 @@ function EditData({
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
               onClick={() => {
                 setdelconf(true);
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Delete",
+                  "Delete clicked from edit data page"
+                );
               }}
             >
               Delete
@@ -160,6 +173,12 @@ function EditData({
                   setdelconf(false);
                   del = "yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Confirm Delete",
+                    "COnfirm Delete clicked from edit data page"
+                  );
                 }}
               >
                 Delete for sure?
@@ -171,6 +190,12 @@ function EditData({
                 onClick={() => {
                   pin = (datapassed.pinned)?"no":"yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Pin/Unpin",
+                    "Pin/Unpin clicked from edit data page"
+                  );
                 }}
               >
                 <img src="/pinned.png" className="h-6 w-6 mr-2" alt=""/>
@@ -182,6 +207,12 @@ function EditData({
                 onClick={()=>{
                   collapse = (datapassed.collapse)?"no":"yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Show/Hide",
+                    "Show/Hide clicked from edit data page"
+                  );
                 }}
               >
                 <div>{(datapassed.collapse)?"Show Reflection":"Hide Reflection"}</div>
@@ -189,7 +220,16 @@ function EditData({
             )}
             <button
               className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
-              onClick={onClosedialog}
+              onClick={()=>{
+                onClosedialog();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Cancel",
+                  "Cancel clicked from edit data page"
+                );
+              }}
+              
             >
               Cancel
             </button>
