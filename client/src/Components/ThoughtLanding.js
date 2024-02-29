@@ -9,7 +9,7 @@ export function ThoughtLanding({ topic, emptydata, setThoughts, toast }) {
   async function handleCreate(event) {
     event.preventDefault();
     if (thought !== "") {
-      const result = await AddThoughtAPI(topic._id, thought);
+      const result = await AddThoughtAPI(topic._id, thought,toast);
       if (result.success) {
         setThoughts(result.data);
         emptydata(false);
@@ -35,7 +35,7 @@ export function ThoughtLanding({ topic, emptydata, setThoughts, toast }) {
 
         <div className="md:flex-1 flex justify-center  px-4">
           <div className="flex flex-col  justify-center">
-            <div className="my-8 text-center font-medium text-lg">
+            <div className="my-8 text-center font-medium md:text-lg">
               Begin your journey of introspection with{" "}
               <span className="font-semibold">{topic.title}</span>. What's the
               first thought that comes to mind?

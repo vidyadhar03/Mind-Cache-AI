@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import NavBar from "../Commons/NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
-import Loader from "../Commons/Loader";
 import Footer from "../Commons/Footer";
+import { CircularProgress } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 export function CreateSubscription() {
@@ -11,14 +12,8 @@ export function CreateSubscription() {
   const location = useLocation();
   const plan = location.state?.plan;
   const [subId, setSubId] = useState("");
-  //loader
-  const [isLoading, setIsLoading] = useState(false);
-  const enableLoader = () => {
-    setIsLoading(true);
-  };
-  const disableLoader = () => {
-    setIsLoading(false);
-  };
+  const [gotSubLink, setGotSubLink] = useState(false);
+
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -63,7 +58,7 @@ export function CreateSubscription() {
   useEffect(() => {
     window.scrollTo(0, 0);
     async function getSubscriptionlink() {
-      enableLoader();
+      // enableLoader();
       try {
         const response = await fetch(`${base_url}subscription`, {
           method: "POST",
@@ -79,6 +74,7 @@ export function CreateSubscription() {
         if (response.status === 403) {
           localStorage.removeItem("userid");
           localStorage.removeItem("usertoken");
+          localStorage.removeItem("username");
           localStorage.removeItem("sessionLoaded");
           localStorage.removeItem("email");
           localStorage.removeItem("subscriptionDetails");
@@ -87,10 +83,9 @@ export function CreateSubscription() {
           navigate(`/`);
         }
         if (!response.ok) {
-          const data = await response.json();
-
-          console.log(data);
-
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
@@ -99,10 +94,11 @@ export function CreateSubscription() {
         loadRazorpayScript(() => {
           setupRazorpayCheckout(data.id);
         });
-        disableLoader();
+        setGotSubLink(true);
+        // disableLoader();
       } catch (e) {
-        console.log(e);
-        disableLoader();
+        // console.log(e);
+        // disableLoader();
         setDialogMessage("Payment request failed, please try again!");
         setShowDialog(true);
       }
@@ -145,7 +141,7 @@ export function CreateSubscription() {
         image: "/mindcachelogo.png",
         handler: function (response) {
           // Handle success: you can use response.razorpay_payment_id, response.razorpay_subscription_id
-          console.log("response after the payment:", response);
+          // console.log("response after the payment:", response);
           const data = {
             paymentid: response.razorpay_payment_id,
             subscriptionId: response.razorpay_subscription_id,
@@ -170,8 +166,10 @@ export function CreateSubscription() {
         console.error("Payment failed:", response);
         // alert("Payment Failed: " + response.error.description);
         const status = "failure";
-        const errord= response.error.description;
-        navigate(`/subscription-status`, { state: { status:status,error:errord } });
+        const errord = response.error.description;
+        navigate(`/subscription-status`, {
+          state: { status: status, error: errord },
+        });
       });
       rzp.open();
     } catch (error) {
@@ -181,7 +179,6 @@ export function CreateSubscription() {
 
   return (
     <div className="bg-bgc font-sans">
-      {isLoading && <Loader />}
       <NavBar />
       <div className="p-6 flex flex-col justify-center items-center ">
         <div>
@@ -190,35 +187,56 @@ export function CreateSubscription() {
         <div className="text-center text-2xl md:text-4xl font-semibold mt-8">
           {plan === "Monthly" ? "Monthly" : "Annual"} Plan Subscription
         </div>
-        <PricingLayout />
-        <div className=" text-center text-xl">
-          Key benefits of the selected plan:
-        </div>
-        <div className=" mb-4 px-4 py-2 ">
-          {plan_points.map((point, index) => (
-            <ul key={index}>
-              <li>
-                <div className="flex items-center mt-2">
-                  <img src="/check.png" className="h-4 w-auto mr-4" alt="" />
-                  <div>{point}</div>
-                </div>
-              </li>
-            </ul>
-          ))}
-        </div>
-        <div className="text-base my-4">
-          <span className="text-red-600 font-semibold text-lg">Note: </span>By
-          pressing 'Proceed for Payment', you'll be directed to another tab to
-          complete your payment. Ensure you revisit this tab for your
-          subscription info.
-        </div>
-        <button
-          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
-          onClick={() => setupRazorpayCheckout(subId)}
-          disabled={!subId}
-        >
-          Proceed to payment.
-        </button>
+        {gotSubLink ? (
+          <div className="flex flex-col justify-center items-center">
+            <PricingLayout />
+            <div className=" text-center text-xl">
+              Key benefits of the selected plan:
+            </div>
+            <div className=" mb-4 px-4 py-2 ">
+              {plan_points.map((point, index) => (
+                <ul key={index}>
+                  <li>
+                    <div className="flex items-center mt-2">
+                      <img
+                        src="/check.png"
+                        className="h-4 w-auto mr-4"
+                        alt=""
+                      />
+                      <div>{point}</div>
+                    </div>
+                  </li>
+                </ul>
+              ))}
+            </div>
+            <div className="text-sm my-4">
+              By pressing 'Proceed for Payment', you'll be directed to Razorpay
+              payment tab to complete your payment.
+            </div>
+            <button
+              className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
+              onClick={() => {
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Proceed to payment",
+                  "Proceed to payment from Subscription creation page"
+                );
+                setupRazorpayCheckout(subId);
+              }}
+              disabled={!subId}
+            >
+              Proceed to payment
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center text-center">
+            <CircularProgress className="my-4" />
+            <div className="mb-60 mt-8 ">
+              Your Subscription is being created. Give us a short moment.
+            </div>
+          </div>
+        )}
       </div>
       <div className="mt-40">
         <Footer />

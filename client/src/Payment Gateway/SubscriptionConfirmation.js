@@ -38,6 +38,7 @@ const SubscriptionConfirmation = () => {
         if (response.status === 403) {
           localStorage.removeItem("userid");
           localStorage.removeItem("usertoken");
+          localStorage.removeItem("username");
           localStorage.removeItem("sessionLoaded");
           localStorage.removeItem("email");
           localStorage.removeItem("subscriptionDetails");
@@ -47,7 +48,8 @@ const SubscriptionConfirmation = () => {
         }
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         // disableLoader();
@@ -56,7 +58,7 @@ const SubscriptionConfirmation = () => {
         const status = "active";
         navigate(`/subscription-status`, { state: { status } });
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         setDialogMessage("Something went wrong, Try again!.");
         setShowDialog(true);
       }

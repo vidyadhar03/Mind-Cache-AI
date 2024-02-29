@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
 const Footer = () => {
   return (
@@ -17,7 +18,7 @@ const Footer = () => {
               />
             </a>
             <a
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/people/Mind-Cache-AI/61556630472651/?mibextid=ZbWKwL"
               style={{ width: "48px", height: "48px" }}
             >
               <img

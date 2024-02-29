@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { setSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -32,14 +33,8 @@ function SignIn() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
-  if (plan) {
-    console.log("exists");
-  } else {
-    console.log("doesnt exist");
-  }
-
   function checkForm() {
-    console.log(email, password);
+    // console.log(email, password);
     if (email === "" || password === "") {
       setDialogMessage("Email and password can not be empty!");
       setShowDialog(true);
@@ -50,6 +45,7 @@ function SignIn() {
 
   const SignUp = async (e) => {
     e.preventDefault();
+    trackEvent("click", "Buttons", "SignUp", "SignUP from SignIn page");
     if (checkForm()) {
       enableLoader();
       try {
@@ -67,26 +63,27 @@ function SignIn() {
 
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          // console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        setDialogMessage("Sign Up successfull!");
-        setShowDialog(true);
         disableLoader();
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
+        localStorage.setItem("username", json.name);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
-          navigate(`/subscription`, { state: { plan } });
+          navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
-          navigate(`/topics`);
+          navigate(`/topics`, { replace: true });
         }
       } catch (e) {
         //todo - update UI to user
-        setDialogMessage("Sign Up Failed!");
-        setShowDialog(true);
+        // setDialogMessage("Sign Up Failed!");
+        // setShowDialog(true);
         disableLoader();
         console.error(e);
       }
@@ -95,6 +92,7 @@ function SignIn() {
 
   const LogIn = async (e) => {
     e.preventDefault();
+    trackEvent("click", "Buttons", "LogIn", "LogIn from SignIn page");
     if (checkForm()) {
       enableLoader();
       try {
@@ -111,26 +109,26 @@ function SignIn() {
 
         if (!response.ok) {
           const json = await response.json();
-          console.log(json);
+          // console.log(json);
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        setDialogMessage("Log In successfull!");
-        setShowDialog(true);
         disableLoader();
         const json = await response.json();
         localStorage.setItem("usertoken", json.token);
         localStorage.setItem("userid", json.userid);
+        localStorage.setItem("username", json.name);
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
-          navigate(`/subscription`, { state: { plan } });
+          navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
-          navigate(`/topics`);
+          navigate(`/topics`, { replace: true });
         }
       } catch (e) {
-        setDialogMessage("Login In failed!");
-        setShowDialog(true);
+        // setDialogMessage("Login In failed!");
+        // setShowDialog(true);
         disableLoader();
         console.error(e);
       }
@@ -158,7 +156,7 @@ function SignIn() {
 
       {plan ? (
         <div className="text-center font-semibold my-10 mx-2">
-          Kindly create your account before we proceed for subscription.
+          Please set up your account to continue with the subscription process.
         </div>
       ) : (
         <div className="text-center my-10 font-semibold mx-2">
@@ -217,6 +215,12 @@ function SignIn() {
         className="mt-4 cursor-pointer underline text-center text-base hover:text-blue-800 "
         onClick={() => {
           showsignup ? setShowsignup(false) : setShowsignup(true);
+          trackEvent(
+            "click",
+            "Buttons",
+            "Create a new account",
+            "Create a new account from sign page"
+          );
         }}
       >
         {showsignup ? "Already an user? LogIn" : "Create a new Account"}

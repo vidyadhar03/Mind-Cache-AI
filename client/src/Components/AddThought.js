@@ -1,13 +1,16 @@
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
+import { useState } from "react";
+import { trackEvent } from "../utils/PageTracking";
 
-function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
-  let newThought = "";
+function AddThought({ onClosedialog, topic, setThoughts, toast, logout }) {
+  const [newThought, setNewThought] = useState("");
 
   async function handleCreate() {
+    trackEvent("click", "Buttons", "Add", "Add from add thought layout");
     if (newThought !== "") {
-      const result = await AddThoughtAPI(topic._id, newThought);
-      console.log(result);
+      const result = await AddThoughtAPI(topic._id, newThought, toast);
+      // console.log(result);
       if (result.success) {
         setThoughts(result.data);
         onClosedialog();
@@ -24,7 +27,7 @@ function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
   }
 
   const addNewThought = (event) => {
-    newThought = event.target.value;
+    setNewThought(event.target.value);
   };
 
   return (
@@ -69,7 +72,15 @@ function AddThought({ onClosedialog, topic, setThoughts,toast,logout }) {
 
             <button
               className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg ml-2"
-              onClick={onClosedialog}
+              onClick={() => {
+                onClosedialog();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Cancel",
+                  "Cancel clicked from add thought layout"
+                );
+              }}
             >
               Cancel
             </button>

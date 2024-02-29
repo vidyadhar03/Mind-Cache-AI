@@ -8,6 +8,11 @@ module.exports = {
         90: "93%",
         10: "7%",
       },
+      width: {
+        80: "86%",
+        90: "93%",
+        10: "7%",
+      },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
         honk: ["'Honk'", "system-ui"],
@@ -28,5 +33,19 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Other plugins...
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.hide-scrollbar': {
+          '-ms-overflow-style': 'none', /* IE and Edge */
+          'scrollbar-width': 'none', /* Firefox */
+          '&::-webkit-scrollbar': {
+            display: 'none', /* Chrome, Safari, Opera*/
+          }
+        },
+      }
+      addUtilities(newUtilities, ['responsive']);
+    }
+  ],
 };

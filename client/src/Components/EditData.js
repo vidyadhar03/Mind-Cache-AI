@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TextField } from "@mui/material";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -50,10 +51,10 @@ function EditData({
           thought: datapassed.thought,
           edit: edit,
           del: del,
-          collapse: collapse
+          collapse: collapse,
         });
       }
-      console.log(req_body);
+      // console.log(req_body);
       const response = await fetch(api_url, {
         method: "POST",
         body: req_body,
@@ -66,6 +67,8 @@ function EditData({
         logout();
       }
       if (!response.ok) {
+        const json = await response.json();
+        toast(json.message);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
@@ -81,13 +84,19 @@ function EditData({
       pin = "";
       onClosedialog();
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       toast("something went wrong, try again later!");
     }
   }
 
   function UpdateData() {
-    if (del === "yes" || pin === "yes" || pin==="no"|| collapse === "yes" || collapse ==="no") {
+    if (
+      del === "yes" ||
+      pin === "yes" ||
+      pin === "no" ||
+      collapse === "yes" ||
+      collapse === "no"
+    ) {
       EditData();
     } else {
       if (edit === "") {
@@ -135,6 +144,12 @@ function EditData({
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg mr-1"
               onClick={() => {
                 UpdateData();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Update",
+                  "Update clicked from edit data page"
+                );
               }}
             >
               Update
@@ -144,6 +159,12 @@ function EditData({
               className="py-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-lg ml-1"
               onClick={() => {
                 setdelconf(true);
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Delete",
+                  "Delete clicked from edit data page"
+                );
               }}
             >
               Delete
@@ -158,6 +179,12 @@ function EditData({
                   setdelconf(false);
                   del = "yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Confirm Delete",
+                    "COnfirm Delete clicked from edit data page"
+                  );
                 }}
               >
                 Delete for sure?
@@ -167,27 +194,49 @@ function EditData({
               <button
                 className="py-2 flex-1 flex justify-center bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
                 onClick={() => {
-                  pin = (datapassed.pinned)?"no":"yes";
+                  pin = datapassed.pinned ? "no" : "yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Pin/Unpin",
+                    "Pin/Unpin clicked from edit data page"
+                  );
                 }}
               >
-                <img src="/pinned.png" className="h-6 w-6 mr-2" alt=""/>
-                <div>{(datapassed.pinned)?"Unpin":"Pin"}</div>
+                <img src="/pinned.png" className="h-6 w-6 mr-2" alt="" />
+                <div>{datapassed.pinned ? "Unpin" : "Pin"}</div>
               </button>
             ) : (
               <button
                 className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
-                onClick={()=>{
-                  collapse = (datapassed.collapse)?"no":"yes";
+                onClick={() => {
+                  collapse = datapassed.collapse ? "no" : "yes";
                   UpdateData();
+                  trackEvent(
+                    "click",
+                    "Buttons",
+                    "Show/Hide",
+                    "Show/Hide clicked from edit data page"
+                  );
                 }}
               >
-                <div>{(datapassed.collapse)?"Show Reflection":"Collapse"}</div>
+                <div>
+                  {datapassed.collapse ? "Show Reflection" : "Hide Reflection"}
+                </div>
               </button>
             )}
             <button
               className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg mt-2"
-              onClick={onClosedialog}
+              onClick={() => {
+                onClosedialog();
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Cancel",
+                  "Cancel clicked from edit data page"
+                );
+              }}
             >
               Cancel
             </button>

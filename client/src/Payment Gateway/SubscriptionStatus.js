@@ -1,12 +1,18 @@
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
 export function SubscriptionStatus() {
   const navigate = useNavigate();
   const location = useLocation();
   const status = location.state?.status;
   const error = location.state?.error;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="bg-bgc font-sans">
@@ -24,7 +30,7 @@ export function SubscriptionStatus() {
             <div className="text-center text-2xl mt-8">
               Subscription successfully activated!
             </div>
-            <div className="text-center text-xl mt-8">
+            <div className="text-center mt-8">
               Thank you for choosing Mind Cache AI! Embark on your journey of
               self-discovery and personal enrichment.
             </div>
@@ -45,12 +51,18 @@ export function SubscriptionStatus() {
           </div>
         )}
         <button
-          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium mt-8 mb-60"
+          className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium mt-8 mb-60"
           onClick={() => {
+            trackEvent(
+              "click",
+              "Buttons",
+              "Go to Dashboard",
+              "Go to Dashboard clicked from subscription status"
+            );
             navigate(`/`);
           }}
         >
-          Go to Dashboard.
+          Go to Dashboard
         </button>
       </div>
       <Footer />

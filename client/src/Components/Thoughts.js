@@ -8,6 +8,9 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
+import { getSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
+import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Thoughts() {
@@ -20,12 +23,19 @@ function Thoughts() {
   const [selectedthought, setSelectedthought] = useState(null);
   const [emptythoughts, setEmptyThoughts] = useState(false);
   const [sort, setSort] = useState(" by latest");
+  const subDetails = getSubDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
 
   function reverseThoughts() {
+    trackEvent(
+      "click",
+      "Buttons",
+      "sort Thoughts",
+      "Sort Thoughts from thoughts page"
+    );
     const reverseThoughts = [...thoughts].reverse();
     setThoughts(reverseThoughts);
     setSort(sort === " by latest" ? " by oldest" : " by latest");
@@ -39,6 +49,7 @@ function Thoughts() {
   function logout() {
     localStorage.removeItem("userid");
     localStorage.removeItem("usertoken");
+    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
     localStorage.removeItem("subscriptionDetails");
@@ -47,6 +58,7 @@ function Thoughts() {
   }
 
   useEffect(() => {
+    // window.scrollTo(0, 0);
     const fetchThoughts = async () => {
       try {
         const response = await fetch(base_url + "thoughts/" + topicobj._id, {
@@ -59,16 +71,19 @@ function Thoughts() {
           logout();
         }
         if (!response.ok) {
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
+        // console.log(json);
         if (json.data.length === 0) {
           setEmptyThoughts(true);
         }
         setThoughts(json.data);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     fetchThoughts();
@@ -83,6 +98,48 @@ function Thoughts() {
         <Loader />
       </div>
     );
+  }
+
+  function ThoughtLimit() {
+    if (subDetails.isSubscribed) {
+      return true;
+    } else {
+      if (thoughts.length < 30) {
+        return true;
+      } else {
+        showToast(
+          "You've hit the limit for adding Reflections. Upgrade now for unlimited access and additional benefits!"
+        );
+        return false;
+      }
+    }
+  }
+
+  function TruncatedText({ text, maxLength }) {
+    const displayText =
+      text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+
+    return (
+      <div title={text} className="truncate">
+        {displayText}
+      </div>
+    );
+  }
+
+  function Analyse() {
+    if (thoughts.length < 3) {
+      showToast(
+        "Please contribute three or more reflections to enable AI analysis for optimal insights."
+      );
+    } else {
+      // navigate("/analyse", {
+      //   state: { data: topicobj.title, thoughts: thoughts },
+      // });
+      navigate("/AIanalysis", {
+        state: { data: topicobj.title, thoughts: thoughts },
+      });
+      localStorage.setItem("sessionLoaded", "");
+    }
   }
 
   return (
@@ -129,8 +186,8 @@ function Thoughts() {
         />
       ) : (
         <div className="bg-bgc min-h-screen">
-          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
-            <div className="w-parent flex flex-row justify-between  ">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md pt-2">
+            <div className="w-parent flex flex-row justify-between items-center px-4 ">
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
@@ -143,10 +200,10 @@ function Thoughts() {
               >
                 <img
                   src="/mindcachelogo.png"
-                  className="h-8 w-8 rounded-full mr-2"
+                  className="h-9 w-9 rounded-full mr-2"
                   alt="logo"
                 />
-                <div className="my-auto text-black text-xl text-justify  ">
+                <div className="my-auto text-black text-lg md:text-xl text-justify  ">
                   Mind Cache AI
                 </div>
               </div>
@@ -162,47 +219,76 @@ function Thoughts() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl">
-                {topicobj.title}
+              <div className="flex  text-black text-xl md:text-3xl px-4">
+                <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
-              <div className="w-full flex mt-4 mb-2">
+
+              <div className="w-full flex mt-2 pl-4 py-2 whitespace-nowrap overflow-x-auto hide-scrollbar ">
                 <div
-                  className="mr-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-xs md:text-sm flex items-center cursor-pointer  border-animation"
                   onClick={() => {
-                    navigate("/analyse", {
-                      state: { data: topicobj.title, thoughts: thoughts },
-                    });
-                    localStorage.setItem("sessionLoaded", "");
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Begin AI Analysis",
+                      "Begin AI Analysis from thoughts page"
+                    );
+                    Analyse();
                   }}
                 >
                   <img src="/bolt.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Analyse</div>
-                </div>
-                <div
-                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
-                  onClick={reverseThoughts}
-                >
-                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort {sort}</div>
+                  <div className="mr-2 md:mr-0">Begin AI Analysis</div>
                 </div>
 
                 <div
-                  className="ml-2  flex items-center cursor-pointer"
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
+                  onClick={reverseThoughts}
+                >
+                  <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
+                  <div className="mr-2 md:mr-0">Sort {sort}</div>
+                </div>
+
+                {!subDetails.isSubscribed && (
+                  <div
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
+                    onClick={() => {
+                      trackEvent(
+                        "click",
+                        "Buttons",
+                        "Subscribe",
+                        "Subscribe from thoughts page"
+                      );
+                      navigate(`/pricing`);
+                    }}
+                  >
+                    <div>Subscribe</div>
+                  </div>
+                )}
+
+                <div
+                  className="mx-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Info",
+                      "Info from thoughts page"
+                    );
                     setshowinfo(true);
                   }}
                 >
-                  <img src="/info.png" className="h-7 w-auto mr-1" alt="" />
+                  <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
+                  <div className="mr-2 md:mr-0">Info.</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex-col items-center text-center">
+          <div className="flex-col items-center text-center pb-16">
             {thoughts.map((thought, index) => (
               <div
                 key={index}
-                className="bg-blue-200 pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
+                className="bg-[#C1D0EF] pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
               >
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">
@@ -214,13 +300,19 @@ function Thoughts() {
                       src="/threedots.svg"
                       alt=""
                       onClick={() => {
+                        trackEvent(
+                          "click",
+                          "Buttons",
+                          "Edit Reflection",
+                          "Edit Reflection from thoughts page"
+                        );
                         setSelectedthought(thought);
                         setshoweditthought(true);
                       }}
                     />
                   </div>
                 </div>
-                <div className="text-center text-black text-base md:text-lg">
+                <div className="text-center text-black text-sm md:text-base">
                   {thought.collapse ? (
                     <div className="italic">** Reflection hidden **</div>
                   ) : (
@@ -234,7 +326,15 @@ function Thoughts() {
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
             onClick={() => {
-              setshowaddthought(true);
+              trackEvent(
+                "click",
+                "Buttons",
+                "Add Reflection",
+                "Add Reflection from thoughts page"
+              );
+              if (ThoughtLimit()) {
+                setshowaddthought(true);
+              }
             }}
           >
             + Add Reflection

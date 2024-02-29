@@ -6,19 +6,19 @@ module.exports = {
   auth: (req, res, next) => {
     const authHeader = req.headers["authorization"];
     if (!authHeader) {
-      return res.status(403).json({ msg: "Missing auth header" });
+      return res.status(403).json({ message: "Authentication Error." });
     }
     try {
       const decoded = jwt.verify(authHeader, secret);
-      console.log(decoded.id);
+      // console.log(decoded.id);
       if (decoded && decoded.userId) {
         // req.userId = decoded.id;
         next();
       } else {
-        return res.status(403).json({ msg: "Invalid token" });
+        return res.status(403).json({ message: "Authentication Error." });
       }
     } catch (e) {
-      return res.status(403).json({ msg: "Invalid token" });
+      return res.status(403).json({ message: "Authentication Error." });
     }
   },
 };

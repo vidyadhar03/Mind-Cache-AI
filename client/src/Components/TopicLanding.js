@@ -11,10 +11,10 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
   async function handleCreate(event) {
     event.preventDefault();
     if (topic !== "") {
-      console.log("called api");
-      const result = await AddTopicAPI(topic);
+      // console.log("called api");
+      const result = await AddTopicAPI(topic,toast);
       if (result.success) {
-        console.log("result success");
+        // console.log("result success");
         setTopics(pinTopics(result.data));
         emptydata(false);
         navigate(`/topics`);
@@ -30,9 +30,9 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
     <div>
       <NavBar />
       <div className="flex flex-col  md:flex-row h-[calc(100vh-70px)] bg-gray-50 font-sans">
-        <div className="flex md:flex-1 justify-center items-center">
+        <div className="flex md:flex-1 justify-center items-center mt-8">
           <img
-            src="/meditationlogo.png"
+            src="/logointrospect.png"
             className="h-72 w-72 md:h-96 md:w-96 rounded-full"
             alt="logo"
           />
@@ -40,7 +40,7 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
 
         <div className="md:flex-1 flex justify-center  ">
           <div className="flex flex-col  justify-center">
-            <div className="mt-8 text-center font-semibold text-lg">
+            <div className="mt-8 text-center font-semibold md:text-lg">
               Create your first Focus Area now. It could be anything that
               resonates with you.
             </div>

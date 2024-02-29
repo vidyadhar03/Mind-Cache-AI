@@ -25,7 +25,7 @@ const webhookSecret = process.env.webhook_secret;
 router.post("/webhook", async (req, res) => {
   const sig = req.headers["x-razorpay-signature"];
   const body = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   switch (body.event) {
     case "subscription.charged":
@@ -35,9 +35,9 @@ router.post("/webhook", async (req, res) => {
         .digest("hex");
 
       if (sig === expectedSig) {
-        console.log("Valid signature. Processing event...");
-        console.log("subscription object", body.payload.subscription.entity);
-        console.log("payment object:", body.payload.payment.entity);
+        // console.log("Valid signature. Processing event...");
+        console.log("subscription object of charged", body.payload.subscription.entity);
+        console.log("payment object of charged:", body.payload.payment.entity);
 
         const subscription = body.payload.subscription.entity;
         const payment = body.payload.payment.entity;
@@ -72,12 +72,12 @@ router.post("/webhook", async (req, res) => {
             await user.save();
           }
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
 
         return res.status(200).send("Webhook processed successfully");
       } else {
-        console.log("Invalid signature. Ignoring.");
+        // console.log("Invalid signature. Ignoring.");
         return res.status(403).send("Invalid signature");
       }
       break;
@@ -88,9 +88,9 @@ router.post("/webhook", async (req, res) => {
         .update(JSON.stringify(body))
         .digest("hex");
       if (sig === expectedSigc) {
-        console.log("Valid signature. Processing event...");
+        // console.log("Valid signature. Processing event...");
         // Process the event here (e.g., update subscription status)
-        console.log("subscription object", body.payload.subscription.entity);
+        console.log("subscription object of cancellation", body.payload.subscription.entity);
 
         const subscription = body.payload.subscription.entity;
 
@@ -104,12 +104,12 @@ router.post("/webhook", async (req, res) => {
             await user.save();
           }
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
 
         return res.status(200).send("Webhook processed successfully");
       } else {
-        console.log("Invalid signature. Ignoring.");
+        // console.log("Invalid signature. Ignoring.");
         return res.status(403).send("Invalid signature");
       }
       break;
@@ -151,8 +151,12 @@ router.post("/subscription", auth, async (req, res) => {
 
     if (!response.ok) {
       const data = await response.json();
-      console.log(data);
-      res.status(500).json({ message: "Network response was not ok." });
+      // console.log(data);
+      return res
+        .status(500)
+        .json({
+          message: "Error from payment gateway side. Please retry shortly.",
+        });
       // throw new Error("Network response was not ok.");
     }
 
@@ -164,8 +168,10 @@ router.post("/subscription", auth, async (req, res) => {
     // console.log(data);
     res.status(200).json(data);
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -202,8 +208,13 @@ router.post("/cancelsubscription", auth, async (req, res) => {
 
     if (!response.ok) {
       const data = await response.json();
-      console.log(data);
-      throw new Error("Network response was not ok.");
+      // console.log(data);
+      return res
+        .status(500)
+        .json({
+          message: "Error from payment gateway side. Please retry shortly.",
+        });
+      // throw new Error("Network response was not ok.");
     }
 
     const data = await response.json();
@@ -221,8 +232,10 @@ router.post("/cancelsubscription", auth, async (req, res) => {
       short_url: short_url,
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -270,16 +283,18 @@ router.post("/confirmpayment", auth, async (req, res) => {
           subscriptionDetails: user.subscriptionDetails,
         });
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     } else {
       res
         .status(400)
-        .json({ success: false, message: "Invalid payment signature" });
+        .json({ success: false, message: "Invalid payment signature." });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

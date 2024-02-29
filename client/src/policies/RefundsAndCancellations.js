@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 
 export function RefundsAndCancellations() {
@@ -11,9 +12,12 @@ export function RefundsAndCancellations() {
 
   return (
     <div className="bg-bgc font-sans">
-      <div className=" py-20 px-8 md:px-20 ">
 
-        <div
+      <NavBar/>
+
+      <div className="pt-8 pb-20 px-8 md:px-20 ">
+
+        {/* <div
           className=" flex justify-center items-center  cursor-pointer"
           onClick={() => {
             navigate(`/`);
@@ -27,7 +31,7 @@ export function RefundsAndCancellations() {
           <div className="text-fifth-blue text-2xl sm:text-4xl font-bold">
             Mind Cache AI
           </div>
-        </div>
+        </div> */}
 
         <div className="flex justify-center text-lg md:text-2xl my-8 font-semibold">
           Refund & Cancellation Policy

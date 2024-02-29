@@ -67,13 +67,13 @@ function BenefitsDropdown() {
             aria-controls={`panel${index}bh-content`}
             id={`panel${index}bh-header`}
           >
-            <div className="font-sans text-base md:text-lg ">
+            <div className="font-sans text-sm md:text-lg ">
               {benefit.title}
             </div>
           </AccordionSummary>
 
           <AccordionDetails>
-            <div className="font-sans text-base md:text-lg">
+            <div className="font-sans text-sm md:text-base">
               {benefit.description}
             </div>
           </AccordionDetails>

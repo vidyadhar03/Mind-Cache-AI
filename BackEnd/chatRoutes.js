@@ -44,7 +44,7 @@ router.post("/socketchat", auth, async (req, res) => {
     });
     updatedMessages.push({ role: "user", content: userinput });
 
-    console.log("waiting for response");
+    // console.log("waiting for response");
     let stream_message = "";
     let stream_messages = JSON.parse(JSON.stringify(updatedMessages));
     stream_messages.push({ role: "assistant", content: stream_message });
@@ -58,7 +58,7 @@ router.post("/socketchat", auth, async (req, res) => {
         messages: stream_messages,
       });
     });
-    console.log("got full response from chat gpt");
+    // console.log("got full response from chat gpt");
 
     // After streaming is complete, update the database
     updatedMessages.push({ role: "assistant", content: aiResponse });
@@ -92,8 +92,8 @@ router.post("/socketchat", auth, async (req, res) => {
         updatedAICount: user.subscriptionDetails.aiInteractionCount,
       });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -113,8 +113,8 @@ router.get("/sessions/:userid", auth,async (req, res) => {
       res.status(200).json({ message: "success", data: [] });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -134,8 +134,8 @@ router.get("/chatmessages/:sessionid", auth, async (req, res) => {
       res.status(200).json({ message: "success", data: [] });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -174,8 +174,8 @@ router.post("/startsession", auth, async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -204,8 +204,8 @@ router.post("/editchatsession", auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Session Updated", data: local_sesh });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    // console.log(e);
+    res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

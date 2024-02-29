@@ -1,15 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../utils/PageTracking";
 
-export const SideBar = ({ modifyActiveTab }) => {
-  const navigate = useNavigate();
+export const SideBar = ({ modifyActiveTab,showConfirm,setText }) => {
   
   const Logout = () => {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
-    localStorage.removeItem("subscriptionDetails");
-    navigate(`/`);
+    setText("Confirm Log Out?")
+    showConfirm();
   };
 
   return (
@@ -17,6 +12,7 @@ export const SideBar = ({ modifyActiveTab }) => {
       <div
         className="px-4 md:px-2 py-2 border border-black rounded-lg text-center cursor-pointer w-full md:w-5/6"
         onClick={() => {
+          trackEvent("click", "Buttons", "Account Details", "Account Details from account details page");
           modifyActiveTab("AccountDetails");
         }}
       >
@@ -25,6 +21,7 @@ export const SideBar = ({ modifyActiveTab }) => {
       <div
         className="px-4 md:px-2 py-2 my-4 border border-black rounded-lg text-center cursor-pointer w-full md:w-5/6"
         onClick={() => {
+          trackEvent("click", "Buttons", "Subscription Details", "SubscriptionDetails from account details page");
           modifyActiveTab("SubscriptionDetails");
         }}
       >
@@ -33,6 +30,7 @@ export const SideBar = ({ modifyActiveTab }) => {
       <div
         className="px-4 md:px-2 py-2 border border-black rounded-lg flex justify-center items-center cursor-pointer w-full md:w-5/6 "
         onClick={() => {
+          trackEvent("click", "Buttons", "Log Out", "Log Out from account details page");
           Logout();
         }}
       >

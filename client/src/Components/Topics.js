@@ -1,4 +1,4 @@
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopicLanding from "./TopicLanding";
 import AddTopic from "./AddTopic";
@@ -7,6 +7,8 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
+import { getSubDetails } from "../utils/SubscriptionDetails";
+import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -16,7 +18,8 @@ function Topics() {
   const [showinfo, setshowinfo] = useState(false);
   const [selectedtopic, setSelectedtopic] = useState(null);
   const [emptytopics, setEmptyTopics] = useState(false);
-  const [sort,setSort] = useState(" by latest");
+  const [sort, setSort] = useState(" by latest");
+  const subDetails = getSubDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -40,9 +43,10 @@ function Topics() {
   }
 
   function reverseTopics() {
+    trackEvent("click", "Buttons", "Sort Topics", "Sort from topics page");
     const reversedTopics = [...topics].reverse();
     setTopics(pinTopics(reversedTopics));
-    setSort(sort===" by latest"?" by oldest":" by latest");
+    setSort(sort === " by latest" ? " by oldest" : " by latest");
   }
 
   const showToast = (message) => {
@@ -53,6 +57,7 @@ function Topics() {
   function logout() {
     localStorage.removeItem("userid");
     localStorage.removeItem("usertoken");
+    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
     localStorage.removeItem("subscriptionDetails");
@@ -76,16 +81,19 @@ function Topics() {
           logout();
         }
         if (!response.ok) {
+          const json = await response.json();
+          setDialogMessage(json.message);
+          setShowDialog(true);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
         if (json.data.length === 0) {
           setEmptyTopics(true);
         }
-        console.log(json.data);
+        // console.log(json.data);
         setTopics(pinTopics(json.data));
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     fetchTopics();
@@ -99,11 +107,55 @@ function Topics() {
     );
   }
 
+  function colorGradient() {
+    const colors = [
+      // "#7F9BD1",
+      // "#8CA5D6",
+      "#99AEDA",
+      "#A5B9DF",
+      "#B2C3E3",
+      "#BFCCE8",
+      "#CCD7EC",
+      "#D8E1F1",
+      "#E5EBF5",
+      // "#F2F5FA",
+    ];
+
+    const getRandomColor = () =>
+      colors[Math.floor(Math.random() * colors.length)];
+
+    const color1 = getRandomColor();
+    const color2 = getRandomColor();
+
+    const gradientStyle = {
+      background: `linear-gradient(to right, ${color1}, ${color2})`,
+    };
+
+    return gradientStyle;
+  }
+
+  function TopicLimit() {
+    if (subDetails.isSubscribed) {
+      return true;
+    } else {
+      if (topics.length < 10) {
+        return true;
+      } else {
+        showToast(
+          "You've hit the limit for adding Focus Areas. Upgrade now for unlimited access and additional benefits!"
+        );
+        return false;
+      }
+    }
+  }
+
   return (
     <div className="font-sans bg-bgc min-h-screen">
       {showaddtopic && (
         <AddTopic
-          onClosedialog={()=>{setshowaddtopic(false);}}
+          onClosedialog={() => {
+            setshowaddtopic(false);
+          }}
           toast={showToast}
           pinTopics={pinTopics}
           setTopics={setTopics}
@@ -112,7 +164,9 @@ function Topics() {
       )}
       {showedittopic && (
         <EditData
-          onClosedialog={()=>{setshowedittopic(false);}}
+          onClosedialog={() => {
+            setshowedittopic(false);
+          }}
           datamode={"topic"}
           datapassed={selectedtopic}
           topicid={selectedtopic._id}
@@ -123,9 +177,11 @@ function Topics() {
           logout={logout}
         />
       )}
-      {showinfo&&(
+      {showinfo && (
         <FocusAreaInfo
-        onClosedialog={()=>{setshowinfo(false);}}
+          onClosedialog={() => {
+            setshowinfo(false);
+          }}
         />
       )}
 
@@ -138,15 +194,15 @@ function Topics() {
         />
       ) : (
         <div className="">
-          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md  px-4 py-2">
-            <div className="w-parent flex flex-row justify-between  ">
+          <div className="sticky top-0 z-60 bg-bgc font-sans shadow-md   py-2">
+            <div className="w-parent flex flex-row justify-between items-center  px-4">
               <div className="flex">
                 <img
                   src="/mindcachelogo.png"
-                  className="h-8 w-8 rounded-full mr-2"
+                  className="h-9 w-9 rounded-full mr-2"
                   alt="logo"
                 />
-                <div className="my-auto text-black text-xl text-justify  ">
+                <div className="my-auto text-black text-lg md:text-xl text-justify  ">
                   Mind Cache AI
                 </div>
               </div>
@@ -162,35 +218,93 @@ function Topics() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl">
+              <div className="flex  text-black text-xl md:text-3xl px-4">
                 Explore Your Focus Areas
               </div>
-              <div className="w-full flex mt-4 mb-2">
+
+              <div className="w-full flex mt-2  pl-4 py-1  whitespace-nowrap overflow-x-auto hide-scrollbar">
                 <div
-                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={reverseTopics}
                 >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Sort {sort}</div>
+                  <div className="mr-2 md:mr-0">Sort {sort}</div>
                 </div>
-                <div className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
-                onClick={()=>{setshowinfo(true);}}>
+
+                <div
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "AI Analysis History",
+                      "AI Analysis History from topics page"
+                    );
+                    // console.log(topics);
+                    navigate("/AIhistory", {
+                      state: { data: topics },
+                    });
+                  }}
+                >
+                  <div>AI Analysis History</div>
+                </div>
+
+                {!subDetails.isSubscribed && (
+                  <div
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
+                    onClick={() => {
+                      trackEvent(
+                        "click",
+                        "Buttons",
+                        "Subscribe",
+                        "Subscribe from topics page"
+                      );
+
+                      navigate(`/pricing`);
+                    }}
+                  >
+                    <div>Subscribe</div>
+                  </div>
+                )}
+
+                <div
+                  className="mx-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
+                  onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Info",
+                      "Info from topics page"
+                    );
+
+                    setshowinfo(true);
+                  }}
+                >
                   <img src="/info.png" className="h-4 w-auto mr-1" alt="" />
-                  <div>Info.</div>
+                  <div className="mr-2 md:mr-0">Info.</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle}`}>
+          <div className={`p-2 grid gap-4 mt-2 ${gridcolstyle} pb-16`}>
             {topics.map((topic, index) => (
               <div
                 key={index}
-                className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
+                // className=" bg-[#89CFF0] border border-[#A8D5BA] min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
+                style={colorGradient()}
+                className=" min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
-                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray md:text-lg  text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
+                    trackEvent(
+                      "click",
+                      "Buttons",
+                      "Focus Area Click",
+                      "Focus Area Click from topics page"
+                    );
+
                     navigate(`/topics/${topic.title.replace(/ /g, "")}`, {
                       state: { data: topic },
                     });
@@ -198,14 +312,14 @@ function Topics() {
                 >
                   {topic.pinned && (
                     <div className="w-1/5 pl-2">
-                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt=""/>
+                      <img src="/pinned.png" className="h-6 w-6 mr-1" alt="" />
                     </div>
                   )}
                   <div className={`w-4/5 ${topic.pinned && "text-left ml-4"}`}>
                     {topic.title}
                   </div>
                 </div>
-                <div className="h-1/6 flex justify-between items-center py-2 border-t border-blue-400">
+                <div className="h-1/6 flex justify-between items-center py-2 border-t border-gray-600">
                   <div className="text-xs ml-2">
                     {smoothifyDate(topic.time.toString())}
                   </div>
@@ -215,6 +329,12 @@ function Topics() {
                       className="h-4 w-4 cursor-pointer mr-2"
                       alt=""
                       onClick={() => {
+                        trackEvent(
+                          "click",
+                          "Buttons",
+                          "Edit Focus Area",
+                          "Edit Focus Area from topics page"
+                        );
                         setSelectedtopic(topic);
                         setshowedittopic(true);
                       }}
@@ -227,7 +347,18 @@ function Topics() {
 
           <div
             className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white text-base px-4 py-2 rounded-full shadow-lg cursor-pointer"
-            onClick={()=>{setshowaddtopic(true);}}
+            onClick={() => {
+              trackEvent(
+                "click",
+                "Buttons",
+                "Add Focus Area",
+                "Add Focus Area from topics page"
+              );
+
+              if (TopicLimit()) {
+                setshowaddtopic(true);
+              }
+            }}
           >
             + Add Focus Area
           </div>
