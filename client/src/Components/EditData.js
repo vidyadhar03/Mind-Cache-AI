@@ -184,7 +184,7 @@ function EditData({
                   UpdateData();
                 }}
               >
-                <div>{(datapassed.collapse)?"Show Reflection":"Collapse"}</div>
+                <div>{(datapassed.collapse)?"Show Reflection":"Hide Reflection"}</div>
               </button>
             )}
             <button

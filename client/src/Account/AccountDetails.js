@@ -106,9 +106,9 @@ export const AccountDetails = () => {
           // onChange={(e) => setEmail(e.target.value)}
         />
       </div>
-      <div className="mt-4 text-base font-medium underline">Reset Password</div>
+      {/* <div className="mt-4 text-base font-medium underline">Reset Password</div> */}
       <div
-        className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-8 cursor-pointer"
+        className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm md:text-base mt-8 cursor-pointer"
         onClick={AddUserName}
       >
         Update Details

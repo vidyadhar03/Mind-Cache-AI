@@ -203,7 +203,7 @@ function Thoughts() {
                   className="h-9 w-9 rounded-full mr-2"
                   alt="logo"
                 />
-                <div className="my-auto text-black text-xl text-justify  ">
+                <div className="my-auto text-black text-lg md:text-xl text-justify  ">
                   Mind Cache AI
                 </div>
               </div>
@@ -219,13 +219,13 @@ function Thoughts() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl px-4">
+              <div className="flex  text-black text-xl md:text-3xl px-4">
                 <TruncatedText text={topicobj.title} maxLength={30} />
               </div>
 
               <div className="w-full flex mt-2 pl-4 py-2 whitespace-nowrap overflow-x-auto hide-scrollbar ">
                 <div
-                  className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-sm flex items-center cursor-pointer  border-animation"
+                  className="relative mr-2 px-4 py-1 bg-bgc text-black rounded-full shadow-md text-xs md:text-sm flex items-center cursor-pointer  border-animation"
                   onClick={() => {
                     trackEvent(
                       "click",
@@ -241,7 +241,7 @@ function Thoughts() {
                 </div>
 
                 <div
-                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={reverseThoughts}
                 >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
@@ -250,7 +250,7 @@ function Thoughts() {
 
                 {!subDetails.isSubscribed && (
                   <div
-                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                     onClick={() => {
                       trackEvent(
                         "click",
@@ -266,7 +266,7 @@ function Thoughts() {
                 )}
 
                 <div
-                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="mx-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={() => {
                     trackEvent(
                       "click",

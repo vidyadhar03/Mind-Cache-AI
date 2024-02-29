@@ -202,7 +202,7 @@ function Topics() {
                   className="h-9 w-9 rounded-full mr-2"
                   alt="logo"
                 />
-                <div className="my-auto text-black text-xl text-justify  ">
+                <div className="my-auto text-black text-lg md:text-xl text-justify  ">
                   Mind Cache AI
                 </div>
               </div>
@@ -218,13 +218,13 @@ function Topics() {
             </div>
 
             <div className="w-full mt-6 flex flex-col">
-              <div className="flex  text-black text-2xl md:text-3xl px-4">
+              <div className="flex  text-black text-xl md:text-3xl px-4">
                 Explore Your Focus Areas
               </div>
 
               <div className="w-full flex mt-2  pl-4 py-1  whitespace-nowrap overflow-x-auto hide-scrollbar">
                 <div
-                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={reverseTopics}
                 >
                   <img src="/sort.png" className="h-4 w-auto mr-1" alt="" />
@@ -232,7 +232,7 @@ function Topics() {
                 </div>
 
                 <div
-                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={() => {
                     trackEvent(
                       "click",
@@ -251,7 +251,7 @@ function Topics() {
 
                 {!subDetails.isSubscribed && (
                   <div
-                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                    className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                     onClick={() => {
                       trackEvent(
                         "click",
@@ -268,7 +268,7 @@ function Topics() {
                 )}
 
                 <div
-                  className="ml-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-sm flex items-center cursor-pointer"
+                  className="mx-2 px-4 py-1 bg-bgc text-black rounded-full border-2 border-gray-600  shadow-md text-xs md:text-sm flex items-center cursor-pointer"
                   onClick={() => {
                     trackEvent(
                       "click",
@@ -296,7 +296,7 @@ function Topics() {
                 className=" min-h-48 lg:min-h-56 rounded-lg shadow-md hover:shadow-lg "
               >
                 <div
-                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray text-lg lg:text-xl text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
+                  className="px-2 lg:px-8 py-12 lg:py-28  h-5/6 text-gray md:text-lg  text-center flex justify-center items-center cursor-pointer overflow-hidden whitespace-normal"
                   onClick={() => {
                     trackEvent(
                       "click",

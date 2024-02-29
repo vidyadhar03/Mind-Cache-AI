@@ -87,7 +87,7 @@ export const SubscriptionDetails = ({
             You are Subscribed to the {subDetails.plan} Plan with below
             Features:
           </div>
-          <div className="mt-4 text-center md:text-left md:text-lg">
+          <div className="mt-4 text-center md:text-left text-sm md:text-base">
             {subDetails.plan === "Monthly" ? (
               <ul className=" pl-6 mt-4  text-center md:text-left">
                 <li className="mt-2 flex items-center">
@@ -104,7 +104,7 @@ export const SubscriptionDetails = ({
                 </li>
               </ul>
             ) : (
-              <ul className=" pl-6 mt-4  text-center md:text-left">
+              <ul className=" pl-6 mt-4 text-sm md:text-base  text-center md:text-left">
                 <li className="mt-2 flex items-center">
                   <img src="/check.png" className="h-3 w-auto mr-2" alt="" />
                   200 AI Interactions per month.
@@ -120,17 +120,17 @@ export const SubscriptionDetails = ({
               </ul>
             )}
           </div>
-          <div className="mt-4">
-            <span className="">Last Billing Date:</span>{" "}
+          <div className="mt-4 font-semibold">
+            <span className="font-medium">Last Billing Date:</span>{" "}
             {subDetails.billingCycleStartDate.substring(0, 10)}
           </div>
-          <div className="mt-1">
-            <span className="">AI Interactions Used:</span>{" "}
+          <div className="mt-1 font-semibold">
+            <span className="font-medium">AI Interactions this month:</span>{" "}
             {subDetails.aiInteractionCount}
           </div>
 
           <button
-            className="w-full md:w-96 py-2 mt-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+            className="w-full md:w-96 py-2 mt-8 bg-blue-600 hover:bg-blue-700 text-sm md:text-base text-white rounded-lg font-medium"
             onClick={() => {
               // cancelSub();
               trackEvent("click", "Buttons", "Cancel Subscription", "Cancel Subscription from account details page");

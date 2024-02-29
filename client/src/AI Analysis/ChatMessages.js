@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+
 // MessageSection.js
 export const MessageSection = ({ messages, messagesEndRef }) => {
   return (
@@ -10,11 +12,7 @@ export const MessageSection = ({ messages, messagesEndRef }) => {
           <div className="text-black font-bold mt-2 md:text-lg">
             {msg.role === "user" ? (
               <div className="flex items-center mt-4 mb-2">
-                <img
-                  src="/userprofile.png"
-                  className="h-6 w-6 mr-2 "
-                  alt=""
-                />
+                <img src="/userprofile.png" className="h-6 w-6 mr-2 " alt="" />
                 You
               </div>
             ) : (
@@ -28,7 +26,9 @@ export const MessageSection = ({ messages, messagesEndRef }) => {
               </div>
             )}
           </div>
-          <div className="whitespace-pre-wrap text-sm md:text-base ml-2">{msg.content}</div>
+          <div className="whitespace-pre-wrap text-sm md:text-base ml-2">
+            {msg.content}
+          </div>
         </div>
       ))}
       <div ref={messagesEndRef} />
@@ -43,11 +43,34 @@ export const MessageInput = ({
   userInput,
   setUserInput,
 }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault(); // This prevents the default form submission behavior
+    onSendMessage(false, selectedSession);
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault(); // This prevents the default form submission behavior
-        onSendMessage(false, selectedSession);
-      };
+  // Define an array of placeholder texts
+  const placeholders = [
+    "Message Mind Cache AI...",
+    "Ask for hidden patterns...",
+    "Seek out for more insights...",
+    "Inquire about methods to advance...",
+  ];
+
+  // State to track the current placeholder index
+  const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+
+  // Set up an interval to cycle through placeholders
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentPlaceholderIndex(
+        (currentPlaceholderIndex) =>
+          (currentPlaceholderIndex + 1) % placeholders.length // Cycle through the placeholders
+      );
+    }, 2000); // Change placeholder every 2 seconds
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div
@@ -63,7 +86,7 @@ export const MessageInput = ({
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Message Mind Cache AI..."
+            placeholder={placeholders[currentPlaceholderIndex]}
             className="p-2 flex-grow w-5/6 outline-none"
           />
           <button
