@@ -35,7 +35,12 @@ function HomePage() {
           <button
             className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-6"
             onClick={() => {
-              trackEvent("click", "Buttons", "Get Started", "Get started from Landing Page");
+              trackEvent(
+                "click",
+                "Buttons",
+                "Get Started",
+                "Get started from Landing Page"
+              );
               navigate(`/signin`);
             }}
           >
@@ -249,7 +254,12 @@ function HomePage() {
 
   function PricingPlans() {
     function Subscribe(plan) {
-      trackEvent("click", "Buttons", "Subscribe", `${plan} subscribe from Landing Page`);
+      trackEvent(
+        "click",
+        "Buttons",
+        "Subscribe",
+        `${plan} subscribe from Landing Page`
+      );
       if (localStorage.getItem("usertoken")) {
         navigate(`/subscription`, { state: { plan } });
       } else {
@@ -273,7 +283,9 @@ function HomePage() {
               <li className="mt-2">30 Reflections per Focus area.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
-              <div className="text-4xl font-medium">Rs.0</div>
+            <div className="text-4xl font-medium">
+                 <span className="text-2xl font-semibold mr-1">₹</span>0
+              </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per month
               </div>
@@ -295,7 +307,10 @@ function HomePage() {
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
-              <div className="text-4xl font-medium">Rs.129</div>
+              <div className="text-4xl font-medium">
+                 <span className="text-2xl font-semibold mr-1">₹</span>129
+                <span className="mx-2 text-lg font-sans">or</span><span className="text-2xl font-semibold mr-1">$</span>1.5
+              </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per month
               </div>
@@ -319,7 +334,10 @@ function HomePage() {
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
-              <div className="text-4xl font-medium">Rs.999</div>
+            <div className="text-4xl font-medium">
+                 <span className="text-2xl font-semibold mr-1">₹</span>999
+                <span className="mx-2 text-lg font-sans">or</span><span className="text-2xl font-semibold mr-1">$</span>12
+              </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per year
               </div>
