@@ -58,7 +58,7 @@ const SubscriptionConfirmation = () => {
         const status = "active";
         navigate(`/subscription-status`, { state: { status } });
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         setDialogMessage("Something went wrong, Try again!.");
         setShowDialog(true);
       }

@@ -90,10 +90,10 @@ function Topics() {
         if (json.data.length === 0) {
           setEmptyTopics(true);
         }
-        console.log(json.data);
+        // console.log(json.data);
         setTopics(pinTopics(json.data));
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     fetchTopics();
@@ -240,7 +240,7 @@ function Topics() {
                       "AI Analysis History",
                       "AI Analysis History from topics page"
                     );
-                    console.log(topics);
+                    // console.log(topics);
                     navigate("/AIhistory", {
                       state: { data: topics },
                     });

@@ -1,9 +1,9 @@
 const base_url = process.env.REACT_APP_API_URL;
 
-export async function AddTopicAPI(newTopic,toast) {
+export async function AddTopicAPI(newTopic, toast) {
   let result = { success: false, data: [], logout: false };
   try {
-    console.log("hitting api");
+    // console.log("hitting api");
     const response = await fetch(base_url + "addtopic", {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ export async function AddTopicAPI(newTopic,toast) {
     }
     if (!response.ok) {
       const json = await response.json();
-      console.log("printed:",json.message);
+      // console.log("printed:",json.message);
       toast(json.message);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -32,12 +32,12 @@ export async function AddTopicAPI(newTopic,toast) {
     result.data = json.data;
     return result;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return result;
   }
 }
 
-export async function AddThoughtAPI(topicid, newThought,toast) {
+export async function AddThoughtAPI(topicid, newThought, toast) {
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "addthought", {
@@ -66,7 +66,7 @@ export async function AddThoughtAPI(topicid, newThought,toast) {
     result.data = json.data;
     return result;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return result;
   }
 }

@@ -71,7 +71,7 @@ export const SubscriptionDetails = ({
       setSubDetails(data.subscriptionDetails);
       window.open(data.short_url, "_blank");
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       disableLoader();
       setDialogMessage("cancellation request failed, please try again!");
       setShowDialog(true);
@@ -133,7 +133,12 @@ export const SubscriptionDetails = ({
             className="w-full md:w-96 py-2 mt-8 bg-blue-600 hover:bg-blue-700 text-sm md:text-base text-white rounded-lg font-medium"
             onClick={() => {
               // cancelSub();
-              trackEvent("click", "Buttons", "Cancel Subscription", "Cancel Subscription from account details page");
+              trackEvent(
+                "click",
+                "Buttons",
+                "Cancel Subscription",
+                "Cancel Subscription from account details page"
+              );
               setText("You are about to cancel subscription!");
               showConfirm();
             }}
@@ -164,7 +169,12 @@ export const SubscriptionDetails = ({
         <div
           className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-base mt-8 cursor-pointer"
           onClick={() => {
-            trackEvent("click", "Buttons", "Subscribe", "Subscribe from account details page");
+            trackEvent(
+              "click",
+              "Buttons",
+              "Subscribe",
+              "Subscribe from account details page"
+            );
             navigate(`/pricing`);
           }}
         >

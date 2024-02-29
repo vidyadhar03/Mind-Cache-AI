@@ -91,12 +91,12 @@ export function Chat() {
           setMessages(data.messages);
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
 
     newWs.onopen = () => {
-      console.log("WebSocket connected");
+      // console.log("WebSocket connected");
     };
 
     newWs.onerror = (error) => {
@@ -104,7 +104,7 @@ export function Chat() {
     };
 
     newWs.onclose = () => {
-      console.log("WebSocket disconnected");
+      // console.log("WebSocket disconnected");
     };
 
     return () => {
@@ -112,11 +112,10 @@ export function Chat() {
     };
   }, []);
 
-  useEffect( () => {
-
-    async function init(){
+  useEffect(() => {
+    async function init() {
       const sessionLoaded = localStorage.getItem("sessionLoaded");
-      if (sessionLoaded === "" | sessionLoaded===null) {
+      if ((sessionLoaded === "") | (sessionLoaded === null)) {
         if (topicTitle) {
           StartSession();
         } else {
@@ -142,7 +141,7 @@ export function Chat() {
   }, [messages]);
 
   async function fetchSessions() {
-    console.log("called fetch sessions");
+    // console.log("called fetch sessions");
     const result = await getSessions(showToast);
     if (result.success) {
       setSessions(result.data);
@@ -152,7 +151,7 @@ export function Chat() {
   }
 
   async function StartSession() {
-    console.log("called start session");
+    // console.log("called start session");
     const result = await startSession(topicTitle, showToast);
     if (result.success) {
       const sessions = result.data;
@@ -167,7 +166,7 @@ export function Chat() {
   }
 
   async function loadSession(session) {
-    console.log("called load session");
+    // console.log("called load session");
     setSelectedSession(session);
     const result = await LoadSession(session, showToast);
     if (result.success) {
@@ -178,7 +177,7 @@ export function Chat() {
   }
 
   async function sendChat(analyse, session) {
-    console.log("called send chat");
+    // console.log("called send chat");
     const result = await aiChat(
       analyse,
       session,
@@ -224,6 +223,7 @@ export function Chat() {
           session={dotclickedsesh}
           updateSesh={setSessions}
           logout={logout}
+          toast={showToast}
         />
       )}
       <div

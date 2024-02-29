@@ -97,7 +97,7 @@ export function CreateSubscription() {
         setGotSubLink(true);
         // disableLoader();
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         // disableLoader();
         setDialogMessage("Payment request failed, please try again!");
         setShowDialog(true);
@@ -141,7 +141,7 @@ export function CreateSubscription() {
         image: "/mindcachelogo.png",
         handler: function (response) {
           // Handle success: you can use response.razorpay_payment_id, response.razorpay_subscription_id
-          console.log("response after the payment:", response);
+          // console.log("response after the payment:", response);
           const data = {
             paymentid: response.razorpay_payment_id,
             subscriptionId: response.razorpay_subscription_id,
@@ -216,7 +216,12 @@ export function CreateSubscription() {
             <button
               className="w-full md:w-96 py-2 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-lg font-medium"
               onClick={() => {
-              trackEvent("click", "Buttons", "Proceed to payment", "Proceed to payment from Subscription creation page");
+                trackEvent(
+                  "click",
+                  "Buttons",
+                  "Proceed to payment",
+                  "Proceed to payment from Subscription creation page"
+                );
                 setupRazorpayCheckout(subId);
               }}
               disabled={!subId}

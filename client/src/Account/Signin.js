@@ -34,7 +34,7 @@ function SignIn() {
   const [dialogMessage, setDialogMessage] = useState("");
 
   function checkForm() {
-    console.log(email, password);
+    // console.log(email, password);
     if (email === "" || password === "") {
       setDialogMessage("Email and password can not be empty!");
       setShowDialog(true);
@@ -122,7 +122,7 @@ function SignIn() {
         localStorage.setItem("email", email);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
-          navigate(`/subscription`, { state: { plan }, replace: true  });
+          navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
           navigate(`/topics`, { replace: true });
         }
@@ -215,7 +215,12 @@ function SignIn() {
         className="mt-4 cursor-pointer underline text-center text-base hover:text-blue-800 "
         onClick={() => {
           showsignup ? setShowsignup(false) : setShowsignup(true);
-          trackEvent("click", "Buttons", "Create a new account", "Create a new account from sign page");
+          trackEvent(
+            "click",
+            "Buttons",
+            "Create a new account",
+            "Create a new account from sign page"
+          );
         }}
       >
         {showsignup ? "Already an user? LogIn" : "Create a new Account"}

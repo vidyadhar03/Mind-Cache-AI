@@ -4,7 +4,7 @@ import { trackEvent } from "../utils/PageTracking";
 
 const base_url = process.env.REACT_APP_API_URL;
 
-function EditSession({ onClosedialog, session, updateSesh, logout }) {
+function EditSession({ onClosedialog, session, updateSesh, logout, toast }) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
   let del = "no";
@@ -34,11 +34,11 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const json = await response.json();
-      console.log(json);
+      // console.log(json);
       updateSesh(json.data.reverse());
       onClosedialog();
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   }
 
@@ -47,7 +47,8 @@ function EditSession({ onClosedialog, session, updateSesh, logout }) {
       UpdateData();
     } else {
       if (edit === "") {
-        console.log("no change in data");
+        toast("Session title is not updated!");
+        // console.log("no change in data");
       } else {
         UpdateData();
       }

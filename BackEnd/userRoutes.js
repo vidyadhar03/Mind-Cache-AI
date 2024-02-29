@@ -33,15 +33,19 @@ const secret = process.env.JWT_SECRET;
 router.post("/signup", async (req, res) => {
   const response = vsignup(req.body);
   if (!response.success) {
-    return res
-      .status(400)
-      .json({ message: "Please use a valid email and ensure your password is at least 6 characters long", errors: response.error.issues });
+    return res.status(400).json({
+      message:
+        "Please use a valid email and ensure your password is at least 6 characters long",
+      errors: response.error.issues,
+    });
   }
   const { name, password, email } = req.body;
   try {
     let found = await User.findOne({ email: email });
     if (found) {
-      return res.status(400).json({ message: "This email is already registered. Please sign in" });
+      return res
+        .status(400)
+        .json({ message: "This email is already registered. Please sign in" });
     }
     const date = Date.now();
     const hashedpassword = await bcrypt.hash(password, saltRounds);
@@ -60,21 +64,25 @@ router.post("/signup", async (req, res) => {
       message: "User signed up succesfully!",
       token: token,
       userid: foundUser._id.toString(),
-      name : foundUser.name,
+      name: foundUser.name,
       subscriptionDetails: foundUser.subscriptionDetails,
     });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
 router.post("/login", async (req, res) => {
   const response = vlogin(req.body);
   if (!response.success) {
-    return res
-      .status(400)
-      .json({ message: "Please use a valid email and ensure your password is at least 6 characters long", errors: response.error.issues });
+    return res.status(400).json({
+      message:
+        "Please use a valid email and ensure your password is at least 6 characters long",
+      errors: response.error.issues,
+    });
   }
   const { email, password } = req.body;
   try {
@@ -88,42 +96,51 @@ router.post("/login", async (req, res) => {
           message: "Logged in!",
           token: token,
           userid: found._id.toString(),
-          name : found.name,
+          name: found.name,
           subscriptionDetails: found.subscriptionDetails,
         });
       } else {
-        res.status(401).json({ message: "Incorrect password. Please try again." });
+        res
+          .status(401)
+          .json({ message: "Incorrect password. Please try again." });
       }
     } else {
-      res.status(400).json({ message: "We couldn't find an account with that email. Please try again or create a new account." });
+      res.status(400).json({
+        message:
+          "We couldn't find an account with that email. Please try again or create a new account.",
+      });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
-router.post("/updateuser", auth, async (req,res)=>{
+router.post("/updateuser", auth, async (req, res) => {
   const response = vupdateuser(req.body);
   if (!response.success) {
     return res
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { usermail,name } = req.body;
-  try{
-    const found = await User.findOne({email:usermail});
-    if(!found){
-      return res.status(400).json({message:"User does not exist!"});
+  const { usermail, name } = req.body;
+  try {
+    const found = await User.findOne({ email: usermail });
+    if (!found) {
+      return res.status(400).json({ message: "User does not exist!" });
     }
     found.name = name;
     await found.save();
-    res.status(200).json({message:"Username updated!"});
-  }catch(e){
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res.status(200).json({ message: "Username updated!" });
+  } catch (e) {
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
-})
+});
 
 //TOPICS CRUD
 router.get("/topics/:userid", auth, async (req, res) => {
@@ -142,8 +159,10 @@ router.get("/topics/:userid", auth, async (req, res) => {
       res.status(200).json({ message: "No topics found", data: [] });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -162,7 +181,10 @@ router.post("/addtopic", auth, async (req, res) => {
       let local_topics = found.topics;
       const topic_found = local_topics.find((topic) => topic.title === title);
       if (topic_found) {
-        res.status(400).json({ message: "The Focus Area specified already exists. Try adding a new one." });
+        res.status(400).json({
+          message:
+            "The Focus Area specified already exists. Try adding a new one.",
+        });
       } else {
         local_topics.push({ title, time: timeAsDate });
         found.topics = local_topics;
@@ -178,8 +200,10 @@ router.post("/addtopic", auth, async (req, res) => {
       res.status(200).json({ message: "Topic added", data: newTopic.topics });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -190,20 +214,20 @@ router.post("/updatetopic", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { userid,topicid,title, edit, del, pin } = req.body;
+  const { userid, topicid, title, edit, del, pin } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
     let local_topics = found.topics;
     const index = local_topics.findIndex((topic) => topic.title === title);
-    console.log("before del: ", local_topics);
+    // console.log("before del: ", local_topics);
 
     if (del === "yes") {
       local_topics.splice(index, 1);
       //deleting thoughts corresponded to the topic
-      await Thought.deleteOne({topicID: topicid});
+      await Thought.deleteOne({ topicID: topicid });
     } else {
-      if (pin === "yes" || pin==="no") {
-        const b = (pin==="yes")?true:false;
+      if (pin === "yes" || pin === "no") {
+        const b = pin === "yes" ? true : false;
         local_topics[index].pinned = b;
       } else {
         local_topics[index].title = edit;
@@ -214,8 +238,10 @@ router.post("/updatetopic", auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Topic Updated", data: found.topics });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -236,8 +262,10 @@ router.get("/thoughts/:topicid", auth, async (req, res) => {
       res.status(200).json({ message: "No thoughts found", data: [] });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -269,8 +297,10 @@ router.post("/addthought", auth, async (req, res) => {
         .json({ message: "Thought added", data: newThought.thoughts });
     }
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -284,7 +314,7 @@ router.post("/updatethought", auth, async (req, res) => {
   const { topicid, thought, edit, del, collapse } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
-    console.log(found);
+    // console.log(found);
     local_thoughts = found.thoughts;
     const index = local_thoughts.findIndex(
       (thoughtl) => thoughtl.thought === thought
@@ -292,8 +322,8 @@ router.post("/updatethought", auth, async (req, res) => {
     if (del === "yes") {
       local_thoughts.splice(index, 1);
     } else {
-      if (collapse === "yes" || collapse==="no") {
-        const b = (collapse==="yes")?true:false;
+      if (collapse === "yes" || collapse === "no") {
+        const b = collapse === "yes" ? true : false;
         local_thoughts[index].collapse = b;
       } else {
         local_thoughts[index].thought = edit;
@@ -303,8 +333,10 @@ router.post("/updatethought", auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Thought Updated", data: found.thoughts });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    // console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

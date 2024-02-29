@@ -77,13 +77,13 @@ function Thoughts() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
+        // console.log(json);
         if (json.data.length === 0) {
           setEmptyThoughts(true);
         }
         setThoughts(json.data);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     fetchThoughts();

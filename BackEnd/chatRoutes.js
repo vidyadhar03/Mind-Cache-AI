@@ -92,7 +92,7 @@ router.post("/socketchat", auth, async (req, res) => {
         updatedAICount: user.subscriptionDetails.aiInteractionCount,
       });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
@@ -113,7 +113,7 @@ router.get("/sessions/:userid", auth,async (req, res) => {
       res.status(200).json({ message: "success", data: [] });
     }
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
@@ -134,7 +134,7 @@ router.get("/chatmessages/:sessionid", auth, async (req, res) => {
       res.status(200).json({ message: "success", data: [] });
     }
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
@@ -174,7 +174,7 @@ router.post("/startsession", auth, async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });
@@ -204,7 +204,7 @@ router.post("/editchatsession", auth, async (req, res) => {
     await found.save();
     res.status(200).json({ message: "Session Updated", data: local_sesh });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ message: "Error on our side. Please retry shortly." });
   }
 });

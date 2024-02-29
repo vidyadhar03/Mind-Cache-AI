@@ -1,4 +1,8 @@
-import { getSubDetails,setSubDetails,isEligible } from "../utils/SubscriptionDetails";
+import {
+  getSubDetails,
+  setSubDetails,
+  isEligible,
+} from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function getSessions(toast) {
@@ -27,7 +31,7 @@ export async function getSessions(toast) {
     result.data = json.data.reverse();
     return result;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return result;
   }
 }
@@ -58,12 +62,12 @@ export const LoadSession = async (session, toast) => {
     result.data = json.data;
     return result;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return result;
   }
 };
 
-export const startSession = async (topicTitle,toast) => {
+export const startSession = async (topicTitle, toast) => {
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "startsession", {
@@ -96,12 +100,19 @@ export const startSession = async (topicTitle,toast) => {
     result.data = sessions;
     return result;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return result;
   }
 };
 
-export async function aiChat(analyse, session, getPrompt, userInput, setUserInput, toast) {
+export async function aiChat(
+  analyse,
+  session,
+  getPrompt,
+  userInput,
+  setUserInput,
+  toast
+) {
   let result = { success: false, data: [], logout: false };
 
   if (isEligible()) {
@@ -142,7 +153,7 @@ export async function aiChat(analyse, session, getPrompt, userInput, setUserInpu
       result.success = true;
       return result;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       return result;
     }
   } else {

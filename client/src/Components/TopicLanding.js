@@ -11,10 +11,10 @@ function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
   async function handleCreate(event) {
     event.preventDefault();
     if (topic !== "") {
-      console.log("called api");
+      // console.log("called api");
       const result = await AddTopicAPI(topic,toast);
       if (result.success) {
-        console.log("result success");
+        // console.log("result success");
         setTopics(pinTopics(result.data));
         emptydata(false);
         navigate(`/topics`);

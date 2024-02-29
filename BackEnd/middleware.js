@@ -10,7 +10,7 @@ module.exports = {
     }
     try {
       const decoded = jwt.verify(authHeader, secret);
-      console.log(decoded.id);
+      // console.log(decoded.id);
       if (decoded && decoded.userId) {
         // req.userId = decoded.id;
         next();

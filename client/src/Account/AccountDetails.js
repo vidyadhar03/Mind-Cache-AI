@@ -7,8 +7,10 @@ import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
 export const AccountDetails = () => {
-  const namestored = localStorage.getItem("username")?localStorage.getItem("username"):"";
-  console.log(namestored);
+  const namestored = localStorage.getItem("username")
+    ? localStorage.getItem("username")
+    : "";
+  // console.log(namestored);
   const [name, setName] = useState(namestored);
   const globalEmail = localStorage.getItem("email");
   //loader
@@ -62,7 +64,7 @@ export const AccountDetails = () => {
         showToast(json.message);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      localStorage.setItem("username",name);
+      localStorage.setItem("username", name);
       showToast("Name updated");
       disableLoader();
     } catch (e) {
@@ -110,8 +112,13 @@ export const AccountDetails = () => {
       {/* <div className="mt-4 text-base font-medium underline">Reset Password</div> */}
       <div
         className="text-center w-full md:w-3/4 px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium  shadow-lg text-sm md:text-base mt-8 cursor-pointer"
-        onClick={()=>{
-          trackEvent("click", "Buttons", "Update User Details", "Update from Account details page");
+        onClick={() => {
+          trackEvent(
+            "click",
+            "Buttons",
+            "Update User Details",
+            "Update from Account details page"
+          );
           AddUserName();
         }}
       >

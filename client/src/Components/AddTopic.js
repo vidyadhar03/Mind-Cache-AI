@@ -3,20 +3,15 @@ import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
 
-function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
-  const [newTopic,setNewTopic] = useState("");
+function AddTopic({ onClosedialog, toast, pinTopics, setTopics, logout }) {
+  const [newTopic, setNewTopic] = useState("");
 
   async function handleCreate(event) {
-    trackEvent(
-      "click",
-      "Buttons",
-      "Add",
-      "Add from add topic layout"
-    );
+    trackEvent("click", "Buttons", "Add", "Add from add topic layout");
     event.preventDefault();
     if (newTopic !== "") {
-      const result = await AddTopicAPI(newTopic,toast);
-      console.log(result);
+      const result = await AddTopicAPI(newTopic, toast);
+      // console.log(result);
       if (result.success) {
         setNewTopic("");
         setTopics(pinTopics(result.data));
@@ -24,7 +19,7 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
       } else {
         if (result.logout) {
           logout();
-        } 
+        }
       }
     } else {
       toast("Focus Area is empty!");
@@ -49,7 +44,7 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
               }}
               value={newTopic}
               fullWidth
-              onChange={(e) => (setNewTopic(e.target.value))}
+              onChange={(e) => setNewTopic(e.target.value)}
             />
           </div>
 
@@ -63,7 +58,7 @@ function AddTopic({ onClosedialog, toast,pinTopics,setTopics,logout }) {
 
             <button
               className="py-2 flex-1 bg-white hover:bg-bgc text-black border-2 text-base rounded-lg ml-2"
-              onClick={()=>{
+              onClick={() => {
                 onClosedialog();
                 trackEvent(
                   "click",
