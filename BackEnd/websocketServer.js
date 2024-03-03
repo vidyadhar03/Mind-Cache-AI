@@ -9,6 +9,12 @@ exports.initWebSocketServer = (server) => {
 
     ws.on("message", (message) => {
       // console.log('Received message from client:', message);
+      const data = JSON.parse(message);
+      if (data.type === 'register') {
+        // Store the association of ws to the sessionId
+        // console.log("set session id ",data.sessionId);
+        ws.sessionId = data.sessionId;
+      }
     });
   });
 };
@@ -16,7 +22,7 @@ exports.initWebSocketServer = (server) => {
 // Broadcasts a message to all connected clients
 exports.broadcast = (sessionId,data) => {
   if (!wss) {
-    console.error("WebSocket server not initialized");
+    // console.error("WebSocket server not initialized");
     return;
   }
   wss.clients.forEach((client) => {

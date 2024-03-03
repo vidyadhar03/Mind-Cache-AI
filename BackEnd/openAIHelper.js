@@ -40,9 +40,9 @@ async function StreamWithOpenAI(messages, broadcast) {
       }
     }
 
-    // for (let i =0;i<15;i++){
+    // for (let i =0;i<2;i++){
     //   setTimeout(function(){
-    //     const chunk = "sending chunk";
+    //     const chunk = "sending chunk  ";
     //     fullResponse+=chunk;
     //     broadcast(chunk);
     //   },700)
