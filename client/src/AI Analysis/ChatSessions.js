@@ -30,7 +30,7 @@ export const ChatSessions = ({
             onSelectSession(session);
             if (isSidebarOpen) toggleSidebar();
             e.stopPropagation();
-            localStorage.setItem("sessionLoaded", JSON.stringify(session));
+            // localStorage.setItem("sessionLoaded", JSON.stringify(session));
           }}
         >
           <div className="w-80 overflow-hidden">{session.sessionTitle}</div>

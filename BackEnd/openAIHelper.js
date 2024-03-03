@@ -45,7 +45,7 @@ async function StreamWithOpenAI(messages, broadcast) {
     //     const chunk = "sending chunk";
     //     fullResponse+=chunk;
     //     broadcast(chunk);
-    //   },100)
+    //   },700)
     // }
 
     return fullResponse; // Return the full response for database update

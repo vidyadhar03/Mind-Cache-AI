@@ -14,13 +14,13 @@ exports.initWebSocketServer = (server) => {
 };
 
 // Broadcasts a message to all connected clients
-exports.broadcast = (data) => {
+exports.broadcast = (sessionId,data) => {
   if (!wss) {
     console.error("WebSocket server not initialized");
     return;
   }
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN && client.sessionId === sessionId) {
       client.send(JSON.stringify(data));
     }
   });
