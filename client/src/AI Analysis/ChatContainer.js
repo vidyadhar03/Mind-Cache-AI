@@ -105,16 +105,16 @@ export function Chat() {
           setMessages(data.messages);
         }
       } catch (e) {
-        console.error("WebSocket message error:", e);
+        // console.error("WebSocket message error:", e);
       }
     };
 
     newWs.onerror = (error) => {
-      console.error("WebSocket error:", error);
+      // console.error("WebSocket error:", error);
     };
 
     newWs.onclose = () => {
-      console.log("WebSocket disconnected");
+      // console.log("WebSocket disconnected");
     };
 
     // Update the state with the new WebSocket connection
@@ -137,7 +137,6 @@ export function Chat() {
       const sessionLoaded = localStorage.getItem("sessionLoaded");
       if ((sessionLoaded === "") | (sessionLoaded === null)) {
         if (topicTitle) {
-          console.log("yes new session");
           StartSession();
         } else {
           if (sessionsr && sessionsr.length > 0) {
@@ -199,7 +198,6 @@ export function Chat() {
   }
 
   async function sendChat(analyse, session) {
-    // console.log("called send chat");
     const result = await aiChat(
       analyse,
       session,

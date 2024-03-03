@@ -53,7 +53,7 @@ router.post("/socketchat", auth, async (req, res) => {
       // console.log("received chunk: ", chunk)
       stream_message += chunk;
       stream_messages[stream_messages.length - 1].content = stream_message;
-      broadcast({
+      broadcast(user_messages.sessionID.toString(), {
         sessionId: user_messages.sessionID,
         messages: stream_messages,
       });
