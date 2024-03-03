@@ -6,7 +6,7 @@ export const MessageSection = ({ messages, messagesEndRef }) => {
   return (
     <div
       id="messages"
-      className="overflow-y-auto px-4 md:px-16 hide-scrollbar max-h-[calc(100vh-102px)] pb-8"
+      className="overflow-y-auto px-4 md:px-16 hide-scrollbar max-h-[calc(100vh-102px)] pb-8 whitespace-pre-wrap max-w-full"
     >
       {messages.map((msg, index) => (
         <div key={index} className="">

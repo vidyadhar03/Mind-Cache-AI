@@ -25,6 +25,7 @@ export function Chat() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
   const [dotclickedsesh, setDotClickedSesh] = useState(null);
+  const [ws, setWs] = useState(null);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -80,8 +81,21 @@ export function Chat() {
     return prompt1 + mytopic + mythoughts + prompt2;
   }
 
-  useEffect(() => {
+  const initWebSocket = (sessionId) => {
+    // Close existing WebSocket connection if open
+    if (ws) {
+      ws.close();
+    }
+
+    // Create a new WebSocket connection
     const newWs = new WebSocket(process.env.REACT_APP_WS_URL);
+
+    newWs.onopen = () => {
+      // Once the connection is open, send the session ID to register
+      if (sessionId) {
+        newWs.send(JSON.stringify({ type: "register", sessionId }));
+      }
+    };
 
     newWs.onmessage = (event) => {
       try {
@@ -91,12 +105,8 @@ export function Chat() {
           setMessages(data.messages);
         }
       } catch (e) {
-        // console.log(e);
+        console.error("WebSocket message error:", e);
       }
-    };
-
-    newWs.onopen = () => {
-      // console.log("WebSocket connected");
     };
 
     newWs.onerror = (error) => {
@@ -104,11 +114,21 @@ export function Chat() {
     };
 
     newWs.onclose = () => {
-      // console.log("WebSocket disconnected");
+      console.log("WebSocket disconnected");
     };
 
+    // Update the state with the new WebSocket connection
+    setWs(newWs);
+  };
+
+  useEffect(() => {
+    // Call initWebSocket without session ID on component mount
+    initWebSocket(null);
+    // Ensure WebSocket is closed when component unmounts
     return () => {
-      newWs.close();
+      if (ws) {
+        ws.close();
+      }
     };
   }, []);
 
@@ -117,6 +137,7 @@ export function Chat() {
       const sessionLoaded = localStorage.getItem("sessionLoaded");
       if ((sessionLoaded === "") | (sessionLoaded === null)) {
         if (topicTitle) {
+          console.log("yes new session");
           StartSession();
         } else {
           if (sessionsr && sessionsr.length > 0) {
@@ -128,8 +149,8 @@ export function Chat() {
           }
         }
       } else {
+        await loadSession(JSON.parse(sessionLoaded));
         await fetchSessions();
-        loadSession(JSON.parse(sessionLoaded));
       }
     }
 
@@ -156,18 +177,19 @@ export function Chat() {
     if (result.success) {
       const sessions = result.data;
       setSessions(sessions);
-      setSelectedSession(sessions[0]);
+      // setSelectedSession(sessions[0]);
+      await loadSession(sessions[0]);
       await sendChat(true, sessions[0]);
-      loadSession(sessions[0]);
-      localStorage.setItem("sessionLoaded", JSON.stringify(sessions[0]));
+      // localStorage.setItem("sessionLoaded", JSON.stringify(sessions[0]));
     } else {
       if (result.logout) logout();
     }
   }
 
   async function loadSession(session) {
-    // console.log("called load session");
     setSelectedSession(session);
+    initWebSocket(session._id);
+    localStorage.setItem("sessionLoaded", JSON.stringify(session));
     const result = await LoadSession(session, showToast);
     if (result.success) {
       setMessages(result.data);
