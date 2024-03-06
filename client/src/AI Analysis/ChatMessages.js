@@ -3,6 +3,7 @@ import { trackEvent } from "../utils/PageTracking";
 
 // MessageSection.js
 export const MessageSection = ({ messages, messagesEndRef }) => {
+  console.log("called message section");
   return (
     <div
       id="messages"
@@ -38,16 +39,80 @@ export const MessageSection = ({ messages, messagesEndRef }) => {
 };
 
 // MessageInput.js
+// export const MessageInput = ({
+//   onSendMessage,
+//   selectedSession,
+//   userInput,
+//   setUserInput,
+// }) => {
+//   const handleSubmit = (e) => {
+//     trackEvent("click", "Buttons", "Send Chat", "Send Message from chat page");
+//     e.preventDefault(); // This prevents the default form submission behavior
+//     onSendMessage(false, selectedSession);
+//   };
+
+//   // Define an array of placeholder texts
+//   const placeholders = [
+//     "Message Mind Cache AI...",
+//     "Ask for hidden patterns...",
+//     "Seek out for more insights...",
+//     "Inquire about methods to advance...",
+//   ];
+
+//   // State to track the current placeholder index
+//   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+
+//   // Set up an interval to cycle through placeholders
+//   useEffect(() => {
+//     const intervalId = setInterval(() => {
+//       setCurrentPlaceholderIndex(
+//         (currentPlaceholderIndex) =>
+//           (currentPlaceholderIndex + 1) % placeholders.length // Cycle through the placeholders
+//       );
+//     }, 2000); // Change placeholder every 2 seconds
+
+//     // Clean up the interval on component unmount
+//     return () => clearInterval(intervalId);
+//   }, []);
+
+//   return (
+//     <div
+//       id="form"
+//       className="fixed bottom-0 h-10 min-h-16 flex items-cente w-full md:w-3/4 "
+//     >
+//       <form
+//         onSubmit={handleSubmit}
+//         className="w-full h-full py-1 flex justify-center"
+//       >
+//         <div className="mx-4 md:ml-16 md:mr-24 flex w-full border border-black rounded-lg overflow-hidden">
+//           <input
+//             type="text"
+//             value={userInput}
+//             onChange={(e) => setUserInput(e.target.value)}
+//             placeholder={placeholders[currentPlaceholderIndex]}
+//             className="p-2 flex-grow w-5/6 outline-none"
+//           />
+//           <button
+//             type="submit"
+//             className=" w-1/6  px-4 rounded-r-lg flex justify-center items-center bg-white cursor-pointer"
+//           >
+//             <img src="/sendicon.png" className="h-4 md:h-6 w-auto" alt="" />
+//           </button>
+//         </div>
+//       </form>
+//     </div>
+//   );
+// };
+
 export const MessageInput = ({
   onSendMessage,
   selectedSession,
-  userInput,
-  setUserInput,
 }) => {
+  const [userInput,setUserInput] = useState("");
   const handleSubmit = (e) => {
     trackEvent("click", "Buttons", "Send Chat", "Send Message from chat page");
     e.preventDefault(); // This prevents the default form submission behavior
-    onSendMessage(false, selectedSession);
+    onSendMessage(false, selectedSession,userInput,setUserInput);
   };
 
   // Define an array of placeholder texts

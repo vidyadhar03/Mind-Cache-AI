@@ -20,7 +20,7 @@ export function Chat() {
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
-  const [userInput, setUserInput] = useState("");
+  // const [userInput, setUserInput] = useState("");
   const messagesEndRef = useRef(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
@@ -178,7 +178,8 @@ export function Chat() {
       setSessions(sessions);
       // setSelectedSession(sessions[0]);
       await loadSession(sessions[0]);
-      await sendChat(true, sessions[0]);
+      // await sendChat(true, sessions[0]);
+      await sendChat(true, sessions[0], "", () => {});
       // localStorage.setItem("sessionLoaded", JSON.stringify(sessions[0]));
     } else {
       if (result.logout) logout();
@@ -197,7 +198,21 @@ export function Chat() {
     }
   }
 
-  async function sendChat(analyse, session) {
+  // async function sendChat(analyse, session) {
+  //   const result = await aiChat(
+  //     analyse,
+  //     session,
+  //     getPrompt,
+  //     userInput,
+  //     setUserInput,
+  //     showToast
+  //   );
+  //   if (!result.success) {
+  //     if (result.logout) logout();
+  //   }
+  // }
+
+  async function sendChat(analyse, session, userInput, setUserInput) {
     const result = await aiChat(
       analyse,
       session,
@@ -276,8 +291,8 @@ export function Chat() {
           <MessageInput
             onSendMessage={sendChat}
             selectedSession={selectedSession}
-            userInput={userInput}
-            setUserInput={setUserInput}
+            // userInput={userInput}
+            // setUserInput={setUserInput}
           />
         </div>
       </div>
