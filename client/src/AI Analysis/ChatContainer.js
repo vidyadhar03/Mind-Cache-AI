@@ -248,6 +248,11 @@ export function Chat() {
     );
   }
 
+  function updateSessions(sessions){
+    setSessions(sessions);
+    loadSession(sessions[0]);
+  }
+
   return (
     <div className="min-h-screen bg-bgc font-sans">
       {editSessionlayout && (
@@ -256,7 +261,7 @@ export function Chat() {
             setEditSessionLayout(false);
           }}
           session={dotclickedsesh}
-          updateSesh={setSessions}
+          updateSesh={updateSessions}
           logout={logout}
           toast={showToast}
         />
