@@ -107,12 +107,17 @@ export const MessageSection = ({ messages, messagesEndRef }) => {
 export const MessageInput = ({
   onSendMessage,
   selectedSession,
+  toast
 }) => {
   const [userInput,setUserInput] = useState("");
   const handleSubmit = (e) => {
     trackEvent("click", "Buttons", "Send Chat", "Send Message from chat page");
     e.preventDefault(); // This prevents the default form submission behavior
+    if(userInput===""){
+      toast("No text was entered in the message.");
+    }else{
     onSendMessage(false, selectedSession,userInput,setUserInput);
+    }
   };
 
   // Define an array of placeholder texts

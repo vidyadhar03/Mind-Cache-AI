@@ -296,6 +296,7 @@ export function Chat() {
           <MessageInput
             onSendMessage={sendChat}
             selectedSession={selectedSession}
+            toast={showToast}
             // userInput={userInput}
             // setUserInput={setUserInput}
           />
