@@ -1,0 +1,1 @@
+Mind Cache AI - Your Pathway to Mindful Clarity: The AI-Powered Reflection Companion
