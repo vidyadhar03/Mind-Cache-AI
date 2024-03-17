@@ -1,11 +1,17 @@
 export function smoothifyDate(date) {
-  const parts = date.split("T");
+  // const parts = date.split("T");
 
-  const datePart = parts[0];
+  // const datePart = parts[0];
 
-  const timePart = parts[1].substring(0, 5);
+  // const timePart = parts[1].substring(0, 5);
 
-  const formattedDateString = datePart + '  ' + timePart;
+  // const formattedDateString = datePart + '  ' + timePart;
 
-  return formattedDateString
+  // return formattedDateString
+
+  const localTime = new Date(date);
+
+  return localTime.toLocaleString();
+
+
 }
