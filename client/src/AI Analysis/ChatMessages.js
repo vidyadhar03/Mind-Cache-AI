@@ -3,7 +3,7 @@ import { trackEvent } from "../utils/PageTracking";
 
 // MessageSection.js
 export const MessageSection = ({ messages, messagesEndRef }) => {
-  console.log("called message section");
+  // console.log("called message section");
   return (
     <div
       id="messages"
