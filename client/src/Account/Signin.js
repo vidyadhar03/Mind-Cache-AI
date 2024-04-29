@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
-import { setSubDetails } from "../utils/SubscriptionDetails";
+import {
+  setSubDetails,
+  setUserDetails,
+  getUserDetails,
+} from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
+import { deriveKeyFromPassword } from "../utils/Encryption";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -120,6 +125,28 @@ function SignIn() {
         localStorage.setItem("userid", json.userid);
         localStorage.setItem("username", json.name);
         localStorage.setItem("email", email);
+        let derivedkey = "";
+        deriveKeyFromPassword(password)
+          .then((derivedKeyBase64) => {
+            let ud = getUserDetails();
+            ud.derivedkey = derivedKeyBase64;
+            setUserDetails(ud);
+          })
+          .catch((error) => {
+            deriveKeyFromPassword(password).then((derivedKeyBase64) => {
+              let ud = getUserDetails();
+              ud.derivedkey = derivedKeyBase64;
+              setUserDetails(ud);
+            });
+          });
+
+        let userDetails = {
+          usertoken: json.token,
+          userid: json.userid,
+          username: json.name,
+          email: email,
+        };
+        setUserDetails(userDetails);
         setSubDetails(json.subscriptionDetails);
         if (plan) {
           navigate(`/subscription`, { state: { plan }, replace: true });

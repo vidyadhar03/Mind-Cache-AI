@@ -1,7 +1,9 @@
-async function deriveKeyFromPassword(password, salt) {
+
+export async function deriveKeyFromPassword(password) {
   // Ensure the salt is unique for each user and securely generated
   const encoder = new TextEncoder();
   const passwordBuffer = encoder.encode(password);
+  const salt= 'UniqueMindCacheAISalt';
   const saltBuffer = encoder.encode(salt);
 
   // Import the password into a CryptoKey
@@ -35,10 +37,10 @@ async function deriveKeyFromPassword(password, salt) {
   return btoa(String.fromCharCode.apply(null, new Uint8Array(keyBuffer)));
 }
 
-// Example usage:
-const password = 'yourPasswordHere';
-const salt = 'yourUniqueSaltHere';  // This should be unique and securely stored/generated
+// // Example usage:
+// const password = 'yourPasswordHere';
+// const salt = 'yourUniqueSaltHere';  // This should be unique and securely stored/generated
 
-deriveKeyFromPassword(password, salt)
-  .then(derivedKeyBase64 => console.log('Derived key:', derivedKeyBase64))
-  .catch(error => console.error('Error deriving key:', error));
+// deriveKeyFromPassword(password, salt)
+//   .then(derivedKeyBase64 => console.log('Derived key:', derivedKeyBase64))
+//   .catch(error => console.error('Error deriving key:', error));

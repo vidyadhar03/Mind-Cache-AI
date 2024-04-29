@@ -25,4 +25,15 @@ export function getPlanLimit(plan) {
   }
 }
 
+export function getUserDetails() {
+  const userDetailsStr = localStorage.getItem("UserDetails");
+  const userDetails = JSON.parse(userDetailsStr);
+  return userDetails;
+}
+
+export function setUserDetails(userDetails) {
+  const userDetailsStr = JSON.stringify(userDetails);
+  localStorage.setItem("UserDetails", userDetailsStr);
+}
+
 
