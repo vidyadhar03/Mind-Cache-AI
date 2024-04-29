@@ -1,56 +1,44 @@
+async function deriveKeyFromPassword(password, salt) {
+  // Ensure the salt is unique for each user and securely generated
+  const encoder = new TextEncoder();
+  const passwordBuffer = encoder.encode(password);
+  const saltBuffer = encoder.encode(salt);
 
- async function generateAndExportAESKey() {
-    try {
-      // Generate a symmetric AES-256 encryption key
-      const key = await window.crypto.subtle.generateKey(
-        {
-          name: "AES-GCM",
-          length: 256, // Can be 128, 192, or 256 bits
-        },
-        true, // Whether the key is extractable
-        ["encrypt", "decrypt"] // Key usages
-      );
-  
-      // Export the key to an ArrayBuffer (for example, to store it)
-      const exportedKey = await window.crypto.subtle.exportKey(
-        "raw", // Export as raw bytes
-        key
-      );
-  
-      // Convert ArrayBuffer to a hexadecimal string for easier storage
-      const keyHex = bufferToHex(exportedKey);
-  
-      return keyHex;
-    } catch (error) {
-      console.error("Error generating or exporting the key:", error);
-      return null;
-    }
-  }
-  
-  // Helper function to convert an ArrayBuffer to a hexadecimal string
-  function bufferToHex(buffer) {
-    return [...new Uint8Array(buffer)]
-      .map(b => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-  
-  // Example usage
-  generateAndExportAESKey().then((keyHex) => {
-    console.log("Generated AES Key:", keyHex);
-    // Store the keyHex securely, e.g., after encrypting it with the user's password-derived key
-  });
-  
+  // Import the password into a CryptoKey
+  const keyMaterial = await window.crypto.subtle.importKey(
+      'raw',
+      passwordBuffer,
+      { name: 'PBKDF2' },
+      false,
+      ['deriveBits', 'deriveKey']
+  );
 
- function EncryptUniqueKey() {}
+  // Set the parameters for the PBKDF2
+  const deriveParams = {
+      name: 'PBKDF2',
+      salt: saltBuffer,
+      iterations: 100000,  // Number of iterations, higher is more secure but slower
+      hash: 'SHA-256'      // Hash function
+  };
 
- function DecryptUniqueKey() {}
+  // Derive a key from the password
+  const derivedKey = await window.crypto.subtle.deriveKey(
+      deriveParams,
+      keyMaterial,
+      { name: 'AES-GCM', length: 256 },  // Specify the key algorithm you want to use
+      true,
+      ['encrypt', 'decrypt']  // Key usages
+  );
 
- function EncryptData(data) {
-  let encryptedData = "";
-  return encryptedData;
+  // Export the CryptoKey to an ArrayBuffer and then to Base64
+  const keyBuffer = await window.crypto.subtle.exportKey('raw', derivedKey);
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(keyBuffer)));
 }
 
- function DecryptData(data) {
-  let decryptedData = "";
-  return decryptedData;
-}
+// Example usage:
+const password = 'yourPasswordHere';
+const salt = 'yourUniqueSaltHere';  // This should be unique and securely stored/generated
+
+deriveKeyFromPassword(password, salt)
+  .then(derivedKeyBase64 => console.log('Derived key:', derivedKeyBase64))
+  .catch(error => console.error('Error deriving key:', error));
