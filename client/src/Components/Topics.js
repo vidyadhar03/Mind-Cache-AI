@@ -7,7 +7,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
-import { getSubDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -20,6 +20,7 @@ function Topics() {
   const [emptytopics, setEmptyTopics] = useState(false);
   const [sort, setSort] = useState(" by latest");
   const subDetails = getSubDetails();
+  const userDetails = getUserDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -60,6 +61,7 @@ function Topics() {
     localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -69,11 +71,11 @@ function Topics() {
     const fetchTopics = async () => {
       try {
         const response = await fetch(
-          base_url + "topics/" + localStorage.getItem("userid"),
+          base_url + "topics/" + userDetails.userid,
           {
             method: "GET",
             headers: {
-              authorization: localStorage.getItem("usertoken"),
+              authorization: userDetails.usertoken,
             },
           }
         );

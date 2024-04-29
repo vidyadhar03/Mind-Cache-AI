@@ -2,18 +2,20 @@ import {
   getSubDetails,
   setSubDetails,
   isEligible,
+  getUserDetails
 } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function getSessions(toast) {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(
-      base_url + "sessions/" + localStorage.getItem("userid"),
+      base_url + "sessions/" + userDetails.userid,
       {
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
         },
       }
     );
@@ -37,12 +39,13 @@ export async function getSessions(toast) {
 }
 
 export const LoadSession = async (session, toast) => {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "chatmessages/" + session._id, {
       method: "GET",
       headers: {
-        authorization: localStorage.getItem("usertoken"),
+        authorization: userDetails.usertoken,
       },
     });
     if (response.status === 403) {
@@ -68,16 +71,17 @@ export const LoadSession = async (session, toast) => {
 };
 
 export const startSession = async (topicTitle, toast) => {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "startsession", {
       method: "POST",
       headers: {
-        authorization: localStorage.getItem("usertoken"),
+        authorization: userDetails.usertoken,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userid: localStorage.getItem("userid"),
+        userid: userDetails.userid,
         sessionTitle: topicTitle,
         time: new Date().toISOString(),
       }),
@@ -113,6 +117,7 @@ export async function aiChat(
   setUserInput,
   toast
 ) {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
 
   if (isEligible()) {
@@ -128,11 +133,11 @@ export async function aiChat(
       const response = await fetch(base_url + "socketchat", {
         method: "POST",
         headers: {
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userid: localStorage.getItem("userid"),
+          userid: userDetails.userid,
           sessionid: session._id,
           userinput: input,
         }),

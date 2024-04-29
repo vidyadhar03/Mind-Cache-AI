@@ -6,13 +6,14 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NavBar from "./Commons/NavBar";
 import { trackEvent } from "./utils/PageTracking";
+import { getUserDetails } from "./utils/SubscriptionDetails";
 import "./App.css";
 
 function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("userid")) {
+    if (getUserDetails()) {
       navigate(`/topics`);
     }
   }, []);
@@ -293,7 +294,7 @@ function HomePage() {
         "Subscribe",
         `${plan} subscribe from Landing Page`
       );
-      if (localStorage.getItem("usertoken")) {
+      if (getUserDetails()) {
         navigate(`/subscription`, { state: { plan } });
       } else {
         navigate(`/signin`, { state: { plan } });

@@ -40,6 +40,7 @@ export function Entrance() {
           localStorage.removeItem("username");
           localStorage.removeItem("sessionLoaded");
           localStorage.removeItem("email");
+          localStorage.removeItem("UserDetails");
           localStorage.removeItem("subscriptionDetails");
           showToast("Authentication failed, Kindly Login again!");
           navigate(`/`);

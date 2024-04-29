@@ -18,6 +18,7 @@ export function ConfirmLayout({ onClosedialog, text, setTriggercancel }) {
       localStorage.removeItem("username");
       localStorage.removeItem("sessionLoaded");
       localStorage.removeItem("email");
+      localStorage.removeItem("UserDetails");
       localStorage.removeItem("subscriptionDetails");
       onClosedialog();
       navigate(`/`);

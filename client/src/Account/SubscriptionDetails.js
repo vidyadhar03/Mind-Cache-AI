@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getSubDetails, setSubDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails, setSubDetails ,getUserDetails} from "../utils/SubscriptionDetails";
 import { useEffect, useState } from "react";
 import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
@@ -13,6 +13,7 @@ export const SubscriptionDetails = ({
   setTriggercancel,
 }) => {
   const navigate = useNavigate();
+  const userDetails = getUserDetails
   const subDetails = getSubDetails();
   //loader
   const [isLoading, setIsLoading] = useState(false);
@@ -42,10 +43,10 @@ export const SubscriptionDetails = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
         },
         body: JSON.stringify({
-          usermail: localStorage.getItem("email"),
+          usermail: userDetails.email,
         }),
       });
       if (response.status === 403) {
@@ -54,6 +55,7 @@ export const SubscriptionDetails = ({
         localStorage.removeItem("username");
         localStorage.removeItem("sessionLoaded");
         localStorage.removeItem("email");
+        localStorage.removeItem("UserDetails");
         localStorage.removeItem("subscriptionDetails");
         setDialogMessage("Authentication failed, Kindly Login again!");
         setShowDialog(true);

@@ -4,15 +4,17 @@ import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../utils/PageTracking";
+import { getUserDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
-
+ 
 export const AccountDetails = () => {
-  const namestored = localStorage.getItem("username")
-    ? localStorage.getItem("username")
+  const userDetails = getUserDetails()
+  const namestored = userDetails.username
+    ? userDetails.username
     : "";
   // console.log(namestored);
   const [name, setName] = useState(namestored);
-  const globalEmail = localStorage.getItem("email");
+  const globalEmail = userDetails.email;
   //loader
   const [isLoading, setIsLoading] = useState(false);
   const enableLoader = () => {
@@ -50,7 +52,7 @@ export const AccountDetails = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
         },
         body: JSON.stringify({
           usermail: globalEmail,

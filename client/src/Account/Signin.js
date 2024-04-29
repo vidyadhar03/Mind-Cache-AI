@@ -38,6 +38,31 @@ function SignIn() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
+  function updateUserDetails(json){
+    let userDetails = {
+      usertoken: json.token,
+      userid: json.userid,
+      username: json.name,
+      email: email,
+    };
+    setUserDetails(userDetails);
+    setSubDetails(json.subscriptionDetails);
+    let derivedkey = "";
+    deriveKeyFromPassword(password)
+      .then((derivedKeyBase64) => {
+        let ud = getUserDetails();
+        ud.derivedkey = derivedKeyBase64;
+        setUserDetails(ud);
+      })
+      .catch((error) => {
+        deriveKeyFromPassword(password).then((derivedKeyBase64) => {
+          let ud = getUserDetails();
+          ud.derivedkey = derivedKeyBase64;
+          setUserDetails(ud);
+        });
+      });
+  }
+
   function checkForm() {
     // console.log(email, password);
     if (email === "" || password === "") {
@@ -75,11 +100,7 @@ function SignIn() {
         }
         disableLoader();
         const json = await response.json();
-        localStorage.setItem("usertoken", json.token);
-        localStorage.setItem("userid", json.userid);
-        localStorage.setItem("username", json.name);
-        localStorage.setItem("email", email);
-        setSubDetails(json.subscriptionDetails);
+        updateUserDetails(json);
         if (plan) {
           navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
@@ -121,33 +142,8 @@ function SignIn() {
         }
         disableLoader();
         const json = await response.json();
-        localStorage.setItem("usertoken", json.token);
-        localStorage.setItem("userid", json.userid);
-        localStorage.setItem("username", json.name);
-        localStorage.setItem("email", email);
-        let derivedkey = "";
-        deriveKeyFromPassword(password)
-          .then((derivedKeyBase64) => {
-            let ud = getUserDetails();
-            ud.derivedkey = derivedKeyBase64;
-            setUserDetails(ud);
-          })
-          .catch((error) => {
-            deriveKeyFromPassword(password).then((derivedKeyBase64) => {
-              let ud = getUserDetails();
-              ud.derivedkey = derivedKeyBase64;
-              setUserDetails(ud);
-            });
-          });
+        updateUserDetails(json);
 
-        let userDetails = {
-          usertoken: json.token,
-          userid: json.userid,
-          username: json.name,
-          email: email,
-        };
-        setUserDetails(userDetails);
-        setSubDetails(json.subscriptionDetails);
         if (plan) {
           navigate(`/subscription`, { state: { plan }, replace: true });
         } else {

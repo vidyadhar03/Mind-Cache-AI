@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { getUserDetails } from "./SubscriptionDetails";
 
 export const usePageTracking = () => {
   const location = useLocation();
@@ -16,13 +17,14 @@ export const usePageTracking = () => {
 };
 
 export const trackEvent = (action, category, label, value) => {
+  const userDetails = getUserDetails();
   try {
-    if (localStorage.getItem("userid")) {
+    if (userDetails.userid) {
       window.gtag("event", action, {
         event_category: category,
         event_label: label,
         value: value,
-        user_id: localStorage.getItem("userid"),
+        user_id: userDetails.userid,
       });
     } else {
       window.gtag("event", action, {

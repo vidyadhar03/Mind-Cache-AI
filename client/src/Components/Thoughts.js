@@ -8,7 +8,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
-import { getSubDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
 import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
@@ -24,6 +24,7 @@ function Thoughts() {
   const [emptythoughts, setEmptyThoughts] = useState(false);
   const [sort, setSort] = useState(" by latest");
   const subDetails = getSubDetails();
+  const userDetails = getUserDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -52,6 +53,7 @@ function Thoughts() {
     localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
     localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -64,7 +66,7 @@ function Thoughts() {
         const response = await fetch(base_url + "thoughts/" + topicobj._id, {
           method: "GET",
           headers: {
-            authorization: localStorage.getItem("usertoken"),
+            authorization: userDetails.usertoken,
           },
         });
         if (response.status === 403) {
@@ -191,7 +193,7 @@ function Thoughts() {
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
-                  if (localStorage.getItem("userid")) {
+                  if (userDetails.userid) {
                     navigate(`/`);
                   } else {
                     navigate(`/topics`);

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
+import { getUserDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -23,6 +24,7 @@ function EditData({
   let datagot = "";
   const rowsheight = datamode === "topic" ? 1 : 4;
   const widthres = datamode === "topic" ? "w-96" : "w-1/3";
+  const userDetails = getUserDetails();
 
   if (datamode === "topic") {
     datagot = datapassed.title;
@@ -37,7 +39,7 @@ function EditData({
       if (datamode === "topic") {
         api_url = base_url + "updatetopic";
         req_body = JSON.stringify({
-          userid: localStorage.getItem("userid"),
+          userid: userDetails.userid,
           topicid: datapassed._id,
           title: datapassed.title,
           edit: edit,
@@ -59,7 +61,7 @@ function EditData({
         method: "POST",
         body: req_body,
         headers: {
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
           "Content-Type": "application/json",
         },
       });

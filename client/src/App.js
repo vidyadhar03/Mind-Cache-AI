@@ -1,6 +1,6 @@
 import Topics from "./Components/Topics";
 import Thoughts from "./Components/Thoughts";
-import ChatComponent from "./Components/ChatComponent";
+// import ChatComponent from "./Components/ChatComponent";
 import SignIn from "./Account/Signin";
 import HomePage from "./HomePage";
 import { RefundsAndCancellations } from "./policies/RefundsAndCancellations";
@@ -38,7 +38,7 @@ function RouteswithNavBar() {
         <Route path="/" element={<HomePage />} />
         <Route path="/topics" element={<Topics />} />
         <Route path="/topics/:topic" element={<Thoughts />} />
-        <Route path="/analyse" element={<ChatComponent />} />
+        {/* <Route path="/analyse" element={<ChatComponent />} /> */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<UserProfile />} />
         <Route path="/subscription" element={<CreateSubscription />} />

@@ -1,18 +1,19 @@
+import { getUserDetails } from "./SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function AddTopicAPI(newTopic, toast) {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
-    // console.log("hitting api");
     const response = await fetch(base_url + "addtopic", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: localStorage.getItem("usertoken"),
+        authorization: userDetails.usertoken,
       },
 
       body: JSON.stringify({
-        userid: localStorage.getItem("userid"),
+        userid: userDetails.userid,
         title: newTopic,
         time: new Date().toISOString(),
       }),
@@ -23,7 +24,7 @@ export async function AddTopicAPI(newTopic, toast) {
     }
     if (!response.ok) {
       const json = await response.json();
-      // console.log("printed:",json.message);
+      console.log("printed:",json.message);
       toast(json.message);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -38,13 +39,14 @@ export async function AddTopicAPI(newTopic, toast) {
 }
 
 export async function AddThoughtAPI(topicid, newThought, toast) {
+  const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
     const response = await fetch(base_url + "addthought", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: localStorage.getItem("usertoken"),
+        authorization: userDetails.usertoken,
       },
       body: JSON.stringify({
         topicid: topicid,
