@@ -8,7 +8,7 @@ import {
   getUserDetails,
 } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
-import { deriveKeyFromPassword } from "../utils/Encryption";
+import { deriveAndStoreKeyInMemory } from "../utils/Encryption";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -47,20 +47,21 @@ function SignIn() {
     };
     setUserDetails(userDetails);
     setSubDetails(json.subscriptionDetails);
-    let derivedkey = "";
-    deriveKeyFromPassword(password)
-      .then((derivedKeyBase64) => {
-        let ud = getUserDetails();
-        ud.derivedkey = derivedKeyBase64;
-        setUserDetails(ud);
-      })
-      .catch((error) => {
-        deriveKeyFromPassword(password).then((derivedKeyBase64) => {
-          let ud = getUserDetails();
-          ud.derivedkey = derivedKeyBase64;
-          setUserDetails(ud);
-        });
-      });
+    // let derivedkey = "";
+    // deriveKeyFromPassword(password)
+    //   .then((derivedKeyBase64) => {
+    //     let ud = getUserDetails();
+    //     ud.derivedkey = derivedKeyBase64;
+    //     setUserDetails(ud);
+    //   })
+    //   .catch((error) => {
+    //     deriveKeyFromPassword(password).then((derivedKeyBase64) => {
+    //       let ud = getUserDetails();
+    //       ud.derivedkey = derivedKeyBase64;
+    //       setUserDetails(ud);
+    //     });
+    //   });
+    deriveAndStoreKeyInMemory(email,password);
   }
 
   function checkForm() {

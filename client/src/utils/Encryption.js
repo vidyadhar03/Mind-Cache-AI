@@ -1,46 +1,68 @@
+import CryptoJS from 'crypto-js';
+import { getUserDetails, setUserDetails } from "./SubscriptionDetails";
 
-export async function deriveKeyFromPassword(password) {
-  // Ensure the salt is unique for each user and securely generated
-  const encoder = new TextEncoder();
-  const passwordBuffer = encoder.encode(password);
-  const salt= 'UniqueMindCacheAISalt';
-  const saltBuffer = encoder.encode(salt);
+let inMemoryKey = null;  // To hold the key in memory
 
-  // Import the password into a CryptoKey
-  const keyMaterial = await window.crypto.subtle.importKey(
-      'raw',
-      passwordBuffer,
-      { name: 'PBKDF2' },
-      false,
-      ['deriveBits', 'deriveKey']
-  );
-
-  // Set the parameters for the PBKDF2
-  const deriveParams = {
-      name: 'PBKDF2',
-      salt: saltBuffer,
-      iterations: 100000,  // Number of iterations, higher is more secure but slower
-      hash: 'SHA-256'      // Hash function
-  };
-
-  // Derive a key from the password
-  const derivedKey = await window.crypto.subtle.deriveKey(
-      deriveParams,
-      keyMaterial,
-      { name: 'AES-GCM', length: 256 },  // Specify the key algorithm you want to use
-      true,
-      ['encrypt', 'decrypt']  // Key usages
-  );
-
-  // Export the CryptoKey to an ArrayBuffer and then to Base64
-  const keyBuffer = await window.crypto.subtle.exportKey('raw', derivedKey);
-  return btoa(String.fromCharCode.apply(null, new Uint8Array(keyBuffer)));
+// Encrypt a key with CryptoJS
+function encryptKey(key, passphrase) {
+    return CryptoJS.AES.encrypt(key, passphrase).toString();
 }
 
-// // Example usage:
-// const password = 'yourPasswordHere';
-// const salt = 'yourUniqueSaltHere';  // This should be unique and securely stored/generated
+// Decrypt a key with CryptoJS
+function decryptKey(encryptedKey, passphrase) {
+    const bytes = CryptoJS.AES.decrypt(encryptedKey, passphrase);
+    return bytes.toString(CryptoJS.enc.Utf8);
+}
 
-// deriveKeyFromPassword(password, salt)
-//   .then(derivedKeyBase64 => console.log('Derived key:', derivedKeyBase64))
-//   .catch(error => console.error('Error deriving key:', error));
+// Store encrypted key in local storage
+function storeKeyLocally(encryptedKey) {
+    const userDetails = getUserDetails();
+    userDetails.encryptedKey = encryptedKey;
+    setUserDetails(userDetails);
+}
+
+// Retrieve encrypted key from local storage
+function retrieveEncryptedKeyFromLocalStorage() {
+    const userDetails = getUserDetails();
+    return userDetails.encryptedKey;
+}
+
+// Derive a key from the password and store it encrypted in local storage
+export async function deriveAndStoreKeyInMemory(email, password) {
+    const passphrase = `UniqueMindCacheAISalt${email}`;
+    const derivedKey = CryptoJS.PBKDF2(password, passphrase, {
+        keySize: 256 / 32,
+        iterations: 1000
+    }).toString();
+    const encryptedKey = encryptKey(derivedKey, passphrase);
+    storeKeyLocally(encryptedKey);
+    console.log("Derived and encrypted key stored locally.");
+}
+
+// Retrieve or decrypt the key from local storage and store it in memory
+async function getEncryptionKey() {
+    if (inMemoryKey) {
+        console.log(inMemoryKey)
+        return inMemoryKey;
+    } else {
+        const userDetails = getUserDetails();
+        const passphrase = `UniqueMindCacheAISalt${userDetails.email}`;
+        const encryptedKey = retrieveEncryptedKeyFromLocalStorage();
+        if (!encryptedKey) throw new Error('No key available in local storage');
+        inMemoryKey = decryptKey(encryptedKey, passphrase);
+        return inMemoryKey;
+    }
+}
+
+// Encrypt data using the in-memory key
+export async function encryptData(plaintext) {
+    const key = await getEncryptionKey();
+    return CryptoJS.AES.encrypt(plaintext, key).toString();
+}
+
+// Decrypt data using the in-memory key
+export async function decryptData(encryptedData) {
+    const key = await getEncryptionKey();
+    const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+    return bytes.toString(CryptoJS.enc.Utf8);
+}
