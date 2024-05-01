@@ -23,6 +23,7 @@ function storeKeyLocally(encryptedKey) {
 
 // Retrieve encrypted key from local storage
 function retrieveEncryptedKeyFromLocalStorage() {
+    console.log("encryption key retreived from local storage")
     const userDetails = getUserDetails();
     return userDetails.encryptedKey;
 }
@@ -42,7 +43,7 @@ export async function deriveAndStoreKeyInMemory(email, password) {
 // Retrieve or decrypt the key from local storage and store it in memory
 async function getEncryptionKey() {
     if (inMemoryKey) {
-        console.log(inMemoryKey)
+        // console.log(inMemoryKey)
         return inMemoryKey;
     } else {
         const userDetails = getUserDetails();

@@ -2,16 +2,18 @@ import { useState } from "react";
 import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import NavBar from "../Commons/NavBar";
+import { encryptData } from "../utils/Encryption";
 
-export function ThoughtLanding({ topic, emptydata, setThoughts, toast }) {
+export function ThoughtLanding({ topic, emptydata, decryptThoughts, toast }) {
   const [thought, setThought] = useState("");
 
   async function handleCreate(event) {
     event.preventDefault();
     if (thought !== "") {
-      const result = await AddThoughtAPI(topic._id, thought,toast);
+      const encryptedThought = await encryptData(thought);
+      const result = await AddThoughtAPI(topic._id, encryptedThought,toast);
       if (result.success) {
-        setThoughts(result.data);
+        await decryptThoughts(result.data);
         emptydata(false);
       } else {
         toast("something went wrong, try again later!");

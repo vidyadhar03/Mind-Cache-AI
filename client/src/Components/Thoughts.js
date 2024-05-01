@@ -10,6 +10,7 @@ import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
 import { getSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
+import { decryptData } from "../utils/Encryption";
 import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -29,6 +30,14 @@ function Thoughts() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+
+  async function decryptThoughts(encryptedThoughts){
+    for(let thought of encryptedThoughts){
+      const decryptedthought = await decryptData(thought.thought);
+      if(decryptedthought!=="") thought.thought=decryptedthought 
+    }
+    setThoughts(encryptedThoughts);
+  }
 
   function reverseThoughts() {
     trackEvent(
@@ -83,7 +92,7 @@ function Thoughts() {
         if (json.data.length === 0) {
           setEmptyThoughts(true);
         }
-        setThoughts(json.data);
+        await decryptThoughts(json.data);
       } catch (e) {
         // console.log(e);
       }
@@ -152,7 +161,7 @@ function Thoughts() {
             setshowaddthought(false);
           }}
           topic={topicobj}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
           logout={logout}
         />
@@ -166,7 +175,7 @@ function Thoughts() {
           datapassed={selectedthought}
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
           logout={logout}
         />
@@ -183,7 +192,7 @@ function Thoughts() {
         <ThoughtLanding
           topic={topicobj}
           emptydata={setEmptyThoughts}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
         />
       ) : (

@@ -3,19 +3,22 @@ import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../Commons/NavBar";
+import { encryptData } from "../utils/Encryption";
 
-function TopicLanding({ emptydata, toast, pinTopics,setTopics }) {
+function TopicLanding({ emptydata, toast, decryptTopics, pinTopics,setTopics }) {
   const navigate = useNavigate();
   const [topic, setTopic] = useState("");
 
   async function handleCreate(event) {
     event.preventDefault();
     if (topic !== "") {
+      const encryptedTopic = await encryptData(topic)
       // console.log("called api");
-      const result = await AddTopicAPI(topic,toast);
+      const result = await AddTopicAPI(encryptedTopic,toast);
       if (result.success) {
         // console.log("result success");
-        setTopics(pinTopics(result.data));
+        const decryptedTopics = await decryptTopics(result.data);
+        setTopics(pinTopics(decryptedTopics));
         emptydata(false);
         navigate(`/topics`);
       } else {

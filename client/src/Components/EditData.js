@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
 import { getUserDetails } from "../utils/SubscriptionDetails";
+import { encryptData } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -11,8 +12,9 @@ function EditData({
   topicid,
   emptydata,
   toast,
-  setThoughts,
+  decryptThoughts,
   setTopics,
+  decryptTopics,
   pinTopics,
   logout,
 }) {
@@ -38,20 +40,25 @@ function EditData({
       let req_body = "";
       if (datamode === "topic") {
         api_url = base_url + "updatetopic";
+        const topic_title = await encryptData(datapassed.title);
+        const topic_edited = await encryptData(edit);
         req_body = JSON.stringify({
           userid: userDetails.userid,
           topicid: datapassed._id,
-          title: datapassed.title,
-          edit: edit,
+          title: topic_title,
+          edit: topic_edited,
           del: del,
           pin: pin,
         });
       } else {
         api_url = base_url + "updatethought";
+        const encryptedThought = await encryptData(datapassed.thought);
+        const encryptedEditedThought = await encryptData(edit);
         req_body = JSON.stringify({
           topicid: topicid,
-          thought: datapassed.thought,
-          edit: edit,
+          thoughtid: datapassed._id,
+          thought: encryptedThought,
+          edit: encryptedEditedThought,
           del: del,
           collapse: collapse,
         });
@@ -78,9 +85,10 @@ function EditData({
         emptydata(true);
       }
       if (datamode === "topic") {
-        setTopics(pinTopics(json.data));
+        const decryptedTopics = await decryptTopics(json.data);
+        setTopics(pinTopics(decryptedTopics));
       } else {
-        setThoughts(json.data);
+        await decryptThoughts(json.data);
       }
       del = "no";
       pin = "";
