@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
 import { getUserDetails } from "../utils/SubscriptionDetails";
+import { encryptData } from "../utils/Encryption";
 
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -13,6 +14,7 @@ function EditSession({ onClosedialog, session, updateSesh, logout, toast }) {
 
   async function UpdateData() {
     try {
+      const encryptedEditedSession = await encryptData(edit);
       const response = await fetch(base_url + "editchatsession", {
         method: "POST",
         headers: {
@@ -22,7 +24,7 @@ function EditSession({ onClosedialog, session, updateSesh, logout, toast }) {
         body: JSON.stringify({
           userid: userDetails.userid,
           sessionid: session._id,
-          edit: edit,
+          edit: encryptedEditedSession,
           del: del,
         }),
       });
@@ -37,7 +39,7 @@ function EditSession({ onClosedialog, session, updateSesh, logout, toast }) {
       }
       const json = await response.json();
       // console.log(json);
-      updateSesh(json.data.reverse());
+      await updateSesh(json.data.reverse());
       onClosedialog();
     } catch (e) {
       // console.log(e);

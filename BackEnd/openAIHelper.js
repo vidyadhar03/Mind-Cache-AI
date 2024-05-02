@@ -22,31 +22,31 @@ const openai = new OpenAI({
 
 async function StreamWithOpenAI(messages, broadcast) {
   //init empty when not testing
-  // let fullResponse = "I will reply once i am integrated, dear Mind Cache AI User!";
-  let fullResponse = "";
+  let fullResponse = "I will reply once i am integrated, dear Mind Cache AI User!";
+  // let fullResponse = "";
 
   try {
-    const stream = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      stream: true,
-    });
+    // const stream = await openai.chat.completions.create({
+    //   model: "gpt-3.5-turbo",
+    //   messages: messages,
+    //   stream: true,
+    // });
 
-    for await (const chunk of stream) {
-      if (chunk.choices[0]?.delta?.content) {
-        const content = chunk.choices[0].delta.content;
-        fullResponse += content;
-        broadcast(content); // Stream each chunk to the client
-      }
-    }
-
-    // for (let i =0;i<2;i++){
-    //   setTimeout(function(){
-    //     const chunk = "sending chunk  ";
-    //     fullResponse+=chunk;
-    //     broadcast(chunk);
-    //   },700)
+    // for await (const chunk of stream) {
+    //   if (chunk.choices[0]?.delta?.content) {
+    //     const content = chunk.choices[0].delta.content;
+    //     fullResponse += content;
+    //     broadcast(content); // Stream each chunk to the client
+    //   }
     // }
+
+    for (let i =0;i<2;i++){
+      setTimeout(function(){
+        const chunk = "sending chunk  ";
+        fullResponse+=chunk;
+        broadcast(chunk);
+      },700)
+    }
 
     return fullResponse; // Return the full response for database update
   } catch (e) {

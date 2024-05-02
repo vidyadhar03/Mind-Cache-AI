@@ -8,6 +8,7 @@ import { ChatBar } from "./ChatBar";
 import { ChatSessions } from "./ChatSessions";
 import { MessageInput, MessageSection } from "./ChatMessages";
 import EditSession from "./EditSession";
+import { decryptData } from "../utils/Encryption";
 
 export function Chat() {
   const location = useLocation();
@@ -39,6 +40,14 @@ export function Chat() {
     setDialogMessage(message);
     setShowDialog(true);
   };
+
+  async function decryptSessions(updatedSessions){
+    for(let session of updatedSessions){
+      const decryptedSession = await decryptData(session.sessionTitle)
+      if(decryptedSession!=="") session.sessionTitle=decryptedSession
+    }
+    return updatedSessions
+  }
 
   function logout() {
     localStorage.removeItem("userid");
@@ -141,8 +150,9 @@ export function Chat() {
           StartSession();
         } else {
           if (sessionsr && sessionsr.length > 0) {
-            loadSession(sessionsr[0]);
-            setSessions(sessionsr);
+            const decryptedSessions = await decryptSessions(sessionsr);
+            loadSession(decryptedSessions[0]);
+            setSessions(decryptedSessions);
           } else {
             await fetchSessions();
             loadSession(sessions[0]);
@@ -165,7 +175,9 @@ export function Chat() {
     // console.log("called fetch sessions");
     const result = await getSessions(showToast);
     if (result.success) {
-      setSessions(result.data);
+      // console.log(result.data);
+      const decryptedSessions = await decryptSessions(result.data);
+      setSessions(decryptedSessions);
     } else {
       if (result.logout) logout();
     }
@@ -176,7 +188,8 @@ export function Chat() {
     const result = await startSession(topicTitle, showToast);
     if (result.success) {
       const sessions = result.data;
-      setSessions(sessions);
+      const decryptedSessions = await decryptSessions(sessions);
+      setSessions(decryptedSessions);
       // setSelectedSession(sessions[0]);
       await loadSession(sessions[0]);
       // await sendChat(true, sessions[0]);
@@ -249,9 +262,10 @@ export function Chat() {
     );
   }
 
-  function updateSessions(sessions){
-    setSessions(sessions);
-    loadSession(sessions[0]);
+  async function updateSessions(sessions){
+    const decryptedSessions = await decryptSessions(sessions);
+    setSessions(decryptedSessions);
+    loadSession(decryptedSessions[0]);
   }
 
   return (

@@ -4,6 +4,7 @@ import {
   isEligible,
   getUserDetails
 } from "../utils/SubscriptionDetails";
+import { encryptData } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function getSessions(toast) {
@@ -73,6 +74,8 @@ export const LoadSession = async (session, toast) => {
 export const startSession = async (topicTitle, toast) => {
   const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
+  console.log("sessions init from here")
+  const encryptedSessionTitle = await encryptData(topicTitle);
   try {
     const response = await fetch(base_url + "startsession", {
       method: "POST",
@@ -82,7 +85,7 @@ export const startSession = async (topicTitle, toast) => {
       },
       body: JSON.stringify({
         userid: userDetails.userid,
-        sessionTitle: topicTitle,
+        sessionTitle: encryptedSessionTitle,
         time: new Date().toISOString(),
       }),
     });
