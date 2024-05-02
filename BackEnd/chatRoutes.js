@@ -42,6 +42,9 @@ router.post("/socketchat", auth, async (req, res) => {
     const updatedMessages = user_messages.messages.map((item) => {
       return { role: item.role, content: item.content };
     });
+
+    //decrypt the content in each message and proceed further
+
     updatedMessages.push({ role: "user", content: userinput });
 
     // console.log("waiting for response");
@@ -61,6 +64,10 @@ router.post("/socketchat", auth, async (req, res) => {
     // console.log("got full response from chat gpt");
 
     // After streaming is complete, update the database
+
+    //encrypt and update 
+
+
     updatedMessages.push({ role: "assistant", content: aiResponse });
     user_messages.messages = updatedMessages;
     await user_messages.save();
