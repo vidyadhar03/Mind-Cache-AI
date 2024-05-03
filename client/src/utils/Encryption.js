@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
 import { getUserDetails, setUserDetails } from "./SubscriptionDetails";
 
-let inMemoryKey = null; // To hold the encryption key in memory
+let inMemoryKey = null; 
 
 // Derive a deterministic key from the email and password
 export async function deriveAndStoreKeyInMemory(email, password) {
@@ -13,7 +13,7 @@ export async function deriveAndStoreKeyInMemory(email, password) {
 
   const encryptedKey = encryptKey(derivedKey);
   storeKeyLocally(encryptedKey);
-  inMemoryKey = derivedKey; // Store the derived key in memory
+  inMemoryKey = derivedKey; 
 }
 
 // Encrypt the generated in-memory key
@@ -68,7 +68,7 @@ export async function decryptData(encryptedData) {
     return decrypted.toString(CryptoJS.enc.Utf8); // Convert to UTF-8 string
   } catch (e) {
     // console.error('Decryption failed:', e);
-    return null; // Handle decryption failure gracefully
+    return null; 
   }
 }
 

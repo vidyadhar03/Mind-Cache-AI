@@ -40,10 +40,10 @@ async function decryptData(encryptedData, key) {
     padding: CryptoJS.pad.Pkcs7,
   });
   try {
-    return decrypted.toString(CryptoJS.enc.Utf8); // Convert to UTF-8 string
+    return decrypted.toString(CryptoJS.enc.Utf8);
   } catch (e) {
     // console.error("Decryption failed:", e);
-    return null; // Handle decryption failure gracefully
+    return null; 
   }
 }
 
