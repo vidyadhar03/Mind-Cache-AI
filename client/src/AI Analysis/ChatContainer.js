@@ -41,12 +41,12 @@ export function Chat() {
     setShowDialog(true);
   };
 
-  async function decryptSessions(updatedSessions){
-    for(let session of updatedSessions){
-      const decryptedSession = await decryptData(session.sessionTitle)
-      if(decryptedSession!=="") session.sessionTitle=decryptedSession
+  async function decryptSessions(updatedSessions) {
+    for (let session of updatedSessions) {
+      const decryptedSession = await decryptData(session.sessionTitle);
+      if (decryptedSession !== "") session.sessionTitle = decryptedSession;
     }
-    return updatedSessions
+    return updatedSessions;
   }
 
   function logout() {
@@ -204,9 +204,7 @@ export function Chat() {
     if (result.success) {
       const messages = result.data;
       for (let message of messages) {
-        const decryptedMessageContent = await decryptData(
-          message.content
-        );
+        const decryptedMessageContent = await decryptData(message.content);
         if (decryptedMessageContent !== "")
           message.content = decryptedMessageContent;
       }
@@ -266,10 +264,14 @@ export function Chat() {
     );
   }
 
-  async function updateSessions(sessions){
-    const decryptedSessions = await decryptSessions(sessions);
-    setSessions(decryptedSessions);
-    loadSession(decryptedSessions[0]);
+  async function updateSessions(sessions) {
+    if (sessions.length === 0) {
+      navigate(`/`);
+    } else {
+      const decryptedSessions = await decryptSessions(sessions);
+      setSessions(decryptedSessions);
+      loadSession(decryptedSessions[0]);
+    }
   }
 
   return (
