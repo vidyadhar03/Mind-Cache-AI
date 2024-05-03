@@ -42,7 +42,7 @@ async function decryptData(encryptedData, key) {
   try {
     return decrypted.toString(CryptoJS.enc.Utf8); // Convert to UTF-8 string
   } catch (e) {
-    console.error("Decryption failed:", e);
+    // console.error("Decryption failed:", e);
     return null; // Handle decryption failure gracefully
   }
 }
@@ -77,7 +77,7 @@ router.post("/socketchat", auth, async (req, res) => {
         message.content,
         encryptionKey 
       );
-      if (decryptedMessageContent !== "")
+      if (decryptedMessageContent !== "" && decryptedMessageContent !== null)
         message.content = decryptedMessageContent;
     }
 

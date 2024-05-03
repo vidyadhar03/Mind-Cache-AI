@@ -34,7 +34,7 @@ function Thoughts() {
   async function decryptThoughts(encryptedThoughts){
     for(let thought of encryptedThoughts){
       const decryptedthought = await decryptData(thought.thought);
-      if(decryptedthought!=="") thought.thought=decryptedthought 
+      if(decryptedthought!=="" && decryptedthought!==null ) thought.thought=decryptedthought 
     }
     setThoughts(encryptedThoughts);
   }

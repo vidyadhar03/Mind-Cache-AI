@@ -67,7 +67,7 @@ export async function decryptData(encryptedData) {
     try {
         return decrypted.toString(CryptoJS.enc.Utf8); // Convert to UTF-8 string
     } catch (e) {
-        console.error('Decryption failed:', e);
+        // console.error('Decryption failed:', e);
         return null; // Handle decryption failure gracefully
     }
 }

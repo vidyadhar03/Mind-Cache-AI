@@ -35,7 +35,9 @@ function Topics() {
   async function decryptTopics(encryptedTopics){
     for(let topic of encryptedTopics){
       const decryptedtitle = await decryptData(topic.title);
-      if(decryptedtitle!=="") topic.title=decryptedtitle 
+      if(decryptedtitle!=="" && decryptedtitle!==null) {
+        topic.title=decryptedtitle 
+      }
     }
     return encryptedTopics
   }
