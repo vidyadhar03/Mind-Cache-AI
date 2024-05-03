@@ -71,8 +71,8 @@ function TopicLanding({
   return (
     <div>
       <NavBar />
-      <div className="flex flex-col  md:flex-row h-[calc(100vh-70px)] bg-gray-50 font-sans">
-        <div className="flex md:flex-1 justify-center items-center mt-8">
+      <div className="flex flex-col  md:flex-row min-h-screen bg-gray-50 font-sans">
+        <div className="flex md:flex-1 justify-center items-center mt-4">
           <img
             src="/logointrospect.png"
             className="h-72 w-72 md:h-96 md:w-96 rounded-full"
@@ -82,7 +82,7 @@ function TopicLanding({
 
         <div className="md:flex-1 flex justify-center  ">
           <div className="flex flex-col  justify-center">
-            <div className="mt-8 text-center font-semibold md:text-lg">
+            <div className="mt-4 text-center font-medium md:text-lg">
               Create your first Focus Area. It could be anything that
               resonates with you.
             </div>
@@ -112,7 +112,7 @@ function TopicLanding({
               </form>
             </div>
 
-            <div className="my-1 text-center font-semibold text-md">
+            <div className="my-1 text-center font-medium text-md">
             You may opt for one of the following
             </div>
 
