@@ -2,24 +2,21 @@ import {
   getSubDetails,
   setSubDetails,
   isEligible,
-  getUserDetails
+  getUserDetails,
 } from "../utils/SubscriptionDetails";
-import { encryptData,getEncryptionKey } from "../utils/Encryption";
+import { encryptData, getEncryptionKey } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function getSessions(toast) {
   const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
   try {
-    const response = await fetch(
-      base_url + "sessions/" + userDetails.userid,
-      {
-        method: "GET",
-        headers: {
-          authorization: userDetails.usertoken,
-        },
-      }
-    );
+    const response = await fetch(base_url + "sessions/" + userDetails.userid, {
+      method: "GET",
+      headers: {
+        authorization: userDetails.usertoken,
+      },
+    });
     if (response.status === 403) {
       result.logout = true;
       return result;
@@ -144,7 +141,7 @@ export async function aiChat(
           userid: userDetails.userid,
           sessionid: session._id,
           userinput: input,
-          encryptionKey: encryptionKey
+          encryptionKey: encryptionKey,
         }),
       });
       if (response.status === 403) {

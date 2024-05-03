@@ -19,7 +19,7 @@ function AddTopic({ onClosedialog, toast, decryptTopics,pinTopics, setTopics, lo
       // console.log(result);
       if (result.success) {
         setNewTopic("");
-        console.log("response from api", result.data);
+        // console.log("response from api", result.data);
         const decryptedTopics = await decryptTopics(result.data);
         setTopics(pinTopics(decryptedTopics));
         onClosedialog();

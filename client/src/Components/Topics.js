@@ -7,7 +7,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
-import { getSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails, getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
 import { decryptData } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
@@ -32,14 +32,14 @@ function Topics() {
       ? "grid-cols-2  lg:grid-cols-4"
       : "grid-cols-1  lg:grid-cols-2";
 
-  async function decryptTopics(encryptedTopics){
-    for(let topic of encryptedTopics){
+  async function decryptTopics(encryptedTopics) {
+    for (let topic of encryptedTopics) {
       const decryptedtitle = await decryptData(topic.title);
-      if(decryptedtitle!=="" && decryptedtitle!==null) {
-        topic.title=decryptedtitle 
+      if (decryptedtitle !== "" && decryptedtitle !== null) {
+        topic.title = decryptedtitle;
       }
     }
-    return encryptedTopics
+    return encryptedTopics;
   }
 
   function pinTopics(updatedTopics) {

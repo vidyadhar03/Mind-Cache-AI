@@ -44,7 +44,8 @@ export function Chat() {
   async function decryptSessions(updatedSessions) {
     for (let session of updatedSessions) {
       const decryptedSession = await decryptData(session.sessionTitle);
-      if (decryptedSession !== "" && decryptedSession !== null) session.sessionTitle = decryptedSession;
+      if (decryptedSession !== "" && decryptedSession !== null)
+        session.sessionTitle = decryptedSession;
     }
     return updatedSessions;
   }

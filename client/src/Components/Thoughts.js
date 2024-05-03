@@ -8,7 +8,7 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
-import { getSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails, getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
 import { decryptData } from "../utils/Encryption";
 import "./buttonanim.css";
@@ -31,10 +31,11 @@ function Thoughts() {
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
 
-  async function decryptThoughts(encryptedThoughts){
-    for(let thought of encryptedThoughts){
+  async function decryptThoughts(encryptedThoughts) {
+    for (let thought of encryptedThoughts) {
       const decryptedthought = await decryptData(thought.thought);
-      if(decryptedthought!=="" && decryptedthought!==null ) thought.thought=decryptedthought 
+      if (decryptedthought !== "" && decryptedthought !== null)
+        thought.thought = decryptedthought;
     }
     setThoughts(encryptedThoughts);
   }

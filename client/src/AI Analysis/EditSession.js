@@ -9,7 +9,7 @@ const base_url = process.env.REACT_APP_API_URL;
 function EditSession({ onClosedialog, session, updateSesh, logout, toast }) {
   const [edit, setEdit] = useState("");
   const [delconf, setdelconf] = useState(false);
-  const userDetails=getUserDetails();
+  const userDetails = getUserDetails();
   let del = "no";
 
   async function UpdateData() {

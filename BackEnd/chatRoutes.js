@@ -75,7 +75,7 @@ router.post("/socketchat", auth, async (req, res) => {
     for (let message of updatedMessages) {
       const decryptedMessageContent = await decryptData(
         message.content,
-        encryptionKey 
+        encryptionKey
       );
       if (decryptedMessageContent !== "" && decryptedMessageContent !== null)
         message.content = decryptedMessageContent;
