@@ -30,7 +30,7 @@ function decryptKey(encryptedKey) {
 }
 
 // Retrieve or decrypt the encryption key
-async function getEncryptionKey() {
+export async function getEncryptionKey() {
     if (inMemoryKey) {
         return inMemoryKey;
     } else {
@@ -64,7 +64,12 @@ export async function decryptData(encryptedData) {
         mode: CryptoJS.mode.CFB,
         padding: CryptoJS.pad.Pkcs7
     });
-    return decrypted.toString(CryptoJS.enc.Utf8);
+    try {
+        return decrypted.toString(CryptoJS.enc.Utf8); // Convert to UTF-8 string
+    } catch (e) {
+        console.error('Decryption failed:', e);
+        return null; // Handle decryption failure gracefully
+    }
 }
 
 // Store encrypted key in local storage
@@ -76,7 +81,6 @@ function storeKeyLocally(encryptedKey) {
 
 // Retrieve encrypted key from local storage
 function retrieveEncryptedKeyFromLocalStorage() {
-    console.log("Encryption key retrieved from local storage");
     const userDetails = getUserDetails();
     return userDetails.encryptedKey;
 }

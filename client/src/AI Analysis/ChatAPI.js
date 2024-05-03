@@ -4,7 +4,7 @@ import {
   isEligible,
   getUserDetails
 } from "../utils/SubscriptionDetails";
-import { encryptData } from "../utils/Encryption";
+import { encryptData,getEncryptionKey } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 export async function getSessions(toast) {
@@ -74,7 +74,7 @@ export const LoadSession = async (session, toast) => {
 export const startSession = async (topicTitle, toast) => {
   const userDetails = getUserDetails();
   let result = { success: false, data: [], logout: false };
-  console.log("sessions init from here")
+  // console.log("sessions init from here")
   const encryptedSessionTitle = await encryptData(topicTitle);
   try {
     const response = await fetch(base_url + "startsession", {
@@ -121,6 +121,7 @@ export async function aiChat(
   toast
 ) {
   const userDetails = getUserDetails();
+  const encryptionKey = await getEncryptionKey();
   let result = { success: false, data: [], logout: false };
 
   if (isEligible()) {
@@ -143,6 +144,7 @@ export async function aiChat(
           userid: userDetails.userid,
           sessionid: session._id,
           userinput: input,
+          encryptionKey: encryptionKey
         }),
       });
       if (response.status === 403) {

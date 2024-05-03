@@ -206,7 +206,15 @@ export function Chat() {
     localStorage.setItem("sessionLoaded", JSON.stringify(session));
     const result = await LoadSession(session, showToast);
     if (result.success) {
-      setMessages(result.data);
+      const messages = result.data;
+      for (let message of messages) {
+        const decryptedMessageContent = await decryptData(
+          message.content
+        );
+        if (decryptedMessageContent !== "")
+          message.content = decryptedMessageContent;
+      }
+      setMessages(messages);
     } else {
       if (result.logout) logout();
     }

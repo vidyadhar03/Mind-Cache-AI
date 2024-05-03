@@ -102,6 +102,7 @@ function vchat(obj) {
     userid: z.string(),
     sessionid: z.string(),
     userinput: z.string(),
+    encryptionKey: z.string()
   });
   const res = schema.safeParse(obj);
   return res;
