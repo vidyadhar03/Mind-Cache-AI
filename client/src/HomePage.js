@@ -6,13 +6,14 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import NavBar from "./Commons/NavBar";
 import { trackEvent } from "./utils/PageTracking";
+import { getUserDetails } from "./utils/SubscriptionDetails";
 import "./App.css";
 
 function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("userid")) {
+    if (getUserDetails()) {
       navigate(`/topics`);
     }
   }, []);
@@ -115,6 +116,39 @@ function HomePage() {
               alt="profile"
             />
             <div className="ml-2 md:text-lg">Susana Teixeria</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function DataPrivacy() {
+    return (
+      <div className=" flex flex-col px-6 py-8 bg-bgc font-sans items-center">
+        <div className="text-black text-center font-bold text-xl md:text-4xl">
+          Commitment to Your Privacy and Security
+        </div>
+
+        <div className="bg-card text-center mt-8 flex flex-col items-center md:text-xl md:w-2/3 px-2 py-4 md:px-6 md:py-4 border shadow-lg rounded-lg">
+          <div>
+            <img src="/dataprivacy.png" className="h-28 w-28 rounded-full"/>
+          </div>
+          <div className="font-semibold text-lg md:text-2xl my-4">End-To-End Encryption</div>
+          <div className=" text-center text-sm md:text-base  text-black font-medium ">
+            At Mind Cache AI, we understand the significance of a trusted space
+            for personal exploration, akin to the confidentiality shared between
+            you and a therapist. That's why we've committed to ensuring
+            end-to-end encryption across all facets of your journey on our
+            platform—be it Focus Areas, reflections, AI sessions, or messages.
+            This level of encryption guards your data from the moment it departs
+            your device until it reaches our servers.
+          </div>
+          <div className=" text-center text-sm md:text-base  text-black font-medium mt-4 ">
+            Mirroring the privacy and security found in a therapeutic setting,
+            our mission is to create a secure haven for your self-discovery and
+            growth. Mind Cache AI aims to be your private, digital sanctuary for
+            introspection. Trust in us to protect your journey with the utmost
+            integrity and confidentiality.
           </div>
         </div>
       </div>
@@ -260,7 +294,7 @@ function HomePage() {
         "Subscribe",
         `${plan} subscribe from Landing Page`
       );
-      if (localStorage.getItem("usertoken")) {
+      if (getUserDetails()) {
         navigate(`/subscription`, { state: { plan } });
       } else {
         navigate(`/signin`, { state: { plan } });
@@ -283,8 +317,8 @@ function HomePage() {
               <li className="mt-2">30 Reflections per Focus area.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
-            <div className="text-4xl font-medium">
-                 <span className="text-2xl font-semibold mr-1">₹</span>0
+              <div className="text-4xl font-medium">
+                <span className="text-2xl font-semibold mr-1">₹</span>0
               </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per month
@@ -308,8 +342,9 @@ function HomePage() {
             </ul>
             <div className="flex justify-center mt-16 mb-4">
               <div className="text-4xl font-medium">
-                 <span className="text-2xl font-semibold mr-1">₹</span>129
-                <span className="mx-2 text-lg font-sans">or</span><span className="text-2xl font-semibold mr-1">$</span>1.5
+                <span className="text-2xl font-semibold mr-1">₹</span>129
+                <span className="mx-2 text-lg font-sans">or</span>
+                <span className="text-2xl font-semibold mr-1">$</span>1.5
               </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per month
@@ -334,9 +369,10 @@ function HomePage() {
               <li className="mt-2">Unlimited Reflections creation.</li>
             </ul>
             <div className="flex justify-center mt-16 mb-4">
-            <div className="text-4xl font-medium">
-                 <span className="text-2xl font-semibold mr-1">₹</span>999
-                <span className="mx-2 text-lg font-sans">or</span><span className="text-2xl font-semibold mr-1">$</span>12
+              <div className="text-4xl font-medium">
+                <span className="text-2xl font-semibold mr-1">₹</span>999
+                <span className="mx-2 text-lg font-sans">or</span>
+                <span className="text-2xl font-semibold mr-1">$</span>12
               </div>
               <div className="flex flex-col justify-end text-md ml-1">
                 per year
@@ -362,6 +398,7 @@ function HomePage() {
       <Intro />
       <UsersReview />
       <HowItWorks />
+      <DataPrivacy />
       <BenefitsofJournaling />
       <PricingPlans />
       <Footer />

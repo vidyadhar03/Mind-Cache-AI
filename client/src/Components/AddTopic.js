@@ -2,19 +2,26 @@ import { useState } from "react";
 import { AddTopicAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
+import { encryptData,decryptData } from "../utils/Encryption";
 
-function AddTopic({ onClosedialog, toast, pinTopics, setTopics, logout }) {
+function AddTopic({ onClosedialog, toast, decryptTopics,pinTopics, setTopics, logout }) {
   const [newTopic, setNewTopic] = useState("");
 
   async function handleCreate(event) {
     trackEvent("click", "Buttons", "Add", "Add from add topic layout");
     event.preventDefault();
     if (newTopic !== "") {
-      const result = await AddTopicAPI(newTopic, toast);
+      const encryptedData = await encryptData(newTopic);
+      // console.log(encryptedData);
+      // const decryptedata = await decryptData(encryptedData);
+      // if(decryptedata==="") console.log("not decryptable"); else console.log(decryptedata)
+      const result = await AddTopicAPI(encryptedData, toast);
       // console.log(result);
       if (result.success) {
         setNewTopic("");
-        setTopics(pinTopics(result.data));
+        // console.log("response from api", result.data);
+        const decryptedTopics = await decryptTopics(result.data);
+        setTopics(pinTopics(decryptedTopics));
         onClosedialog();
       } else {
         if (result.logout) {

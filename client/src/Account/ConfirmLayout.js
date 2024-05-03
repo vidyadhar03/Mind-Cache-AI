@@ -12,12 +12,8 @@ export function ConfirmLayout({ onClosedialog, text, setTriggercancel }) {
         "Confirm Log Out",
         "Confirm Log Out from account details page"
       );
-
-      localStorage.removeItem("userid");
-      localStorage.removeItem("usertoken");
-      localStorage.removeItem("username");
       localStorage.removeItem("sessionLoaded");
-      localStorage.removeItem("email");
+      localStorage.removeItem("UserDetails");
       localStorage.removeItem("subscriptionDetails");
       onClosedialog();
       navigate(`/`);

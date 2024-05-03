@@ -8,12 +8,13 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { ReflectionInfo } from "./ReflectionInfo";
-import { getSubDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails, getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
+import { decryptData } from "../utils/Encryption";
 import "./buttonanim.css";
 const base_url = process.env.REACT_APP_API_URL;
 
-function Thoughts() {
+function Thoughts() { 
   const location = useLocation();
   const topicobj = location.state?.data;
   const [thoughts, setThoughts] = useState([]);
@@ -24,10 +25,20 @@ function Thoughts() {
   const [emptythoughts, setEmptyThoughts] = useState(false);
   const [sort, setSort] = useState(" by latest");
   const subDetails = getSubDetails();
+  const userDetails = getUserDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const navigate = useNavigate();
+
+  async function decryptThoughts(encryptedThoughts) {
+    for (let thought of encryptedThoughts) {
+      const decryptedthought = await decryptData(thought.thought);
+      if (decryptedthought !== "" && decryptedthought !== null)
+        thought.thought = decryptedthought;
+    }
+    setThoughts(encryptedThoughts);
+  }
 
   function reverseThoughts() {
     trackEvent(
@@ -47,11 +58,8 @@ function Thoughts() {
   };
 
   function logout() {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -64,7 +72,7 @@ function Thoughts() {
         const response = await fetch(base_url + "thoughts/" + topicobj._id, {
           method: "GET",
           headers: {
-            authorization: localStorage.getItem("usertoken"),
+            authorization: userDetails.usertoken,
           },
         });
         if (response.status === 403) {
@@ -81,7 +89,7 @@ function Thoughts() {
         if (json.data.length === 0) {
           setEmptyThoughts(true);
         }
-        setThoughts(json.data);
+        await decryptThoughts(json.data);
       } catch (e) {
         // console.log(e);
       }
@@ -150,7 +158,7 @@ function Thoughts() {
             setshowaddthought(false);
           }}
           topic={topicobj}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
           logout={logout}
         />
@@ -164,7 +172,7 @@ function Thoughts() {
           datapassed={selectedthought}
           topicid={topicobj._id}
           emptydata={setEmptyThoughts}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
           logout={logout}
         />
@@ -181,7 +189,7 @@ function Thoughts() {
         <ThoughtLanding
           topic={topicobj}
           emptydata={setEmptyThoughts}
-          setThoughts={setThoughts}
+          decryptThoughts={decryptThoughts}
           toast={showToast}
         />
       ) : (
@@ -191,7 +199,7 @@ function Thoughts() {
               <div
                 className="flex cursor-pointer"
                 onClick={() => {
-                  if (localStorage.getItem("userid")) {
+                  if (userDetails.userid) {
                     navigate(`/`);
                   } else {
                     navigate(`/topics`);
@@ -288,7 +296,8 @@ function Thoughts() {
             {thoughts.map((thought, index) => (
               <div
                 key={index}
-                className="bg-[#C1D0EF] pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg"
+                className="bg-[#C1D0EF] pb-4 px-2 m-2 md:m-4 md:pb-6 rounded-lg topic-animate"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="flex justify-end">
                   <div className="text-right text-sm font-mono  p-2">

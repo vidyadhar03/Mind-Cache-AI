@@ -4,15 +4,17 @@ import Loader from "../Commons/Loader";
 import { Toast } from "../Commons/Toast";
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../utils/PageTracking";
+import { getUserDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
-
+ 
 export const AccountDetails = () => {
-  const namestored = localStorage.getItem("username")
-    ? localStorage.getItem("username")
+  const userDetails = getUserDetails()
+  const namestored = userDetails.username
+    ? userDetails.username
     : "";
   // console.log(namestored);
   const [name, setName] = useState(namestored);
-  const globalEmail = localStorage.getItem("email");
+  const globalEmail = userDetails.email;
   //loader
   const [isLoading, setIsLoading] = useState(false);
   const enableLoader = () => {
@@ -32,11 +34,8 @@ export const AccountDetails = () => {
   };
 
   function logout() {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -49,7 +48,7 @@ export const AccountDetails = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
         },
         body: JSON.stringify({
           usermail: globalEmail,

@@ -7,8 +7,9 @@ import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
 import { smoothifyDate } from "../utils/DateUtils";
 import { FocusAreaInfo } from "./FocusInfo";
-import { getSubDetails } from "../utils/SubscriptionDetails";
+import { getSubDetails, getUserDetails } from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
+import { decryptData } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 function Topics() {
@@ -20,6 +21,7 @@ function Topics() {
   const [emptytopics, setEmptyTopics] = useState(false);
   const [sort, setSort] = useState(" by latest");
   const subDetails = getSubDetails();
+  const userDetails = getUserDetails();
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -29,6 +31,16 @@ function Topics() {
     topics.length > 4
       ? "grid-cols-2  lg:grid-cols-4"
       : "grid-cols-1  lg:grid-cols-2";
+
+  async function decryptTopics(encryptedTopics) {
+    for (let topic of encryptedTopics) {
+      const decryptedtitle = await decryptData(topic.title);
+      if (decryptedtitle !== "" && decryptedtitle !== null) {
+        topic.title = decryptedtitle;
+      }
+    }
+    return encryptedTopics;
+  }
 
   function pinTopics(updatedTopics) {
     const { pinned, unpinned } = updatedTopics.reduce(
@@ -42,9 +54,10 @@ function Topics() {
     return pinnedTopics;
   }
 
-  function reverseTopics() {
+  async function reverseTopics() {
     trackEvent("click", "Buttons", "Sort Topics", "Sort from topics page");
     const reversedTopics = [...topics].reverse();
+    // const decryptedTopics = await decryptTopics(reversedTopics);
     setTopics(pinTopics(reversedTopics));
     setSort(sort === " by latest" ? " by oldest" : " by latest");
   }
@@ -55,11 +68,8 @@ function Topics() {
   };
 
   function logout() {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -69,11 +79,11 @@ function Topics() {
     const fetchTopics = async () => {
       try {
         const response = await fetch(
-          base_url + "topics/" + localStorage.getItem("userid"),
+          base_url + "topics/" + userDetails.userid,
           {
             method: "GET",
             headers: {
-              authorization: localStorage.getItem("usertoken"),
+              authorization: userDetails.usertoken,
             },
           }
         );
@@ -91,7 +101,8 @@ function Topics() {
           setEmptyTopics(true);
         }
         // console.log(json.data);
-        setTopics(pinTopics(json.data));
+        const decryptedTopics = await decryptTopics(json.data);
+        setTopics(pinTopics(decryptedTopics));
       } catch (e) {
         // console.log(e);
       }
@@ -157,6 +168,7 @@ function Topics() {
             setshowaddtopic(false);
           }}
           toast={showToast}
+          decryptTopics={decryptTopics}
           pinTopics={pinTopics}
           setTopics={setTopics}
           logout={logout}
@@ -172,6 +184,7 @@ function Topics() {
           topicid={selectedtopic._id}
           emptydata={setEmptyTopics}
           toast={showToast}
+          decryptTopics={decryptTopics}
           pinTopics={pinTopics}
           setTopics={setTopics}
           logout={logout}
@@ -189,6 +202,7 @@ function Topics() {
         <TopicLanding
           emptydata={setEmptyTopics}
           toast={showToast}
+          decryptTopics={decryptTopics}
           pinTopics={pinTopics}
           setTopics={setTopics}
         />

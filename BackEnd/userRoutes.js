@@ -217,8 +217,12 @@ router.post("/updatetopic", auth, async (req, res) => {
   const { userid, topicid, title, edit, del, pin } = req.body;
   try {
     const found = await Topic.findOne({ userID: userid });
+    // console.log(found)
     let local_topics = found.topics;
-    const index = local_topics.findIndex((topic) => topic.title === title);
+    // console.log(local_topics)
+    // console.log(topicid)
+    const index = local_topics.findIndex((topic) => topic._id.toString() === topicid);
+    // console.log("topic found at index", index)
     // console.log("before del: ", local_topics);
 
     if (del === "yes") {
@@ -311,14 +315,15 @@ router.post("/updatethought", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { topicid, thought, edit, del, collapse } = req.body;
+  const { topicid,thoughtid,thought, edit, del, collapse } = req.body;
   try {
     const found = await Thought.findOne({ topicID: topicid });
     // console.log(found);
     local_thoughts = found.thoughts;
     const index = local_thoughts.findIndex(
-      (thoughtl) => thoughtl.thought === thought
+      (thoughtl) => thoughtl._id.toString() === thoughtid
     );
+    // console.log("thought exists at",index)
     if (del === "yes") {
       local_thoughts.splice(index, 1);
     } else {

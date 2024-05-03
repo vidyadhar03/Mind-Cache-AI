@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import NavBar from "../Commons/NavBar";
 import Footer from "../Commons/Footer";
 import { Toast } from "../Commons/Toast";
-import { setSubDetails } from "../utils/SubscriptionDetails";
+import { setSubDetails,getUserDetails } from "../utils/SubscriptionDetails";
 import { CircularProgress } from "@mui/material";
 const base_url = process.env.REACT_APP_API_URL;
 
@@ -11,6 +11,7 @@ const SubscriptionConfirmation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state?.data;
+  const userDetails = getUserDetails();
 
   //dialog
   const [showDialog, setShowDialog] = useState(false);
@@ -24,23 +25,20 @@ const SubscriptionConfirmation = () => {
         const response = await fetch(base_url + "confirmpayment", {
           method: "POST",
           body: JSON.stringify({
-            usermail: localStorage.getItem("email"),
+            usermail: userDetails.email,
             subid: data.subscriptionId,
             payid: data.paymentid,
             signature: data.signature,
             plan: data.plan,
           }),
           headers: {
-            authorization: localStorage.getItem("usertoken"),
+            authorization: userDetails.usertoken,
             "Content-Type": "application/json",
           },
         });
         if (response.status === 403) {
-          localStorage.removeItem("userid");
-          localStorage.removeItem("usertoken");
-          localStorage.removeItem("username");
           localStorage.removeItem("sessionLoaded");
-          localStorage.removeItem("email");
+          localStorage.removeItem("UserDetails");
           localStorage.removeItem("subscriptionDetails");
           setDialogMessage("Authentication failed, Kindly Login again!.");
           setShowDialog(true);

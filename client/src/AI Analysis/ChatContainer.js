@@ -8,6 +8,7 @@ import { ChatBar } from "./ChatBar";
 import { ChatSessions } from "./ChatSessions";
 import { MessageInput, MessageSection } from "./ChatMessages";
 import EditSession from "./EditSession";
+import { decryptData } from "../utils/Encryption";
 
 export function Chat() {
   const location = useLocation();
@@ -20,7 +21,7 @@ export function Chat() {
   const [messages, setMessages] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
-  const [userInput, setUserInput] = useState("");
+  // const [userInput, setUserInput] = useState("");
   const messagesEndRef = useRef(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [editSessionlayout, setEditSessionLayout] = useState(false);
@@ -40,12 +41,18 @@ export function Chat() {
     setShowDialog(true);
   };
 
+  async function decryptSessions(updatedSessions) {
+    for (let session of updatedSessions) {
+      const decryptedSession = await decryptData(session.sessionTitle);
+      if (decryptedSession !== "" && decryptedSession !== null)
+        session.sessionTitle = decryptedSession;
+    }
+    return updatedSessions;
+  }
+
   function logout() {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("usertoken");
-    localStorage.removeItem("username");
     localStorage.removeItem("sessionLoaded");
-    localStorage.removeItem("email");
+    localStorage.removeItem("UserDetails");
     localStorage.removeItem("subscriptionDetails");
     showToast("Authentication failed, Kindly Login again!");
     navigate(`/`);
@@ -140,8 +147,9 @@ export function Chat() {
           StartSession();
         } else {
           if (sessionsr && sessionsr.length > 0) {
-            loadSession(sessionsr[0]);
-            setSessions(sessionsr);
+            const decryptedSessions = await decryptSessions(sessionsr);
+            loadSession(decryptedSessions[0]);
+            setSessions(decryptedSessions);
           } else {
             await fetchSessions();
             loadSession(sessions[0]);
@@ -164,7 +172,9 @@ export function Chat() {
     // console.log("called fetch sessions");
     const result = await getSessions(showToast);
     if (result.success) {
-      setSessions(result.data);
+      // console.log(result.data);
+      const decryptedSessions = await decryptSessions(result.data);
+      setSessions(decryptedSessions);
     } else {
       if (result.logout) logout();
     }
@@ -175,10 +185,12 @@ export function Chat() {
     const result = await startSession(topicTitle, showToast);
     if (result.success) {
       const sessions = result.data;
-      setSessions(sessions);
+      const decryptedSessions = await decryptSessions(sessions);
+      setSessions(decryptedSessions);
       // setSelectedSession(sessions[0]);
       await loadSession(sessions[0]);
-      await sendChat(true, sessions[0]);
+      // await sendChat(true, sessions[0]);
+      await sendChat(true, sessions[0], "", () => {});
       // localStorage.setItem("sessionLoaded", JSON.stringify(sessions[0]));
     } else {
       if (result.logout) logout();
@@ -191,13 +203,33 @@ export function Chat() {
     localStorage.setItem("sessionLoaded", JSON.stringify(session));
     const result = await LoadSession(session, showToast);
     if (result.success) {
-      setMessages(result.data);
+      const messages = result.data;
+      for (let message of messages) {
+        const decryptedMessageContent = await decryptData(message.content);
+        if (decryptedMessageContent !== "" && decryptedMessageContent !== null)
+          message.content = decryptedMessageContent;
+      }
+      setMessages(messages);
     } else {
       if (result.logout) logout();
     }
   }
 
-  async function sendChat(analyse, session) {
+  // async function sendChat(analyse, session) {
+  //   const result = await aiChat(
+  //     analyse,
+  //     session,
+  //     getPrompt,
+  //     userInput,
+  //     setUserInput,
+  //     showToast
+  //   );
+  //   if (!result.success) {
+  //     if (result.logout) logout();
+  //   }
+  // }
+
+  async function sendChat(analyse, session, userInput, setUserInput) {
     const result = await aiChat(
       analyse,
       session,
@@ -233,6 +265,16 @@ export function Chat() {
     );
   }
 
+  async function updateSessions(sessions) {
+    if (sessions.length === 0) {
+      navigate(`/`);
+    } else {
+      const decryptedSessions = await decryptSessions(sessions);
+      setSessions(decryptedSessions);
+      loadSession(decryptedSessions[0]);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-bgc font-sans">
       {editSessionlayout && (
@@ -241,7 +283,7 @@ export function Chat() {
             setEditSessionLayout(false);
           }}
           session={dotclickedsesh}
-          updateSesh={setSessions}
+          updateSesh={updateSessions}
           logout={logout}
           toast={showToast}
         />
@@ -276,8 +318,9 @@ export function Chat() {
           <MessageInput
             onSendMessage={sendChat}
             selectedSession={selectedSession}
-            userInput={userInput}
-            setUserInput={setUserInput}
+            toast={showToast}
+            // userInput={userInput}
+            // setUserInput={setUserInput}
           />
         </div>
       </div>

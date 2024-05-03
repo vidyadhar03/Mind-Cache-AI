@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { broadcast } = require('./websocketServer');
+const { broadcast } = require("./websocketServer");
+const CryptoJS = require("crypto-js");
+// import CryptoJS from "crypto-js";
 
 //importing DB models
 const { ChatSession, ChatMessage, User } = require("./models/schemas");
@@ -20,6 +22,31 @@ const { auth } = require("./middleware");
 //OPEN AI
 const { StreamWithOpenAI } = require("./openAIHelper");
 
+async function encryptData(plaintext, key) {
+  const iv = CryptoJS.enc.Hex.parse("00000000000000000000000000000000");
+  const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CFB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  return encrypted.toString();
+}
+
+async function decryptData(encryptedData, key) {
+  const iv = CryptoJS.enc.Hex.parse("00000000000000000000000000000000");
+  const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CFB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  try {
+    return decrypted.toString(CryptoJS.enc.Utf8);
+  } catch (e) {
+    // console.error("Decryption failed:", e);
+    return null; 
+  }
+}
+
 router.post("/socketchat", auth, async (req, res) => {
   const response = vchat(req.body);
   if (!response.success) {
@@ -27,7 +54,7 @@ router.post("/socketchat", auth, async (req, res) => {
       .status(400)
       .json({ message: "Inputs are invalid", errors: response.error.issues });
   }
-  const { userid, sessionid, userinput } = req.body;
+  const { userid, sessionid, userinput, encryptionKey } = req.body;
   try {
     // initializeWebSocketServer();
     //check if messages exists already
@@ -42,7 +69,21 @@ router.post("/socketchat", auth, async (req, res) => {
     const updatedMessages = user_messages.messages.map((item) => {
       return { role: item.role, content: item.content };
     });
+
+    // console.log("messages before decryption", updatedMessages);
+    //decrypt the content in each message and proceed further
+    for (let message of updatedMessages) {
+      const decryptedMessageContent = await decryptData(
+        message.content,
+        encryptionKey
+      );
+      if (decryptedMessageContent !== "" && decryptedMessageContent !== null)
+        message.content = decryptedMessageContent;
+    }
+
     updatedMessages.push({ role: "user", content: userinput });
+
+    // console.log("messages after decryption", updatedMessages);
 
     // console.log("waiting for response");
     let stream_message = "";
@@ -60,8 +101,21 @@ router.post("/socketchat", auth, async (req, res) => {
     });
     // console.log("got full response from chat gpt");
 
-    // After streaming is complete, update the database
+    // console.log("messages before encryption", updatedMessages);
+    // After streaming is complete, update to the database
     updatedMessages.push({ role: "assistant", content: aiResponse });
+    //encrypt and update to the database
+    for (let message of updatedMessages) {
+      const encryptedMessageContent = await encryptData(
+        message.content,
+        encryptionKey
+      );
+      if (encryptedMessageContent !== "")
+        message.content = encryptedMessageContent;
+    }
+
+    // console.log("messages after encryption", updatedMessages);
+
     user_messages.messages = updatedMessages;
     await user_messages.save();
 
@@ -84,20 +138,20 @@ router.post("/socketchat", auth, async (req, res) => {
 
     await user.save();
 
-    res
-      .status(200)
-      .json({
-        sessionId: user_messages.sessionID,
-        messages: updatedMessages,
-        updatedAICount: user.subscriptionDetails.aiInteractionCount,
-      });
+    res.status(200).json({
+      sessionId: user_messages.sessionID,
+      messages: updatedMessages,
+      updatedAICount: user.subscriptionDetails.aiInteractionCount,
+    });
   } catch (e) {
     // console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
-router.get("/sessions/:userid", auth,async (req, res) => {
+router.get("/sessions/:userid", auth, async (req, res) => {
   const response = vsessions(req.params.userid);
   if (!response.success) {
     return res
@@ -114,7 +168,9 @@ router.get("/sessions/:userid", auth,async (req, res) => {
     }
   } catch (e) {
     // console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -135,7 +191,9 @@ router.get("/chatmessages/:sessionid", auth, async (req, res) => {
     }
   } catch (e) {
     // console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -175,7 +233,9 @@ router.post("/startsession", auth, async (req, res) => {
     }
   } catch (e) {
     // console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 
@@ -196,7 +256,7 @@ router.post("/editchatsession", auth, async (req, res) => {
     if (del === "yes") {
       local_sesh.splice(index, 1);
       //deleting corresponding chat messages related to the session
-      await ChatMessage.deleteOne({sessionID:sessionid});
+      await ChatMessage.deleteOne({ sessionID: sessionid });
     } else {
       local_sesh[index].sessionTitle = edit;
     }
@@ -205,7 +265,9 @@ router.post("/editchatsession", auth, async (req, res) => {
     res.status(200).json({ message: "Session Updated", data: local_sesh });
   } catch (e) {
     // console.log(e);
-    res.status(500).json({ message: "Error on our side. Please retry shortly." });
+    res
+      .status(500)
+      .json({ message: "Error on our side. Please retry shortly." });
   }
 });
 

@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "../Commons/Toast";
 import Loader from "../Commons/Loader";
-import { setSubDetails } from "../utils/SubscriptionDetails";
+import {
+  setSubDetails,
+  setUserDetails,
+  getUserDetails,
+} from "../utils/SubscriptionDetails";
 import { trackEvent } from "../utils/PageTracking";
+import { deriveAndStoreKeyInMemory } from "../utils/Encryption";
 
 //input related material imports
 import { TextField, IconButton, InputAdornment } from "@mui/material";
@@ -32,6 +37,32 @@ function SignIn() {
   //dialog
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+
+  function updateUserDetails(json){
+    let userDetails = {
+      usertoken: json.token,
+      userid: json.userid,
+      username: json.name,
+      email: email,
+    };
+    setUserDetails(userDetails);
+    setSubDetails(json.subscriptionDetails);
+    // let derivedkey = "";
+    // deriveKeyFromPassword(password)
+    //   .then((derivedKeyBase64) => {
+    //     let ud = getUserDetails();
+    //     ud.derivedkey = derivedKeyBase64;
+    //     setUserDetails(ud);
+    //   })
+    //   .catch((error) => {
+    //     deriveKeyFromPassword(password).then((derivedKeyBase64) => {
+    //       let ud = getUserDetails();
+    //       ud.derivedkey = derivedKeyBase64;
+    //       setUserDetails(ud);
+    //     });
+    //   });
+    deriveAndStoreKeyInMemory(email,password);
+  }
 
   function checkForm() {
     // console.log(email, password);
@@ -70,11 +101,7 @@ function SignIn() {
         }
         disableLoader();
         const json = await response.json();
-        localStorage.setItem("usertoken", json.token);
-        localStorage.setItem("userid", json.userid);
-        localStorage.setItem("username", json.name);
-        localStorage.setItem("email", email);
-        setSubDetails(json.subscriptionDetails);
+        updateUserDetails(json);
         if (plan) {
           navigate(`/subscription`, { state: { plan }, replace: true });
         } else {
@@ -116,11 +143,8 @@ function SignIn() {
         }
         disableLoader();
         const json = await response.json();
-        localStorage.setItem("usertoken", json.token);
-        localStorage.setItem("userid", json.userid);
-        localStorage.setItem("username", json.name);
-        localStorage.setItem("email", email);
-        setSubDetails(json.subscriptionDetails);
+        updateUserDetails(json);
+
         if (plan) {
           navigate(`/subscription`, { state: { plan }, replace: true });
         } else {

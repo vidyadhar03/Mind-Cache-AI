@@ -5,6 +5,7 @@ import { Toast } from "../Commons/Toast";
 import Footer from "../Commons/Footer";
 import { CircularProgress } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
+import { getUserDetails } from "../utils/SubscriptionDetails";
 const base_url = process.env.REACT_APP_API_URL;
 
 export function CreateSubscription() {
@@ -13,6 +14,7 @@ export function CreateSubscription() {
   const plan = location.state?.plan;
   const [subId, setSubId] = useState("");
   const [gotSubLink, setGotSubLink] = useState(false);
+  const userDetails = getUserDetails();
 
   //dialog
   const [showDialog, setShowDialog] = useState(false);
@@ -64,19 +66,16 @@ export function CreateSubscription() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            authorization: localStorage.getItem("usertoken"),
+            authorization: userDetails.usertoken,
           },
           body: JSON.stringify({
             plan: plan,
-            usermail: localStorage.getItem("email"),
+            usermail: userDetails.email,
           }),
         });
         if (response.status === 403) {
-          localStorage.removeItem("userid");
-          localStorage.removeItem("usertoken");
-          localStorage.removeItem("username");
           localStorage.removeItem("sessionLoaded");
-          localStorage.removeItem("email");
+          localStorage.removeItem("UserDetails");
           localStorage.removeItem("subscriptionDetails");
           setDialogMessage("Authentication failed, Kindly Login again!.");
           setShowDialog(true);

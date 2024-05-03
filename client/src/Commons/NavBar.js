@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../utils/PageTracking";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { getUserDetails } from "../utils/SubscriptionDetails";
 
 function NavBar() {
   const navigate = useNavigate();
+  const userDetails=getUserDetails();
 
   // useEffect(() => {
   //   const navbar = document.getElementById("navbar");
   //   const height = navbar.getBoundingClientRect().height;
   //   console.log(height);
   // }, []);
-
-  const userid = localStorage.getItem("userid");
 
   return (
     <div
@@ -21,7 +21,7 @@ function NavBar() {
       <div
         className="flex cursor-pointer"
         onClick={() => {
-          if (userid) {
+          if (userDetails) {
             navigate(`/topics`);
           } else {
             navigate(`/`);
@@ -38,7 +38,7 @@ function NavBar() {
         </div>
       </div>
 
-      {userid ? (
+      {userDetails ? (
         <button
           className="flex items-center justify-center "
           onClick={() => {

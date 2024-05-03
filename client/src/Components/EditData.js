@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { trackEvent } from "../utils/PageTracking";
+import { getUserDetails } from "../utils/SubscriptionDetails";
+import { encryptData } from "../utils/Encryption";
 const base_url = process.env.REACT_APP_API_URL;
 
 function EditData({
@@ -10,8 +12,9 @@ function EditData({
   topicid,
   emptydata,
   toast,
-  setThoughts,
+  decryptThoughts,
   setTopics,
+  decryptTopics,
   pinTopics,
   logout,
 }) {
@@ -23,6 +26,7 @@ function EditData({
   let datagot = "";
   const rowsheight = datamode === "topic" ? 1 : 4;
   const widthres = datamode === "topic" ? "w-96" : "w-1/3";
+  const userDetails = getUserDetails();
 
   if (datamode === "topic") {
     datagot = datapassed.title;
@@ -36,20 +40,25 @@ function EditData({
       let req_body = "";
       if (datamode === "topic") {
         api_url = base_url + "updatetopic";
+        const topic_title = await encryptData(datapassed.title);
+        const topic_edited = await encryptData(edit);
         req_body = JSON.stringify({
-          userid: localStorage.getItem("userid"),
+          userid: userDetails.userid,
           topicid: datapassed._id,
-          title: datapassed.title,
-          edit: edit,
+          title: topic_title,
+          edit: topic_edited,
           del: del,
           pin: pin,
         });
       } else {
         api_url = base_url + "updatethought";
+        const encryptedThought = await encryptData(datapassed.thought);
+        const encryptedEditedThought = await encryptData(edit);
         req_body = JSON.stringify({
           topicid: topicid,
-          thought: datapassed.thought,
-          edit: edit,
+          thoughtid: datapassed._id,
+          thought: encryptedThought,
+          edit: encryptedEditedThought,
           del: del,
           collapse: collapse,
         });
@@ -59,7 +68,7 @@ function EditData({
         method: "POST",
         body: req_body,
         headers: {
-          authorization: localStorage.getItem("usertoken"),
+          authorization: userDetails.usertoken,
           "Content-Type": "application/json",
         },
       });
@@ -76,9 +85,10 @@ function EditData({
         emptydata(true);
       }
       if (datamode === "topic") {
-        setTopics(pinTopics(json.data));
+        const decryptedTopics = await decryptTopics(json.data);
+        setTopics(pinTopics(decryptedTopics));
       } else {
-        setThoughts(json.data);
+        await decryptThoughts(json.data);
       }
       del = "no";
       pin = "";

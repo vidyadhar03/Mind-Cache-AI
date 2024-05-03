@@ -2,17 +2,19 @@ import { AddThoughtAPI } from "../utils/Api";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { trackEvent } from "../utils/PageTracking";
+import { encryptData } from "../utils/Encryption";
 
-function AddThought({ onClosedialog, topic, setThoughts, toast, logout }) {
+function AddThought({ onClosedialog, topic, decryptThoughts, toast, logout }) {
   const [newThought, setNewThought] = useState("");
 
   async function handleCreate() {
     trackEvent("click", "Buttons", "Add", "Add from add thought layout");
     if (newThought !== "") {
-      const result = await AddThoughtAPI(topic._id, newThought, toast);
+      const encryptedThought = await encryptData(newThought);
+      const result = await AddThoughtAPI(topic._id, encryptedThought, toast);
       // console.log(result);
       if (result.success) {
-        setThoughts(result.data);
+        await decryptThoughts(result.data);
         onClosedialog();
       } else {
         if (result.logout) {
