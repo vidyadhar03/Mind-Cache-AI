@@ -14,7 +14,6 @@ const TypingAnimation = () => {
   const [displayedMessage, setDisplayedMessage] = useState("");
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-  
 
   useEffect(() => {
     const typeMessage = () => {
