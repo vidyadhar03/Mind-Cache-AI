@@ -42,7 +42,7 @@ function TopicLanding({
     "Leadership",
     "Socializing", 
     "Innovation",
-    // "Culture",
+    "Culture",
     "Environment"
 ];
 
